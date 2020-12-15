@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<libraries>
+    <library>
+        <location>paella/</location>
+        <name>paella</name>
+        <version>6.4.3</version>
+        <license>ECL</license>
+        <licenseversion>2.0</licenseversion>
+    </library>
+</libraries>
