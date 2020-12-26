@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * The main mod_opencastepisode configuration form.
+ * The main mod_opencast configuration form.
  *
- * @package     mod_opencastepisode
+ * @package     mod_opencast
  * @copyright   2020 Tobias Reischmann <tobias.reischmann@wi.uni-muenster.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -29,11 +29,11 @@ require_once($CFG->dirroot . '/course/moodleform_mod.php');
 /**
  * Module instance settings form.
  *
- * @package    mod_opencastepisode
+ * @package    mod_opencast
  * @copyright  2020 Tobias Reischmann <tobias.reischmann@wi.uni-muenster.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_opencastepisode_mod_form extends moodleform_mod {
+class mod_opencast_mod_form extends moodleform_mod {
 
     /**
      * Defines forms elements
@@ -47,7 +47,7 @@ class mod_opencastepisode_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         // Adding the standard "name" field.
-        $mform->addElement('text', 'name', get_string('modulename', 'mod_opencastepisode'), array('size' => '64'));
+        $mform->addElement('text', 'name', get_string('modulename', 'mod_opencast'), array('size' => '64'));
 
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
@@ -57,7 +57,7 @@ class mod_opencastepisode_mod_form extends moodleform_mod {
 
         $this->standard_intro_elements();
 
-        $mform->addElement('text', 'opencastid', get_string('opencastid', 'mod_opencastepisode'),
+        $mform->addElement('text', 'opencastid', get_string('opencastid', 'mod_opencast'),
                 array('size' => 64));
         $mform->setType('opencastid', PARAM_ALPHANUMEXT);
         $mform->addRule('opencastid', get_string('required'), 'required');

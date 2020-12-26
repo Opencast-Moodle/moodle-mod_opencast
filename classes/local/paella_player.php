@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace mod_opencastepisode\local;
+namespace mod_opencast\local;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -25,8 +25,8 @@ class paella_player {
 
         echo "<div id=\"playerContainer\" style=\"display:block;width:100%\"></div>";
 
-        $PAGE->requires->js_call_amd('mod_opencastepisode/config');
-        $PAGE->requires->js_call_amd('mod_opencastepisode/paella');
+        $PAGE->requires->js_call_amd('mod_opencast/config');
+        $PAGE->requires->js_call_amd('mod_opencast/paella');
         $res = new \stdClass();
         $res->w = 0;
         $res->h = 0;
@@ -34,7 +34,7 @@ class paella_player {
         $api = apibridge::get_instance();
         $response = $api->get_episode_json($opencastid);
 
-        $PAGE->requires->js_call_amd('mod_opencastepisode/opencast_player', 'init',
+        $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init',
                 array('playerContainer', $response->episode));
 
     }

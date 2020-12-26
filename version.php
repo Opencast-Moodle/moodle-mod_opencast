@@ -17,7 +17,7 @@
 /**
  * Plugin version and other meta-data are defined here.
  *
- * @package     mod_opencastepisode
+ * @package     mod_opencast
  * @copyright   2020 Tobias Reischmann <tobias.reischmann@wi.uni-muenster.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

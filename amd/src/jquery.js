@@ -1,4 +1,4 @@
-define(['mod_opencastepisode/config', 'jquery'], function(unused,jquery) {
+define(['mod_opencast/config', 'jquery'], function(unused,jquery) {
         return jquery;
     }
 );

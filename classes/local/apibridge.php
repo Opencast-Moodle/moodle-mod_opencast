@@ -15,14 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * API-bridge for mod_opencastepisode. Contain all the function, which uses the external API.
+ * API-bridge for mod_opencast. Contain all the function, which uses the external API.
  *
- * @package    mod_opencastepisode
+ * @package    mod_opencast
  * @copyright  2020 Justus Dieckmann WWU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_opencastepisode\local;
+namespace mod_opencast\local;
 
 use tool_opencast\local\api;
 

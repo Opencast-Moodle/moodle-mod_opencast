@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Display information about all the mod_opencastepisode modules in the requested course.
+ * Display information about all the mod_opencast modules in the requested course.
  *
- * @package     mod_opencastepisode
+ * @package     mod_opencast
  * @copyright   2020 Tobias Reischmann <tobias.reischmann@wi.uni-muenster.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -33,26 +33,26 @@ require_course_login($course);
 
 $coursecontext = context_course::instance($course->id);
 
-$event = \mod_opencastepisode\event\course_module_instance_list_viewed::create(array(
+$event = \mod_opencast\event\course_module_instance_list_viewed::create(array(
     'context' => $modulecontext
 ));
 $event->add_record_snapshot('course', $course);
 $event->trigger();
 
-$PAGE->set_url('/mod/opencastepisode/index.php', array('id' => $id));
+$PAGE->set_url('/mod/opencast/index.php', array('id' => $id));
 $PAGE->set_title(format_string($course->fullname));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($coursecontext);
 
 echo $OUTPUT->header();
 
-$modulenameplural = get_string('modulenameplural', 'mod_opencastepisode');
+$modulenameplural = get_string('modulenameplural', 'mod_opencast');
 echo $OUTPUT->heading($modulenameplural);
 
-$opencastepisodes = get_all_instances_in_course('opencastepisode', $course);
+$opencastinstances = get_all_instances_in_course('opencast', $course);
 
-if (empty($opencastepisodes)) {
-    notice(get_string('nonewmodules', 'mod_opencastepisode'), new moodle_url('/course/view.php', array('id' => $course->id)));
+if (empty($opencastinstances)) {
+    notice(get_string('nonewmodules', 'mod_opencast'), new moodle_url('/course/view.php', array('id' => $course->id)));
 }
 
 $table = new html_table();
@@ -69,20 +69,20 @@ if ($course->format == 'weeks') {
     $table->align = array('left', 'left', 'left');
 }
 
-foreach ($opencastepisodes as $opencastepisode) {
-    if (!$opencastepisode->visible) {
+foreach ($opencastinstances as $opencastinstance) {
+    if (!$opencastinstance->visible) {
         $link = html_writer::link(
-            new moodle_url('/mod/opencastepisode/view.php', array('id' => $opencastepisode->coursemodule)),
-            format_string($opencastepisode->name, true),
+            new moodle_url('/mod/opencast/view.php', array('id' => $opencastinstance->coursemodule)),
+            format_string($opencastinstance->name, true),
             array('class' => 'dimmed'));
     } else {
         $link = html_writer::link(
-            new moodle_url('/mod/opencastepisode/view.php', array('id' => $opencastepisode->coursemodule)),
-            format_string($opencastepisode->name, true));
+            new moodle_url('/mod/opencast/view.php', array('id' => $opencastinstance->coursemodule)),
+            format_string($opencastinstance->name, true));
     }
 
     if ($course->format == 'weeks' or $course->format == 'topics') {
-        $table->data[] = array($opencastepisode->section, $link);
+        $table->data[] = array($opencastinstance->section, $link);
     } else {
         $table->data[] = array($link);
     }

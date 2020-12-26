@@ -15,22 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The mod_opencastepisode course module viewed event.
+ * The mod_opencast course module viewed event.
  *
- * @package     mod_opencastepisode
+ * @package     mod_opencast
  * @copyright   2020 Tobias Reischmann <tobias.reischmann@wi.uni-muenster.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 
-namespace mod_opencastepisode\event;
+namespace mod_opencast\event;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * The mod_opencastepisode course module viewed event class.
+ * The mod_opencast course module viewed event class.
  *
- * @package    mod_opencastepisode
+ * @package    mod_opencast
  * @copyright   2020 Tobias Reischmann <tobias.reischmann@wi.uni-muenster.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -40,12 +40,12 @@ class course_module_viewed extends \core\event\course_module_viewed {
      * Init method.
      */
     protected function init() {
-        $this->data['objecttable'] = 'opencastepisode';
+        $this->data['objecttable'] = 'opencast';
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 
     public static function get_objectid_mapping() {
-        return array('db' => 'opencastepisode', 'restore' => 'opencastepisode');
+        return array('db' => 'opencast', 'restore' => 'opencast');
     }
 }

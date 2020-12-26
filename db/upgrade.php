@@ -17,7 +17,7 @@
 /**
  * Plugin upgrade steps are defined here.
  *
- * @package     mod_opencastepisode
+ * @package     mod_opencast
  * @category    upgrade
  * @copyright   2020 Tobias Reischmann <tobias.reischmann@wi.uni-muenster.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,12 +26,12 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Execute mod_opencastepisode upgrade from the given old version.
+ * Execute mod_opencast upgrade from the given old version.
  *
  * @param int $oldversion
  * @return bool
  */
-function xmldb_opencastepisode_upgrade($oldversion) {
+function xmldb_opencast_upgrade($oldversion) {
     global $DB;
 
     $dbman = $DB->get_manager();

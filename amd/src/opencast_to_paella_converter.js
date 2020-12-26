@@ -1,4 +1,4 @@
-define(['mod_opencastepisode/paella', 'mod_opencastepisode/base'], function (paella, base) {
+define(['mod_opencast/paella', 'mod_opencast/base'], function (paella, base) {
 
     /**
      * Licensed to The Apereo Foundation under one or more contributor license

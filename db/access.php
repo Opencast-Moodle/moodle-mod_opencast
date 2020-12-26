@@ -18,7 +18,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
 
-    'mod/opencastepisode:addinstance' => array(
+    'mod/opencast:addinstance' => array(
         'riskbitmask' => RISK_XSS,
 
         'captype' => 'write',
