@@ -14,26 +14,24 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Types of mod_opencast instances. Either SERIES, EPISODE or UNDEFINED.
+ *
+ * @package    mod_opencast
+ * @copyright  2020 Justus Dieckmann WWU
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace mod_opencast\local;
+
+use tool_opencast\local\api;
 
 defined('MOODLE_INTERNAL') || die();
 
-class paella_player {
+class opencasttype {
 
-    public function view($opencastid, $seriesid = null) {
-        global $PAGE;
+    const UNDEFINED = 0;
+    const EPISODE = 1;
+    const SERIES = 2;
 
-        $api = apibridge::get_instance();
-        $response = $api->get_episode_json($opencastid, $seriesid);
-
-        if (!property_exists($response, 'episode')) {
-            return;
-        }
-
-        $PAGE->requires->js_call_amd('mod_opencast/config');
-        $PAGE->requires->js_call_amd('mod_opencast/paella');
-        $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init',
-                array($response->episode));
-
-    }
 }

@@ -22,8 +22,12 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_opencast\local\opencasttype;
+
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
+
+global $OUTPUT, $DB, $PAGE;
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -62,7 +66,22 @@ $PAGE->set_context($modulecontext);
 
 echo $OUTPUT->header();
 
-echo "<iframe src=" . (new moodle_url("/mod/opencast/player.php?id=" . $cm->id))->out() . " allowfullscreen " .
-        "style='width: 100%; height: 50vw'></iframe>";
+if ($moduleinstance->type == opencasttype::EPISODE) {
+    echo "<iframe src=" . (new moodle_url("/mod/opencast/player.php?id=" . $cm->id))->out() .
+        " allowfullscreen " . "style='width: 100%; height: 50vw'></iframe>";
+} else if ($moduleinstance->type == opencasttype::SERIES) {
+    $episode = optional_param('e', null, PARAM_ALPHANUMEXT);
+    if ($episode) {
+        echo "<iframe src=" . (new moodle_url("/mod/opencast/player.php?id=$cm->id&e=$episode"))->out() .
+            " allowfullscreen " . "style='width: 100%; height: 50vw'></iframe>";
+    } else {
+        $api = \mod_opencast\local\apibridge::get_instance();
+        $context = new stdClass();
+        $context->episodes = $api->get_episodes_in_series($moduleinstance->opencastid);
+        echo $OUTPUT->render_from_template('mod_opencast/series', $context);
+    }
+} else {
+    echo "NOOO!";
+}
 
 echo $OUTPUT->footer();

@@ -1,0 +1,35 @@
+body.path-mod-opencast .series {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+body.path-mod-opencast .episode {
+    margin: 8px;
+    padding: 4px;
+    border: 1px solid #ccc;
+}
+
+body.path-mod-opencast .episode img {
+    width: 100%;
+    min-width: 15vw;
+}
+
+body.path-mod-opencast .episode .text {
+    padding: 4px 4px 0 4px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+body.path-mod-opencast .episode .title {
+    font-weight: bold;
+}
+
+body.path-mod-opencast .episode .duration,
+body.path-mod-opencast .episode .date {
+    color: #666;
+    font-size: 0.9em;
+}
+
+body.path-mod-opencast .episode .duration {
+    float: right;
+}

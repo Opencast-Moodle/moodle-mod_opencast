@@ -4,11 +4,12 @@ define(['mod_opencast/jquery', 'jqueryui', 'mod_opencast/swfobject', 'mod_openca
 
         var wwwroot = M.cfg.wwwroot;
 
-        function initManage(id, episode) {
+        function initManage(episode) {
             $("body").ready(() => {
-                paella.lazyLoad(id, {
+                $("body").append('<div id="playerContainer" style="display:block;width:100%"></div>');
+                paella.lazyLoad('playerContainer', {
                     'configUrl': wwwroot + '/mod/opencast/paella/player/config/config.json',
-                    loadVideo: function () {
+                    loadVideo: function() {
                         return new Promise((resolve) => {
                             let data = new OpencastToPaellaConverter().convertToDataJson(episode);
                             resolve(data);

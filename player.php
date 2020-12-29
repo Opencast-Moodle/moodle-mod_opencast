@@ -47,6 +47,8 @@ if ($id) {
 
 require_login($course, true, $cm);
 
+$episode = optional_param('e', null, PARAM_ALPHANUMEXT);
+
 $modulecontext = context_module::instance($cm->id);
 
 $event = \mod_opencast\event\course_module_viewed::create(array(
@@ -65,6 +67,10 @@ echo $OUTPUT->header();
 
 $paellaplayer = new paella_player();
 
-$paellaplayer->view($moduleinstance->opencastid);
+if ($episode) {
+    $paellaplayer->view($episode, $moduleinstance->opencastid);
+} else {
+    $paellaplayer->view($moduleinstance->opencastid);
+}
 
 echo $OUTPUT->footer();

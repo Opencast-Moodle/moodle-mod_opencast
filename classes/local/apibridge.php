@@ -51,12 +51,16 @@ class apibridge {
         return $apibridge;
     }
 
-    public function get_episode_json($episodeid) {
+    public function get_episode_json($episodeid, $seriesid = null) {
         $result = new \stdClass();
         $result->error = 0;
 
         $api = new api();
-        $response = $api->oc_get("/search/episode.json?id=$episodeid&sign=true");
+        $resource = "/search/episode.json?id=$episodeid&sign=true";
+        if ($seriesid) {
+            $resource .= "&sid=$seriesid";
+        }
+        $response = $api->oc_get($resource);
 
         if ($api->get_http_code() != 200) {
             $result->error = $api->get_http_code();
@@ -70,5 +74,63 @@ class apibridge {
 
         $result->episode = $response->{'search-results'}->result;
         return $result;
+    }
+
+    public function get_episodes_in_series($seriesid) {
+        $api = new api();
+        $response = $api->oc_get("/api/events?is_part_of=$seriesid&withpublications=true&sort=start_date:DESC,title:ASC");
+
+        if ($api->get_http_code() != 200) {
+            return false;
+        }
+
+        $response = json_decode($response);
+        if (!$response) {
+            return false;
+        }
+
+        $result = [];
+        foreach ($response as $event) {
+            $url = null;
+            foreach ($event->publications as $publication) {
+                if ($publication->channel == 'api') {
+                    foreach ($publication->attachments as $attachment) {
+                        if ($attachment->flavor == 'presenter/search+preview') {
+                            $url = $attachment->url;
+                        }
+                    }
+                }
+            }
+            $video = new \stdClass();
+            $video->identifier = $event->identifier;
+            $video->start = $event->start;
+            $video->title = $event->title;
+            $video->created = $event->created;
+            $video->duration = $event->duration;
+            $video->thumbnail = $url;
+            $result[] = $video;
+        }
+        return $result;
+    }
+
+
+    /**
+     * Finds out, if a opencastid specifies an episode, a series, or nothing.
+     * @param string $id opencastid
+     * @return int the type {@link opencasttype}
+     */
+    public function find_opencast_type_for_id($id) {
+        $api = new api();
+        $api->oc_get("/api/events/$id");
+        if ($api->get_http_code() == 200) {
+            return opencasttype::EPISODE;
+        }
+
+        $api->oc_get("/api/series/$id");
+        if ($api->get_http_code() == 200) {
+            return opencasttype::SERIES;
+        }
+
+        return opencasttype::UNDEFINED;
     }
 }
