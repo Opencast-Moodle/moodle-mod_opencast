@@ -75,6 +75,8 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
         echo "<iframe src=" . (new moodle_url("/mod/opencast/player.php?id=$cm->id&e=$episode"))->out() .
             " allowfullscreen " . "style='width: 100%; height: 50vw'></iframe>";
     } else {
+        echo $OUTPUT->heading($moduleinstance->name);
+        echo '<br>';
         $api = \mod_opencast\local\apibridge::get_instance();
         $context = new stdClass();
         $context->episodes = $api->get_episodes_in_series($moduleinstance->opencastid);

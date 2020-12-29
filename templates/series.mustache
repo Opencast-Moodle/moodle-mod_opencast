@@ -26,15 +26,17 @@
         }]
     }
 }}
-<div class="series">
+<ul class="series">
     {{#episodes}}
-        <div class="episode">
+        <li class="episode" title="{{ description }}">
+            <a href="{{link}}">
             <img src="{{{ thumbnail }}}" alt="{{ title }}"/>
             <div class="text">
                 <span class="title">{{ title }}</span><br>
                 <span class="date">{{ start }}</span>
                 <span class="duration">{{ duration }}</span>
             </div>
-        </div>
+            </a>
+        </li>
     {{/episodes}}
-</div>
+</ul>

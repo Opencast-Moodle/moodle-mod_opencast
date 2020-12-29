@@ -1,17 +1,30 @@
-body.path-mod-opencast .series {
-    display: flex;
-    flex-wrap: wrap;
+body.path-mod-opencast ul.series {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(max(20vw, 200px), 1fr));
+    grid-column-gap: 8px;
+    grid-row-gap: 16px;
+    padding: 0;
 }
 
-body.path-mod-opencast .episode {
-    margin: 8px;
+body.path-mod-opencast ul.series,
+body.path-mod-opencast li.episode {
+    list-style: none;
+}
+
+body.path-mod-opencast .episode > a {
     padding: 4px;
     border: 1px solid #ccc;
+    color: #333;
+    display: block;
+}
+
+body.path-mod-opencast .episode > a:hover {
+    text-decoration: none;
 }
 
 body.path-mod-opencast .episode img {
     width: 100%;
-    min-width: 15vw;
+    border: 1px solid #ccc;
 }
 
 body.path-mod-opencast .episode .text {
