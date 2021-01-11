@@ -12,10 +12,12 @@ body.path-mod-opencast li.episode {
 }
 
 body.path-mod-opencast .episode > a {
-    padding: 4px;
-    border: 1px solid #ccc;
     color: #333;
-    display: block;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #bbb;
+    padding: 4px;
 }
 
 body.path-mod-opencast .episode > a:hover {
@@ -27,11 +29,8 @@ body.path-mod-opencast .episode img {
     border: 1px solid #ccc;
 }
 
-body.path-mod-opencast .episode .text {
-    padding: 6px 4px 0 4px;
-}
-
 body.path-mod-opencast .episode .title {
+    margin: 6px 2px 4px 2px;
     font-weight: bold;
     line-height: 1.3em;
     max-height: 2.6em;
@@ -42,12 +41,31 @@ body.path-mod-opencast .episode .title {
     -webkit-box-orient: vertical;
 }
 
-body.path-mod-opencast .episode .duration,
+body.path-mod-opencast .episode .infos {
+    margin: auto 2px 2px 2px;
+}
+
 body.path-mod-opencast .episode .date {
     color: #666;
     font-size: 0.9em;
+    margin-top: auto;
+    margin-left: 2px;
+}
+
+body.path-mod-opencast .episode .thumbnail {
+    position: relative;
 }
 
 body.path-mod-opencast .episode .duration {
     float: right;
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    line-height: 1em;
+    padding: 3px 3px 1px 3px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #eee;
+    border-radius: 2px;
+    font-weight: 600;
+    font-size: 0.9em;
 }

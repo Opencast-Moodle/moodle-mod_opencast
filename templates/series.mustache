@@ -30,14 +30,12 @@
     {{#episodes}}
         <li class="episode" title="{{ title }}">
             <a href="{{link}}">
-            <img src="{{{ thumbnail }}}" alt="{{ title }}"/>
-            <div class="text">
-                <div class="title">{{ title }}</div>
-                <div class="infos">
-                <span class="date">vom 14.12.</span>
-                <span class="duration">0:30</span>
+                <div class="thumbnail">
+                    <img src="{{{ thumbnail }}}" alt="{{ title }}"/>
+                    <span class="duration">0:30</span>
                 </div>
-            </div>
+                <div class="title">{{ title }}</div>
+                <span class="date">vom 14.12.</span>
             </a>
         </li>
     {{/episodes}}
