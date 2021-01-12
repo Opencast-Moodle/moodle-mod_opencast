@@ -119,6 +119,23 @@ class apibridge {
     }
 
 
+    public function get_series($seriesid) {
+        $api = new api();
+        $resource = "/api/series/$seriesid";
+        $response = $api->oc_get($resource);
+
+        if ($api->get_http_code() != 200) {
+            return false;
+        }
+
+        $response = json_decode($response);
+        if (!$response) {
+            return false;
+        }
+        return $response;
+    }
+
+
     /**
      * Finds out, if a opencastid specifies an episode, a series, or nothing.
      * @param string $id opencastid

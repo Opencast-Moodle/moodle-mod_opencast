@@ -108,3 +108,13 @@ function opencast_delete_instance($id) {
 
     return true;
 }
+
+/**
+ * Get icon mapping for font-awesome.
+ */
+function mod_opencast_get_fontawesome_icon_map() {
+    return [
+        'mod_opencast:i/grid' => 'fa-th-large',
+        'mod_opencast:i/list' => 'fa-list-ul'
+    ];
+}

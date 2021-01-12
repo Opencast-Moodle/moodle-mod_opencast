@@ -23,6 +23,7 @@
  */
 
 use mod_opencast\local\opencasttype;
+use mod_opencast\output\renderer;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -51,6 +52,23 @@ require_login($course, true, $cm);
 
 $modulecontext = context_module::instance($cm->id);
 
+$PAGE->set_url('/mod/opencast/view.php', array('id' => $cm->id));
+$PAGE->set_title(format_string($moduleinstance->name));
+$PAGE->set_heading(format_string($course->fullname));
+$PAGE->set_context($modulecontext);
+
+$viewlist = optional_param('list', null, PARAM_BOOL);
+if ($viewlist !== null) {
+    require_sesskey();
+    if ($viewlist) {
+        set_user_preference('mod_opencast/list', '1');
+    } else {
+        unset_user_preference('mod_opencast/list');
+    }
+    redirect($PAGE->url);
+    die();
+}
+
 $event = \mod_opencast\event\course_module_viewed::create(array(
     'objectid' => $moduleinstance->id,
     'context' => $modulecontext
@@ -58,11 +76,6 @@ $event = \mod_opencast\event\course_module_viewed::create(array(
 $event->add_record_snapshot('course', $course);
 $event->add_record_snapshot('opencast', $moduleinstance);
 $event->trigger();
-
-$PAGE->set_url('/mod/opencast/view.php', array('id' => $cm->id));
-$PAGE->set_title(format_string($moduleinstance->name));
-$PAGE->set_heading(format_string($course->fullname));
-$PAGE->set_context($modulecontext);
 
 echo $OUTPUT->header();
 
@@ -76,14 +89,25 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
             " allowfullscreen " . "style='width: 100%; height: 50vw'></iframe>";
     } else {
         echo $OUTPUT->heading($moduleinstance->name);
-        echo '<br>';
         $api = \mod_opencast\local\apibridge::get_instance();
         $context = new stdClass();
         $context->episodes = $api->get_episodes_in_series($moduleinstance->opencastid);
-        echo $OUTPUT->render_from_template('mod_opencast/series', $context);
+
+        $listviewactive = get_user_preferences('mod_opencast/list', false);
+        /** @var renderer $renderer */
+        $renderer = $PAGE->get_renderer('mod_opencast');
+        echo $renderer->render_listview_toggle($listviewactive);
+        if ($listviewactive) {
+            $table = new \mod_opencast\local\table_series_list_view();
+            $table->define_baseurl($PAGE->url);
+            $table->set_data($context->episodes);
+            $table->finish_output();
+        } else {
+            echo $OUTPUT->render_from_template('mod_opencast/series', $context);
+        }
     }
 } else {
-    echo "NOOO!";
+    echo "Not yet fetched.";
 }
 
 echo $OUTPUT->footer();

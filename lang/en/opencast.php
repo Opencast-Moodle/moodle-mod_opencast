@@ -32,3 +32,6 @@ $string['opencastepisodename'] = 'Opencast Episode: {$a}';
 $string['pluginadministration'] = 'Opencast Episode administration';
 
 $string['opencastid'] = 'Opencast ID';
+
+$string['listview'] = 'View as list';
+$string['gridview'] = 'View as grid';
