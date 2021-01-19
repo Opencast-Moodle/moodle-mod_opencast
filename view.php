@@ -23,6 +23,7 @@
  */
 
 use mod_opencast\local\opencasttype;
+use mod_opencast\local\output_helper;
 use mod_opencast\output\renderer;
 
 require(__DIR__.'/../../config.php');
@@ -89,22 +90,7 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
             " allowfullscreen " . "style='width: 100%; height: 50vw'></iframe>";
     } else {
         echo $OUTPUT->heading($moduleinstance->name);
-        $api = \mod_opencast\local\apibridge::get_instance();
-        $context = new stdClass();
-        $context->episodes = $api->get_episodes_in_series($moduleinstance->opencastid);
-
-        $listviewactive = get_user_preferences('mod_opencast/list', false);
-        /** @var renderer $renderer */
-        $renderer = $PAGE->get_renderer('mod_opencast');
-        echo $renderer->render_listview_toggle($listviewactive);
-        if ($listviewactive) {
-            $table = new \mod_opencast\local\table_series_list_view();
-            $table->define_baseurl($PAGE->url);
-            $table->set_data($context->episodes);
-            $table->finish_output();
-        } else {
-            echo $OUTPUT->render_from_template('mod_opencast/series', $context);
-        }
+        output_helper::output_series($moduleinstance->opencastid);
     }
 } else {
     echo "Not yet fetched.";

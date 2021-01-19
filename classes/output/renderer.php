@@ -26,6 +26,7 @@ defined('MOODLE_INTERNAL') || die;
 use html_writer;
 use moodle_url;
 use plugin_renderer_base;
+use stdClass;
 
 /**
  * mod_opencast renderer

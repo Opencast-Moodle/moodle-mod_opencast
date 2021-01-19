@@ -21,6 +21,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_opencast\local;
+use core_date;
+use DateTime;
+
 defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->libdir . '/tablelib.php');
@@ -39,10 +42,17 @@ class table_series_list_view extends \flexible_table {
 
     public function set_data($episodes) {
         $this->define_columns(['title', 'duration', 'created']);
-        $this->define_headers(['TITLE', 'DURATION', 'DATE']);
+        $this->define_headers([
+            get_string('title', 'mod_opencast'),
+            get_string('duration', 'mod_opencast'),
+            get_string('date', 'mod_opencast')
+        ]);
         $this->setup();
         foreach ($episodes as $episode) {
+            $timestamp = (new DateTime($episode->created, core_date::get_user_timezone_object()))->getTimestamp();
+            $episode->created = userdate($timestamp, get_string('strftimedate', 'core_langconfig'));
             $this->add_data_keyed($episode);
         }
     }
+
 }

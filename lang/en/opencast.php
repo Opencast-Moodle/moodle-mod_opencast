@@ -35,3 +35,7 @@ $string['opencastid'] = 'Opencast ID';
 
 $string['listview'] = 'View as list';
 $string['gridview'] = 'View as grid';
+
+$string['title'] = 'Title';
+$string['duration'] = 'Duration';
+$string['date'] = 'Date';
