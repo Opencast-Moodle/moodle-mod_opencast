@@ -31,9 +31,7 @@ class paella_player {
         }
 
         $PAGE->requires->js_call_amd('mod_opencast/config');
-        $PAGE->requires->js_call_amd('mod_opencast/paella');
         $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init',
                 array($response->episode));
-
     }
 }

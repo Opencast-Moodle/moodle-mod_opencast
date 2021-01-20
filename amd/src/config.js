@@ -1,4 +1,4 @@
-/***
+/**
  * @module     mod_opencast/config
  */
 define([], function () {
@@ -17,7 +17,7 @@ define([], function () {
             'base': {exports: 'base'},
             'jquery': {exports: 'jquery'},
             'lunr': {exports: 'lunr'},
-            'paella': {exports: 'paella', deps:['base']}
+            'paella': {exports: 'paella', deps: ['base']}
         }
     });
 });
