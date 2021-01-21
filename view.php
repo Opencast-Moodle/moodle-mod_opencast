@@ -83,13 +83,11 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading($moduleinstance->name);
 
 if ($moduleinstance->type == opencasttype::EPISODE) {
-    echo "<iframe src=" . (new moodle_url("/mod/opencast/player.php?id=" . $cm->id))->out() .
-        " allowfullscreen " . "style='width: 100%; height: 50vw'></iframe>";
+    output_helper::output_episode($moduleinstance->opencastid);
 } else if ($moduleinstance->type == opencasttype::SERIES) {
     $episode = optional_param('e', null, PARAM_ALPHANUMEXT);
     if ($episode) {
-        echo "<iframe src=" . (new moodle_url("/mod/opencast/player.php?id=$cm->id&e=$episode"))->out() .
-            " allowfullscreen " . "style='width: 100%; height: 50vw'></iframe>";
+        output_helper::output_episode($episode, $moduleinstance->opencastid);
     } else {
         output_helper::output_series($moduleinstance->opencastid);
     }

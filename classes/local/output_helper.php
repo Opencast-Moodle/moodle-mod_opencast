@@ -42,4 +42,22 @@ class output_helper {
             echo $OUTPUT->render_from_template('mod_opencast/series', $context);
         }
     }
+
+    public static function output_episode($episodeid, $seriesid = null) {
+        global $PAGE;
+
+        $api = apibridge::get_instance();
+        $response = $api->get_episode_json($episodeid, $seriesid);
+
+        if (!property_exists($response, 'episode')) {
+            return;
+        }
+
+        echo \html_writer::script('window.episode = ' . json_encode($response->episode));
+
+        echo '<iframe src="player.html" id="player-iframe" allowfullscreen"></iframe>';
+
+        $PAGE->requires->js_call_amd('mod_opencast/config');
+        $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init');
+    }
 }

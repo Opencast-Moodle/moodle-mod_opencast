@@ -69,3 +69,8 @@ body.path-mod-opencast .episode .duration {
     font-weight: 600;
     font-size: 0.9em;
 }
+
+body.path-mod-opencast #player-iframe {
+    width: 100%;
+    height: 50vw;
+}

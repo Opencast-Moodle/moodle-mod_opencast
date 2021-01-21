@@ -1,4 +1,4 @@
-define(['mod_opencast/paella', 'mod_opencast/base'], function (paella, base) {
+define(['mod_opencast/base'], function(base) {
 
     /**
      * Licensed to The Apereo Foundation under one or more contributor license
@@ -22,7 +22,8 @@ define(['mod_opencast/paella', 'mod_opencast/base'], function (paella, base) {
      */
     return class OpencastToPaellaConverter {
 
-        constructor() {
+        constructor(paella) {
+            this.paella = paella;
             this._config = paella.player.config.plugins.list['es.upv.paella.opencast.loader'] || {};
             this._orderTracks = this._config.orderTracks ||
                 ['presenter/delivery', 'presenter/preview', 'presentation/delivery', 'presentation/preview'];
@@ -76,7 +77,7 @@ define(['mod_opencast/paella', 'mod_opencast/base'], function (paella, base) {
                                 sourceType = 'rtmp';
                                 break;
                             default:
-                                paella.debug.log(`OpencastToPaellaConverter: MimeType (${track.mimetype}) not supported!`);
+                                this.paella.debug.log(`OpencastToPaellaConverter: MimeType (${track.mimetype}) not supported!`);
                                 break;
                         }
                         break;
@@ -101,12 +102,12 @@ define(['mod_opencast/paella', 'mod_opencast/base'], function (paella, base) {
                                 sourceType = 'audio';
                                 break;
                             default:
-                                paella.debug.log(`OpencastToPaellaConverter: MimeType (${track.mimetype}) not supported!`);
+                                this.paella.debug.log(`OpencastToPaellaConverter: MimeType (${track.mimetype}) not supported!`);
                                 break;
                         }
                         break;
                     default:
-                        paella.debug.log(`OpencastToPaellaConverter: Protocol (${protocol[1]}) not supported!`);
+                        this.paella.debug.log(`OpencastToPaellaConverter: Protocol (${protocol[1]}) not supported!`);
                         break;
                 }
             }

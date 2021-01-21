@@ -1,9 +1,7 @@
 /**
  * @module     mod_opencast/config
  */
-define([], function () {
-    // Ugly, but I couldn't find a better solution.
-    window.paella_debug_baseUrl = M.cfg.wwwroot + "/mod/opencast/paella/player/";
+define([], function() {
     window.requirejs.config({
         paths: {
             "swfobject": M.cfg.wwwroot + '/mod/opencast/paella/player/javascript/swfobject',
