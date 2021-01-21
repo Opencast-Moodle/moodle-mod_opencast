@@ -60,6 +60,7 @@ class apibridge {
         if ($seriesid) {
             $resource .= "&sid=$seriesid";
         }
+        var_dump($resource);
         $response = $api->oc_get($resource);
 
         if ($api->get_http_code() != 200) {
@@ -89,33 +90,8 @@ class apibridge {
         if (!$response) {
             return false;
         }
-        $result = [];
-        global $PAGE;
 
-        foreach ($response as $event) {
-            $url = null;
-            foreach ($event->publications as $publication) {
-                if ($publication->channel == 'api') {
-                    foreach ($publication->attachments as $attachment) {
-                        if ($attachment->flavor == 'presenter/search+preview'
-                                || $attachment->flavor == 'presentation/search+preview') {
-                            $url = $attachment->url;
-                            break 2;
-                        }
-                    }
-                }
-            }
-            $video = new \stdClass();
-            $video->start = $event->start;
-            $video->title = $event->title;
-            $video->created = $event->created;
-            $video->duration = $event->duration;
-            $video->thumbnail = $url;
-            $video->link = $PAGE->url->out(false, ['e' => $event->identifier]);
-            $video->description = $event->description;
-            $result[] = $video;
-        }
-        return $result;
+        return $response;
     }
 
 
