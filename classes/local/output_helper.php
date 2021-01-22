@@ -16,6 +16,8 @@
 
 namespace mod_opencast\local;
 
+use core_date;
+use DateTime;
 use mod_opencast\output\renderer;
 use stdClass;
 
@@ -26,6 +28,11 @@ class output_helper {
     public static function output_series($seriesid) {
         global $OUTPUT, $PAGE;
         $context = self::create_template_context_for_series($seriesid);
+
+        if (!$context) {
+            echo "ERROR!";
+            return;
+        }
 
         $listviewactive = get_user_preferences('mod_opencast/list', false);
         /** @var renderer $renderer */
@@ -65,35 +72,43 @@ class output_helper {
         $result = [];
         global $PAGE;
 
+        if (!$response) {
+            return false;
+        }
+
         foreach ($response as $event) {
             $find_duration = !$event->duration;
-
             $url = null;
             foreach ($event->publications as $publication) {
                 if ($publication->channel == 'api') {
                     foreach ($publication->attachments as $attachment) {
-                        if ($attachment->flavor == 'presenter/search+preview') {
-                            $url = $attachment->url;
-                            break 2;
-                        }
+                        // If presentation preview available, use that, else use presenter preview.
                         if ($attachment->flavor == 'presentation/search+preview') {
+                            $url = $attachment->url;
+                            break;
+                        }
+                        if ($attachment->flavor == 'presenter/search+preview') {
                             $url = $attachment->url;
                         }
                     }
                     if ($find_duration) {
+                        $event->duration = 0;
                         foreach ($publication->media as $media) {
                             if ($media->duration > $event->duration) {
                                 $event->duration = $media->duration;
                             }
                         }
                     }
+                    break;
                 }
             }
+            if (!$url) {
+                continue;
+            }
             $video = new \stdClass();
-            $video->start = $event->start;
+            $video->date = self::format_date($event->start);
             $video->title = $event->title;
-            $video->created = $event->created;
-            $video->duration = $event->duration;
+            $video->duration = $event->duration ? self::format_duration($event->duration) : null;
             $video->thumbnail = $url;
             $video->link = $PAGE->url->out(false, ['e' => $event->identifier]);
             $video->description = $event->description;
@@ -102,5 +117,25 @@ class output_helper {
         $context = new stdClass();
         $context->episodes = $result;
         return $context;
+    }
+
+    private static function format_duration($duration): string {
+        $duration = intval($duration / 1000);
+        $secs = $duration % 60;
+        $duration = intdiv($duration, 60);
+        $mins = $duration % 60;
+        $hours = intdiv($duration, 60);
+
+        if ($hours) {
+            return sprintf("%d:%02d:%02d", $hours, $mins, $secs);
+        } else {
+            return sprintf("%d:%02d", $mins, $secs);
+        }
+    }
+
+    private static function format_date($startdate): string {
+        $dt = new DateTime($startdate, core_date::get_server_timezone_object());
+        return userdate($dt->getTimestamp(), get_string('strftimedatefullshort', 'core_langconfig'));
+        // return $dt->format('d.m.Y');
     }
 }

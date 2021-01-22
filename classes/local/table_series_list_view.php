@@ -41,7 +41,7 @@ class table_series_list_view extends \flexible_table {
     }
 
     public function set_data($episodes) {
-        $this->define_columns(['title', 'duration', 'created']);
+        $this->define_columns(['title', 'duration', 'date']);
         $this->define_headers([
             get_string('title', 'mod_opencast'),
             get_string('duration', 'mod_opencast'),
@@ -49,8 +49,6 @@ class table_series_list_view extends \flexible_table {
         ]);
         $this->setup();
         foreach ($episodes as $episode) {
-            $timestamp = (new DateTime($episode->created, core_date::get_user_timezone_object()))->getTimestamp();
-            $episode->created = userdate($timestamp, get_string('strftimedate', 'core_langconfig'));
             $this->add_data_keyed($episode);
         }
     }

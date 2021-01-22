@@ -60,7 +60,6 @@ class apibridge {
         if ($seriesid) {
             $resource .= "&sid=$seriesid";
         }
-        var_dump($resource);
         $response = $api->oc_get($resource);
 
         if ($api->get_http_code() != 200) {

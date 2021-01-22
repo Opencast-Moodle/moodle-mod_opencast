@@ -68,4 +68,10 @@ class mod_opencast_mod_form extends moodleform_mod {
         // Add standard buttons.
         $this->add_action_buttons();
     }
+
+    public function validation($data, $files) {
+        $errors = parent::validation($data, $files);
+
+        return $errors;
+    }
 }
