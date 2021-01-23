@@ -12,32 +12,21 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin strings are defined here.
+ * Adds admin settings for the plugin.
  *
  * @package     mod_opencast
- * @category    string
- * @copyright   2020 Tobias Reischmann <tobias.reischmann@wi.uni-muenster.de>
+ * @category    admin
+ * @copyright   2021 Justus Dieckmann WWU
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Opencast Episode';
-$string['modulename'] = 'Opencast Episode';
-$string['modulenameplural'] = 'Opencast Episodes';
-$string['opencastepisodename'] = 'Opencast Episode: {$a}';
-$string['pluginadministration'] = 'Opencast Episode administration';
-
-$string['opencastid'] = 'Opencast ID';
-
-$string['listview'] = 'View as list';
-$string['gridview'] = 'View as grid';
-
-$string['title'] = 'Title';
-$string['duration'] = 'Duration';
-$string['date'] = 'Date';
-
-$string['settings:api-channel'] = 'Opencast Channel';
+if ($hassiteconfig) {
+    $settings->add(new admin_setting_configtext('mod_opencast/channel',
+        new lang_string('settings:api-channel', 'mod_opencast'), '', 'api',
+        PARAM_ALPHANUMEXT));
+}

@@ -91,11 +91,12 @@ class output_helper {
             return false;
         }
 
+        $channel = get_config('mod_opencast', 'channel');
         foreach ($response as $event) {
             $find_duration = !$event->duration;
             $url = null;
             foreach ($event->publications as $publication) {
-                if ($publication->channel == 'api') {
+                if ($publication->channel == $channel) {
                     foreach ($publication->attachments as $attachment) {
                         // If presentation preview available, use that, else use presenter preview.
                         if ($attachment->flavor == 'presentation/search+preview') {
