@@ -59,7 +59,22 @@ class output_helper {
         }
 
         echo \html_writer::script('window.episode = ' . json_encode($response->episode));
-        echo \html_writer::start_div('player-wrapper');
+
+        // Find aspect-ratio if only one video track.
+        $resolutions = [];
+        foreach ($response->episode->mediapackage->media->track as $track) {
+            if (!array_key_exists($track->ref, $resolutions)) {
+                $resolutions[$track->ref] = $track->video->resolution;
+            }
+        }
+
+        if (count($resolutions) === 1) {
+            $resolution = str_replace('x', '/', array_pop($resolutions));
+            echo \html_writer::start_div('player-wrapper', ['style' => '--aspect-ratio:' . $resolution]);
+        } else {
+            echo \html_writer::start_div('player-wrapper');
+        }
+
         echo '<iframe src="player.html" id="player-iframe" allowfullscreen"></iframe>';
         echo \html_writer::end_div();
         $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init');

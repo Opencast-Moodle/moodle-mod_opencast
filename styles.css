@@ -1,6 +1,6 @@
 body.path-mod-opencast ul.series {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(max(20vw, 225px), 300px), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(max(20vw, 225px), 300px), 1fr)); /* stylelint-disable-line */
     grid-column-gap: 8px;
     grid-row-gap: 16px;
     padding: 0;
@@ -72,10 +72,18 @@ body.path-mod-opencast .episode .duration {
 
 body.path-mod-opencast .player-wrapper {
     position: relative;
+    margin: auto;
     width: 100%;
-    height: 0;
-    padding-top: calc(100% / (16 / 9));
+    height: 85vh;
     border: 1px solid #bbb;
+}
+
+@supports (--custom:property) {
+    body.path-mod-opencast .player-wrapper[style*="--aspect-ratio"] {
+        height: 0;
+        width: min(100%, calc(85vh * (var(--aspect-ratio))));
+        padding-top: min(85vh, 100% / (var(--aspect-ratio)));
+    }
 }
 
 body.path-mod-opencast #player-iframe {
