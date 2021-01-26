@@ -22,6 +22,8 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_opencast\local\apibridge;
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
@@ -62,6 +64,9 @@ class mod_opencast_mod_form extends moodleform_mod {
         $mform->setType('opencastid', PARAM_ALPHANUMEXT);
         $mform->addRule('opencastid', get_string('required'), 'required');
 
+        $mform->addElement('hidden', 'type');
+        $mform->setType('type', PARAM_INT);
+
         // Add standard elements.
         $this->standard_coursemodule_elements();
 
@@ -72,6 +77,15 @@ class mod_opencast_mod_form extends moodleform_mod {
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
 
+        if (!array_key_exists('opencastid', $errors)) {
+            $api = apibridge::get_instance();
+            $type = $api->find_opencast_type_for_id($data['opencastid']);
+            if ($type === \mod_opencast\local\opencasttype::UNDEFINED) {
+                $errors['opencastid'] = get_string('opencastidnotrecognized', 'mod_opencast');
+            } else {
+                $this->_form->setConstant('type', $type);
+            }
+        }
         return $errors;
     }
 }

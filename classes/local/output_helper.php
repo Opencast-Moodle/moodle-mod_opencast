@@ -62,11 +62,17 @@ class output_helper {
 
         // Find aspect-ratio if only one video track.
         $resolutions = [];
-        foreach ($response->episode->mediapackage->media->track as $track) {
-            if (!array_key_exists($track->ref, $resolutions)) {
-                $resolutions[$track->ref] = $track->video->resolution;
+        $tracks = $response->episode->mediapackage->media->track;
+        if (is_array($tracks)) {
+            foreach ($tracks as $track) {
+                if (!array_key_exists($track->ref, $resolutions)) {
+                    $resolutions[$track->ref] = $track->video->resolution;
+                }
             }
+        } else {
+            $resolutions[$tracks->ref] = $tracks->video->resolution;
         }
+
 
         if (count($resolutions) === 1) {
             $resolution = str_replace('x', '/', array_pop($resolutions));

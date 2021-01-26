@@ -32,6 +32,7 @@ $string['opencastepisodename'] = 'Opencast Episode: {$a}';
 $string['pluginadministration'] = 'Opencast Episode administration';
 
 $string['opencastid'] = 'Opencast ID';
+$string['opencastidnotrecognized'] = 'This ID is neither recognized as a series nor a video.';
 
 $string['listview'] = 'View as list';
 $string['gridview'] = 'View as grid';

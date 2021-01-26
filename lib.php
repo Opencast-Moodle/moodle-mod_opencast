@@ -56,7 +56,6 @@ function opencast_add_instance($moduleinstance, $mform = null) {
     $api = \mod_opencast\local\apibridge::get_instance();
 
     $moduleinstance->timecreated = time();
-    $moduleinstance->type = $api->find_opencast_type_for_id($moduleinstance->opencastid);
 
     $id = $DB->insert_record('opencast', $moduleinstance);
 
@@ -76,16 +75,8 @@ function opencast_add_instance($moduleinstance, $mform = null) {
 function opencast_update_instance($moduleinstance, $mform = null) {
     global $DB;
 
-    $oldopencastid = $DB->get_field('opencast', 'opencastid', ['id' => $moduleinstance->instance]);
-
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
-
-    // Reevaluate type if opencastid changed.
-    if ($oldopencastid !== $moduleinstance->opencastid) {
-        $api = \mod_opencast\local\apibridge::get_instance();
-        $moduleinstance->type = $api->find_opencast_type_for_id($moduleinstance->opencastid);
-    }
 
     return $DB->update_record('opencast', $moduleinstance);
 }
