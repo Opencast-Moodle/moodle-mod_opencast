@@ -78,10 +78,6 @@ $event->add_record_snapshot('course', $course);
 $event->add_record_snapshot('opencast', $moduleinstance);
 $event->trigger();
 
-echo $OUTPUT->header();
-
-echo $OUTPUT->heading($moduleinstance->name);
-
 if ($moduleinstance->type == opencasttype::EPISODE) {
     output_helper::output_episode($moduleinstance->opencastid);
 } else if ($moduleinstance->type == opencasttype::SERIES) {
@@ -92,7 +88,7 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
         output_helper::output_series($moduleinstance->opencastid);
     }
 } else {
-    echo "Not yet fetched.";
+    echo $OUTPUT->header();
+    echo "TEMP_ERROR";
+    echo $OUTPUT->footer();
 }
-
-echo $OUTPUT->footer();

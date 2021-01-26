@@ -27,11 +27,27 @@ class output_helper {
 
     public static function output_series($seriesid) {
         global $OUTPUT, $PAGE;
-        $context = self::create_template_context_for_series($seriesid);
 
-        if (!$context) {
-            echo "ERROR!";
+        $api = apibridge::get_instance();
+        $response = $api->get_episodes_in_series($seriesid);
+
+        if ($response) {
+            $context = self::create_template_context_for_series($response);
+        }
+
+        if (!$response || !$context) {
+            echo $OUTPUT->header();
+            echo "TEMP_ERROR!!";
+            echo $OUTPUT->footer();
             return;
+        }
+
+        echo $OUTPUT->header();
+
+        if (count($response) == 0) {
+            echo $OUTPUT->heading("TEMP_EMPTY");
+        } else {
+            echo $OUTPUT->heading($response[0]->series);
         }
 
         $listviewactive = get_user_preferences('mod_opencast/list', false);
@@ -46,19 +62,38 @@ class output_helper {
         } else {
             echo $OUTPUT->render_from_template('mod_opencast/series', $context);
         }
+
+        echo $OUTPUT->footer();
     }
 
     public static function output_episode($episodeid, $seriesid = null) {
-        global $PAGE;
+        global $PAGE, $OUTPUT;
 
         $api = apibridge::get_instance();
         $response = $api->get_episode_json($episodeid, $seriesid);
 
         if (!property_exists($response, 'episode')) {
+            echo $OUTPUT->header();
+            echo "TEMP_ERROR!!";
+            echo $OUTPUT->footer();
             return;
         }
 
+        if ($seriesid) {
+            // If episode is viewed as part of a series, add episode title to navbar.
+            $title = $response->episode->dcTitle;
+            if (strlen($title) > 50) {
+                $title = substr($title, 0, 50) . '...';
+            }
+            $PAGE->navbar->add($title);
+        }
+
+        echo $OUTPUT->header();
+
         echo \html_writer::script('window.episode = ' . json_encode($response->episode));
+
+        echo $OUTPUT->heading($response->episode->dcTitle);
+        echo '<br>';
 
         // Find aspect-ratio if only one video track.
         $resolutions = [];
@@ -73,7 +108,6 @@ class output_helper {
             $resolutions[$tracks->ref] = $tracks->video->resolution;
         }
 
-
         if (count($resolutions) === 1) {
             $resolution = str_replace('x', '/', array_pop($resolutions));
             echo \html_writer::start_div('player-wrapper', ['style' => '--aspect-ratio:' . $resolution]);
@@ -84,21 +118,17 @@ class output_helper {
         echo '<iframe src="player.html" id="player-iframe" allowfullscreen"></iframe>';
         echo \html_writer::end_div();
         $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init');
+
+        echo $OUTPUT->footer();
     }
 
-    public static function create_template_context_for_series($seriesid) {
-        $api = apibridge::get_instance();
-        $response = $api->get_episodes_in_series($seriesid);
-
-        $result = [];
+    public static function create_template_context_for_series($seriesjson) {
         global $PAGE;
 
-        if (!$response) {
-            return false;
-        }
+        $result = [];
 
         $channel = get_config('mod_opencast', 'channel');
-        foreach ($response as $event) {
+        foreach ($seriesjson as $event) {
             $find_duration = !$event->duration;
             $url = null;
             foreach ($event->publications as $publication) {
@@ -158,6 +188,5 @@ class output_helper {
     private static function format_date($startdate): string {
         $dt = new DateTime($startdate, core_date::get_server_timezone_object());
         return userdate($dt->getTimestamp(), get_string('strftimedatefullshort', 'core_langconfig'));
-        // return $dt->format('d.m.Y');
     }
 }
