@@ -21,8 +21,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_opencast\local;
-use core_date;
-use DateTime;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -41,16 +39,39 @@ class table_series_list_view extends \flexible_table {
     }
 
     public function set_data($episodes) {
-        $this->define_columns(['title', 'duration', 'date']);
+        $this->define_columns(['title', 'duration', 'date', 'video-icons']);
         $this->define_headers([
             get_string('title', 'mod_opencast'),
             get_string('duration', 'mod_opencast'),
-            get_string('date', 'mod_opencast')
+            get_string('date', 'mod_opencast'),
+            ''
         ]);
         $this->setup();
         foreach ($episodes as $episode) {
-            $this->add_data_keyed($episode);
+            $this->add_data([
+                $this->format_title($episode),
+                $episode->duration,
+                $episode->date,
+                $this->format_video_icons($episode),
+            ]);
         }
+    }
+
+    private function format_video_icons($episode) {
+        global $OUTPUT;
+
+        $output = '';
+        if ($episode->haspresenter) {
+            $output .= $OUTPUT->pix_icon('i/user', '');
+        }
+        if ($episode->haspresentation) {
+            $output .= $OUTPUT->pix_icon('i/tv', '', 'mod_opencast');
+        }
+        return $output;
+    }
+
+    private function format_title($episode): string {
+        return \html_writer::link($episode->link, $episode->title);
     }
 
 }

@@ -25,27 +25,26 @@ defined('MOODLE_INTERNAL') || die();
 
 class output_helper {
 
-    public static function output_series($seriesid) {
+    public static function output_series($seriesid, $activityname) {
         global $OUTPUT, $PAGE;
 
         $api = apibridge::get_instance();
         $response = $api->get_episodes_in_series($seriesid);
 
-        if ($response) {
-            $context = self::create_template_context_for_series($response);
+        if (!$response) {
+            throw new \exception('There was a problem reaching opencast!');
         }
 
-        if (!$response || !$context) {
-            echo $OUTPUT->header();
-            echo "TEMP_ERROR!!";
-            echo $OUTPUT->footer();
-            return;
+        $context = self::create_template_context_for_series($response);
+
+        if (!$context) {
+            throw new \coding_exception('There was a problem processing the series.');
         }
 
         echo $OUTPUT->header();
 
         if (count($response) == 0) {
-            echo $OUTPUT->heading("TEMP_EMPTY");
+            echo $OUTPUT->heading($activityname);
         } else {
             echo $OUTPUT->heading($response[0]->series);
         }
@@ -74,7 +73,7 @@ class output_helper {
 
         if (!property_exists($response, 'episode')) {
             echo $OUTPUT->header();
-            echo "TEMP_ERROR!!";
+            echo $OUTPUT->heading(get_string('errorfetchingvideo', 'mod_opencast'));
             echo $OUTPUT->footer();
             return;
         }
@@ -130,6 +129,7 @@ class output_helper {
         $channel = get_config('mod_opencast', 'channel');
         foreach ($seriesjson as $event) {
             $find_duration = !$event->duration;
+            $video = new \stdClass();
             $url = null;
             foreach ($event->publications as $publication) {
                 if ($publication->channel == $channel) {
@@ -141,6 +141,15 @@ class output_helper {
                         }
                         if ($attachment->flavor == 'presenter/search+preview') {
                             $url = $attachment->url;
+                        }
+                    }
+                    $video->haspresenter = false;
+                    $video->haspresentation = false;
+                    foreach ($publication->media as $media) {
+                        if ($media->flavor === 'presenter/delivery') {
+                            $video->haspresenter = true;
+                        } else if ($media->flavor === 'presentation/delivery') {
+                            $video->haspresentation = true;
                         }
                     }
                     if ($find_duration) {
@@ -157,7 +166,6 @@ class output_helper {
             if (!$url) {
                 continue;
             }
-            $video = new \stdClass();
             $video->date = self::format_date($event->start);
             $video->title = $event->title;
             $video->duration = $event->duration ? self::format_duration($event->duration) : null;

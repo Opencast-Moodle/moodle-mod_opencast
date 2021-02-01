@@ -24,7 +24,6 @@
 
 use mod_opencast\local\opencasttype;
 use mod_opencast\local\output_helper;
-use mod_opencast\output\renderer;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -36,6 +35,8 @@ $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id.
 $o  = optional_param('o', 0, PARAM_INT);
+
+$episode = optional_param('e', null, PARAM_ALPHANUMEXT);
 
 if ($id) {
     $cm             = get_coursemodule_from_id('opencast', $id, 0, false, MUST_EXIST);
@@ -53,7 +54,12 @@ require_login($course, true, $cm);
 
 $modulecontext = context_module::instance($cm->id);
 
-$PAGE->set_url('/mod/opencast/view.php', array('id' => $cm->id));
+if ($episode) {
+    $PAGE->set_url('/mod/opencast/view.php', array('id' => $cm->id, 'e' => $episode));
+} else {
+    $PAGE->set_url('/mod/opencast/view.php', array('id' => $cm->id));
+}
+
 $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
@@ -81,14 +87,11 @@ $event->trigger();
 if ($moduleinstance->type == opencasttype::EPISODE) {
     output_helper::output_episode($moduleinstance->opencastid);
 } else if ($moduleinstance->type == opencasttype::SERIES) {
-    $episode = optional_param('e', null, PARAM_ALPHANUMEXT);
     if ($episode) {
         output_helper::output_episode($episode, $moduleinstance->opencastid);
     } else {
-        output_helper::output_series($moduleinstance->opencastid);
+        output_helper::output_series($moduleinstance->opencastid, $moduleinstance->name);
     }
 } else {
-    echo $OUTPUT->header();
-    echo "TEMP_ERROR";
-    echo $OUTPUT->footer();
+    throw new coding_exception('This opencast activity is neither a episode nor a series.');
 }

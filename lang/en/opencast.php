@@ -42,3 +42,5 @@ $string['duration'] = 'Duration';
 $string['date'] = 'Date';
 
 $string['settings:api-channel'] = 'Opencast Channel';
+
+$string['errorfetchingvideo'] = 'There was a problem fetching the video.';
