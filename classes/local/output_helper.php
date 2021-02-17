@@ -25,7 +25,7 @@ defined('MOODLE_INTERNAL') || die();
 
 class output_helper {
 
-    public static function output_series($seriesid, $activityname) {
+    public static function output_series($seriesid, $activityname): void {
         global $OUTPUT, $PAGE;
 
         $api = apibridge::get_instance();
@@ -65,7 +65,7 @@ class output_helper {
         echo $OUTPUT->footer();
     }
 
-    public static function output_episode($episodeid, $seriesid = null) {
+    public static function output_episode($episodeid, $seriesid = null): void {
         global $PAGE, $OUTPUT;
 
         $api = apibridge::get_instance();
@@ -121,7 +121,7 @@ class output_helper {
         echo $OUTPUT->footer();
     }
 
-    public static function create_template_context_for_series($seriesjson) {
+    public static function create_template_context_for_series($seriesjson): stdClass {
         global $PAGE;
 
         $result = [];
