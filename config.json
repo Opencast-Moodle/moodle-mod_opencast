@@ -75,22 +75,22 @@
       "edu.harvard.dce.paella.flexSkipPlugin": {"enabled":true, "direction": "Rewind", "seconds": 10, "minWindowSize": 510 },
       "edu.harvard.dce.paella.flexSkipForwardPlugin": {"enabled":true, "direction": "Forward", "seconds": 30},
       "es.upv.paella.captionsPlugin": {"enabled":true, "searchOnCaptions":true},
-      "es.upv.paella.extendedTabAdapterPlugin": {"enabled":true, "minWindowSize": 400},
+      "es.upv.paella.extendedTabAdapterPlugin": {"enabled":false, "minWindowSize": 400},
       "es.upv.paella.footprintsPlugin": {"enabled":false},
       "es.upv.paella.frameControlPlugin":  {"enabled": true, "showFullPreview": "auto", "showCaptions":true, "minWindowSize": 450 },
       "es.upv.paella.fullScreenButtonPlugin": {"enabled":true, "reloadOnFullscreen":{ "enabled":true, "keepUserSelection":true }, "ariaLabel": "Switch full screen mode"},
-      "es.upv.paella.helpPlugin": {"enabled":true, "langs":["en","es"], "minWindowSize": 650 },
+      "es.upv.paella.helpPlugin": {"enabled":false, "langs":["en","es"], "minWindowSize": 650 },
       "es.upv.paella.multipleQualitiesPlugin": {"enabled":true, "showWidthRes":true, "minWindowSize": 550, "minVisibleQuality": 240, "ariaLabel": "Change video quality" },
       "es.upv.paella.playbackRatePlugin": {"enabled":true, "availableRates": [0.75, 1, 1.25, 1.5], "minWindowSize": 500 },
       "es.upv.paella.playPauseButtonPlugin": {"enabled":true},
-      "es.upv.paella.searchPlugin": {"enabled":true, "sortType":"time", "colorSearch":false, "minWindowSize": 550},
-      "es.upv.paella.sharePlugin": {"enabled":true, "minWindowSize": 600},
-      "es.upv.paella.themeChooserPlugin":  {"enabled":true, "minWindowSize": 600},
+      "es.upv.paella.searchPlugin": {"enabled":false, "sortType":"time", "colorSearch":false, "minWindowSize": 550},
+      "es.upv.paella.sharePlugin": {"enabled":false, "minWindowSize": 600},
+      "es.upv.paella.themeChooserPlugin":  {"enabled":false, "minWindowSize": 600},
       "es.upv.paella.viewModePlugin": { "enabled": true, "minWindowSize": 300 },
       "es.upv.paella.volumeRangePlugin":{"enabled":true, "showMasterVolume": true, "showSlaveVolume": false, "ariaLabel": "Volume" },
       "es.upv.paella.pipModePlugin": { "enabled":true },
-      "es.upv.paella.ratePlugin": { "enabled":true, "minWindowSize": 500 },
-      "es.upv.paella.videoZoomPlugin": { "enabled":true, "showButtons":true },
+      "es.upv.paella.ratePlugin": { "enabled":false, "minWindowSize": 500 },
+      "es.upv.paella.videoZoomPlugin": { "enabled":true, "showButtons":false },
       "es.upv.paella.audioSelector": { "enabled":true, "minWindowSize": 400 },
       "es.upv.paella.videoZoomToolbarPlugin": { "enabled":false, "targetStreamIndex":0, "minWindowSize": 500 },
       "es.upv.paella.videoZoomTrack4kPlugin": { "enabled":true, "targetStreamIndex":0, "autoModeByDefault":false, "minWindowSize": 500 },
@@ -104,7 +104,7 @@
       "es.upv.paella.showEditorPlugin":{"enabled":true,"alwaysVisible":true},
       "es.upv.paella.arrowSlidesNavigatorPlugin": {"enabled": true, "content":["presentation","presenter"] },
       "es.upv.paella.videoDataPlugin": {
-        "enabled": true,
+        "enabled": false,
         "excludeLocations":[
           "paellaplayer.upv.es"
         ],
@@ -113,7 +113,7 @@
         ]
       },
       "es.upv.paella.legalPlugin": {
-		"enabled": true,
+		"enabled": false,
 		    "label": "Legal info",
 		    "position": "right",
         "legalUrl": "https://en.wikipedia.org/wiki/General_Data_Protection_Regulation"
@@ -130,7 +130,7 @@
       "es.upv.paella.playButtonOnScreenPlugin": {"enabled":true},
       "es.upv.paella.translecture.captionsPlugin": {"enabled":true},
       "es.upv.paella.trimmingPlayerPlugin": {"enabled":true},
-      "es.upv.paella.windowTitlePlugin": {"enabled": true},
+      "es.upv.paella.windowTitlePlugin": {"enabled": false},
       "es.upv.paella.track4kPlugin": { "enabled":false },
       "es.upv.paella.relatedVideosPlugin": { "enabled":true },
 
@@ -191,11 +191,9 @@
     "repository": "../repository/"
   },
   "skin": {
+    "default": "dark_custom",
     "available": [
-      "dark",
-      "dark_small",
-      "light",
-      "light_small"
+      "dark_custom"
     ]
   }
 }
