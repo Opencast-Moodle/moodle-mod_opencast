@@ -86,7 +86,7 @@ class apibridge {
         }
 
         $response = json_decode($response);
-        if (!$response) {
+        if ($response === null) {
             return false;
         }
 
@@ -104,7 +104,7 @@ class apibridge {
         }
 
         $response = json_decode($response);
-        if (!$response) {
+        if ($response === null) {
             return false;
         }
         return $response;

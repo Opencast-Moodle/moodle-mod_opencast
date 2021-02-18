@@ -31,7 +31,7 @@ class output_helper {
         $api = apibridge::get_instance();
         $response = $api->get_episodes_in_series($seriesid);
 
-        if (!$response) {
+        if ($response === false) {
             throw new \exception('There was a problem reaching opencast!');
         }
 
@@ -43,23 +43,25 @@ class output_helper {
 
         echo $OUTPUT->header();
 
-        if (count($response) == 0) {
+        if (count($context->episodes) == 0) {
             echo $OUTPUT->heading($activityname);
+            echo '</br></br>';
+            echo \html_writer::tag('h4', get_string('seriesisempty', 'mod_opencast'));
         } else {
             echo $OUTPUT->heading($response[0]->series);
-        }
 
-        $listviewactive = get_user_preferences('mod_opencast/list', false);
-        /** @var renderer $renderer */
-        $renderer = $PAGE->get_renderer('mod_opencast');
-        echo $renderer->render_listview_toggle($listviewactive);
-        if ($listviewactive) {
-            $table = new table_series_list_view();
-            $table->define_baseurl($PAGE->url);
-            $table->set_data($context->episodes);
-            $table->finish_output();
-        } else {
-            echo $OUTPUT->render_from_template('mod_opencast/series', $context);
+            $listviewactive = get_user_preferences('mod_opencast/list', false);
+            /** @var renderer $renderer */
+            $renderer = $PAGE->get_renderer('mod_opencast');
+            echo $renderer->render_listview_toggle($listviewactive);
+            if ($listviewactive) {
+                $table = new table_series_list_view();
+                $table->define_baseurl($PAGE->url);
+                $table->set_data($context->episodes);
+                $table->finish_output();
+            } else {
+                echo $OUTPUT->render_from_template('mod_opencast/series', $context);
+            }
         }
 
         echo $OUTPUT->footer();
