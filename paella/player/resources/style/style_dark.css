@@ -8,6 +8,9 @@
 .timeControl {
   font-family: sans-serif !important;
 }
+#playerContainer:fullscreen {
+  background-color: #000 !important;
+}
 body {
   height: 100%;
   width: 100%;
@@ -2431,26 +2434,6 @@ a.btn {
   bottom: 0px;
   right: 0px;
 }
-.blackBoardDiv {
-  position: absolute;
-  /* 16:9 */
-  width: 816px;
-  height: 459px;
-  top: 135px;
-  left: 450px;
-  background-size: 100%;
-}
-.lensClass {
-  background-color: rgba(255, 236, 195, 0.3);
-  position: absolute;
-  border: 1px dotted white;
-}
-.lensContainer img {
-  width: 100% !important;
-}
-#overlayContainer div.lensContainer {
-  pointer-events: all;
-}
 .buttonPlugin.audioTags {
   text-align: center;
   background-position: -900% -200%;
@@ -2471,6 +2454,26 @@ a.btn {
 }
 .videoAudioTrackItem:hover {
   background-color: #cc0000;
+}
+.blackBoardDiv {
+  position: absolute;
+  /* 16:9 */
+  width: 816px;
+  height: 459px;
+  top: 135px;
+  left: 450px;
+  background-size: 100%;
+}
+.lensClass {
+  background-color: rgba(255, 236, 195, 0.3);
+  position: absolute;
+  border: 1px dotted white;
+}
+.lensContainer img {
+  width: 100% !important;
+}
+#overlayContainer div.lensContainer {
+  pointer-events: all;
 }
 .textBreak {
   background-color: rgba(128, 128, 128, 0.7);
@@ -2859,14 +2862,14 @@ textarea {
 .enabledFrameThumbnail:hover {
   border: 3px #cc0000 solid;
 }
-.buttonPlugin.helpButton {
-  background-position: -1300% 0%;
-}
 .buttonPlugin.showFullScreenButton {
   background-position: -900% 0%;
 }
 .buttonPlugin.showFullScreenButton.active {
   background-position: -1000% 0%;
+}
+.buttonPlugin.helpButton {
+  background-position: -1300% 0%;
 }
 .buttonPlugin.right.liveIndicator {
   width: 100px;
