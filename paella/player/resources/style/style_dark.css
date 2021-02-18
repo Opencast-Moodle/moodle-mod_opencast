@@ -1,10 +1,19 @@
 /* Light icons over dark background */
+#paella_logo-png {
+  display: none !important;
+}
+.playbackBar:focus {
+  box-shadow: none !important;
+}
+.timeControl {
+  font-family: sans-serif !important;
+}
 body {
   height: 100%;
   width: 100%;
   font-family: Verdana, sans-serif;
   font-size: 12px;
-  background: #4b4b4b;
+  background: #000;
   touch-action: none;
 }
 a {
@@ -191,7 +200,7 @@ i.button-icon.icon-screen {
   text-align: center;
 }
 .playbackControls {
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.5);
   background-image: none;
   background-size: auto;
   position: absolute;
@@ -221,13 +230,13 @@ i.button-icon.icon-screen {
   cursor: pointer;
 }
 .playbackBar:focus {
-  box-shadow: inset 0px 0px 5px 0px #FF4C4C;
+  box-shadow: inset 0px 0px 5px 0px rgba(255, 255, 255, 0.25);
   outline: none;
 }
 .playbackBarFull {
   height: 12px;
   background-color: #cc0000;
-  background: linear-gradient(to bottom, #ff0000 0%, #690000 100%);
+  background: #900000;
   position: absolute;
   top: 0px;
 }
@@ -241,10 +250,10 @@ i.button-icon.icon-screen {
   float: right;
 }
 .buttonPlugin:hover {
-  background-color: #FF4C4C;
+  background-color: rgba(255, 255, 255, 0.25);
 }
 .buttonPlugin:focus {
-  box-shadow: inset 0px 0px 5px 0px #FF4C4C;
+  box-shadow: inset 0px 0px 5px 0px rgba(255, 255, 255, 0.25);
   outline: none;
 }
 .buttonPlugin.selected {
@@ -257,7 +266,7 @@ i.button-icon.icon-screen {
   color: white;
 }
 .buttonPluginPopUp {
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.5);
   position: absolute;
   bottom: -14px;
 }
@@ -271,7 +280,7 @@ i.button-icon.icon-screen {
   width: 100%;
 }
 .buttonPluginPopUp.menuContainer .menuItem:hover {
-  background-color: #FF4C4C;
+  background-color: rgba(255, 255, 255, 0.25);
 }
 .buttonPluginPopUp.menuContainer .menuItem.selected {
   color: #cc0000;
@@ -283,7 +292,7 @@ i.button-icon.icon-screen {
   position: absolute;
   left: 0px;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.5);
   bottom: 56px;
   color: white;
 }
@@ -448,7 +457,7 @@ i.button-icon.icon-screen {
 }
 .divTimeOverlay {
   position: fixed;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.5);
   color: white;
   text-align: center;
   padding-right: 3px;
@@ -459,7 +468,7 @@ i.button-icon.icon-screen {
 }
 .divTimeImageOverlay {
   position: fixed;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 99;
   width: 256px;
   -webkit-background-size: cover;
@@ -471,7 +480,7 @@ i.button-icon.icon-screen {
   height: 100%;
   width: 100%;
   max-width: none;
-  border: 1px solid rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(0, 0, 0, 0.5);
 }
 .videoPosterFrameImage {
   position: absolute;
@@ -522,6 +531,9 @@ video::-webkit-media-controls-panel {
 }
 .dimmed-element {
   filter: blur(4px);
+}
+.playerContainer_controls_playback_playbackBar_canvas {
+  pointer-events: none;
 }
 /* TODO: Extract this CSS to editor plugins */
 .editorTrackItem.mainTrackTrim {
@@ -2419,6 +2431,26 @@ a.btn {
   bottom: 0px;
   right: 0px;
 }
+.blackBoardDiv {
+  position: absolute;
+  /* 16:9 */
+  width: 816px;
+  height: 459px;
+  top: 135px;
+  left: 450px;
+  background-size: 100%;
+}
+.lensClass {
+  background-color: rgba(255, 236, 195, 0.3);
+  position: absolute;
+  border: 1px dotted white;
+}
+.lensContainer img {
+  width: 100% !important;
+}
+#overlayContainer div.lensContainer {
+  pointer-events: all;
+}
 .buttonPlugin.audioTags {
   text-align: center;
   background-position: -900% -200%;
@@ -2440,26 +2472,6 @@ a.btn {
 .videoAudioTrackItem:hover {
   background-color: #cc0000;
 }
-.blackBoardDiv {
-  position: absolute;
-  /* 16:9 */
-  width: 816px;
-  height: 459px;
-  top: 135px;
-  left: 450px;
-  background-size: 100%;
-}
-.lensClass {
-  background-color: rgba(255, 236, 195, 0.3);
-  position: absolute;
-  border: 1px dotted white;
-}
-.lensContainer img {
-  width: 100% !important;
-}
-#overlayContainer div.lensContainer {
-  pointer-events: all;
-}
 .textBreak {
   background-color: rgba(128, 128, 128, 0.7);
   text-align: center;
@@ -2479,7 +2491,7 @@ a.btn {
 }
 .captionsBar input {
   color: white;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.5);
   border-color: #cc0000;
   width: 49%;
   margin-bottom: 0px;
@@ -2516,7 +2528,7 @@ a.btn {
   height: auto;
 }
 .captionsBar input:hover {
-  border-color: #FF4C4C;
+  border-color: rgba(255, 255, 255, 0.25);
 }
 .captionsBar input:focus {
   border-color: #cc0000;
@@ -2527,10 +2539,10 @@ a.btn {
   border: 1px solid black;
 }
 .captionsBar input:hover {
-  border-color: #FF4C4C;
+  border-color: rgba(255, 255, 255, 0.25);
 }
 .captionsBar input:focus {
-  border-color: #FF4C4C;
+  border-color: rgba(255, 255, 255, 0.25);
 }
 ::-webkit-scrollbar {
   width: 8px;
@@ -2577,7 +2589,7 @@ a.btn {
   border-radius: 12px;
 }
 .Highlight {
-  color: #FF4C4C;
+  color: rgba(255, 255, 255, 0.25);
   font-weight: bold;
 }
 #CommentPlugin_Publish_entry_buttons_area {
@@ -2655,7 +2667,7 @@ textarea {
 }
 .extendedTabAdapterPlugin > .tabsPluginContainer > .tabsLabelContainer > .tabLabel {
   display: inline;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.5);
   line-height: 26px;
   padding-left: 10px;
   padding-right: 10px;
@@ -2679,7 +2691,7 @@ textarea {
 }
 .extendedTabAdapterPlugin > .tabsPluginContainer > .tabsContentContainer {
   height: 200px;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.5);
   padding-left: 5px;
   padding-top: 9px;
   padding-right: 5px;
@@ -2704,7 +2716,7 @@ textarea {
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #FF4C4C;
+  background: rgba(255, 255, 255, 0.25);
 }
 .extendedTabAdapterPlugin > .tabsPluginContainer > .tabsContentContainer > .tabContent.enabled {
   display: block;
@@ -2847,14 +2859,14 @@ textarea {
 .enabledFrameThumbnail:hover {
   border: 3px #cc0000 solid;
 }
+.buttonPlugin.helpButton {
+  background-position: -1300% 0%;
+}
 .buttonPlugin.showFullScreenButton {
   background-position: -900% 0%;
 }
 .buttonPlugin.showFullScreenButton.active {
   background-position: -1000% 0%;
-}
-.buttonPlugin.helpButton {
-  background-position: -1300% 0%;
 }
 .buttonPlugin.right.liveIndicator {
   width: 100px;
@@ -2951,17 +2963,17 @@ textarea {
 }
 .searchBar input {
   color: white;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.5);
   border-color: #cc0000;
   width: 96%;
   margin-bottom: 0px;
   margin-left: 1px;
 }
 .searchBar input:hover {
-  border-color: #FF4C4C;
+  border-color: rgba(255, 255, 255, 0.25);
 }
 .searchBar input:focus {
-  border-color: #FF4C4C;
+  border-color: rgba(255, 255, 255, 0.25);
 }
 .searchBody {
   max-height: 280px;
@@ -2972,10 +2984,10 @@ textarea {
   display: block;
   margin-left: 3px;
   min-height: 70px;
-  border: 1px solid rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(0, 0, 0, 0.5);
 }
 .hover {
-  background-color: #FF4C4C;
+  background-color: rgba(255, 255, 255, 0.25);
 }
 .redScore {
   background-color: rgba(255, 0, 0, 0.2);
@@ -3020,7 +3032,7 @@ textarea {
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #FF4C4C;
+  background: rgba(255, 255, 255, 0.25);
 }
 svg path,
 svg rect {
@@ -3047,7 +3059,7 @@ svg rect {
 }
 .alert-share {
   background-color: #a4a4a4;
-  border-color: #4b4b4b;
+  border-color: #000;
   color: #333333;
   user-select: text;
 }
@@ -3078,7 +3090,7 @@ svg rect {
   padding-bottom: 3px;
 }
 .buttonPluginPopUp.themeChooserPlugin .themebutton:hover {
-  background-color: #FF4C4C;
+  background-color: rgba(255, 255, 255, 0.25);
 }
 .translecturesCaptionsMessageBox {
   margin-left: auto;
@@ -3245,7 +3257,7 @@ svg rect {
   background-position: -1100% 0%;
 }
 .viewModeItemButton:hover {
-  background-color: #FF4C4C;
+  background-color: rgba(255, 255, 255, 0.25);
 }
 .buttonPlugin.volumeRangeButton.mute {
   background-position: -300% 0%;

@@ -82,7 +82,7 @@ body.path-mod-opencast .player-wrapper {
     body.path-mod-opencast .player-wrapper[style*="--aspect-ratio"] {
         height: 0;
         width: min(100%, calc(85vh * (var(--aspect-ratio))));
-        padding-top: min(85vh, 100% / (var(--aspect-ratio)));
+        padding-top: min(85vh, calc(100% / (var(--aspect-ratio))));
     }
 }
 

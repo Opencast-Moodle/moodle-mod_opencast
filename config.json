@@ -191,9 +191,9 @@
     "repository": "../repository/"
   },
   "skin": {
-    "default": "dark_custom",
+    "default": "dark",
     "available": [
-      "dark_custom"
+      "dark"
     ]
   }
 }
