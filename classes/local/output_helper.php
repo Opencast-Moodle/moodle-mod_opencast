@@ -118,7 +118,9 @@ class output_helper {
 
         echo '<iframe src="player.html" id="player-iframe" allowfullscreen"></iframe>';
         echo \html_writer::end_div();
-        $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init');
+
+        $configurl = new \moodle_url(get_config('mod_opencast', 'configurl'));
+        $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init', [$configurl->out(false)]);
 
         echo $OUTPUT->footer();
     }

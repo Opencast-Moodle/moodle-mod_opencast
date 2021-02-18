@@ -29,4 +29,8 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_configtext('mod_opencast/channel',
         new lang_string('settings:api-channel', 'mod_opencast'), '', 'api',
         PARAM_ALPHANUMEXT));
+
+    $settings->add(new admin_setting_configtext('mod_opencast/configurl',
+        new lang_string('settings:configurl', 'mod_opencast'),
+        new lang_string('settings:configurl_desc', 'mod_opencast'), '/mod/opencast/config.json'));
 }

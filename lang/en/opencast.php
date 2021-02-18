@@ -42,6 +42,8 @@ $string['duration'] = 'Duration';
 $string['date'] = 'Date';
 
 $string['settings:api-channel'] = 'Opencast Channel';
+$string['settings:configurl'] = 'URL to Paella config.json';
+$string['settings:configurl_desc'] = 'URL of the config.json used by Paella Player. Can either be a absolute URL or a URL relative to the wwwroot.';
 
 $string['errorfetchingvideo'] = 'There was a problem fetching the video.';
 $string['seriesisempty'] = 'This series is currently empty.';
