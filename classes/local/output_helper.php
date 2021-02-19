@@ -199,6 +199,7 @@ class output_helper {
 
     private static function format_date($startdate): string {
         $dt = new DateTime($startdate, core_date::get_server_timezone_object());
-        return userdate($dt->getTimestamp(), get_string('strftimedatefullshort', 'core_langconfig'));
+        return userdate($dt->getTimestamp(), get_string('strftimedatefullshort', 'core_langconfig'),
+            99, false);
     }
 }
