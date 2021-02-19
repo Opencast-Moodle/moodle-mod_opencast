@@ -1,6 +1,6 @@
 body.path-mod-opencast ul.series {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(max(20vw, 225px), 300px), 1fr)); /* stylelint-disable-line */
+    grid-template-columns: repeat(auto-fill, minmax(clamp(225px, 20vw, 300px), 1fr)); /* stylelint-disable-line */
     grid-column-gap: 8px;
     grid-row-gap: 16px;
     padding: 0;
@@ -22,11 +22,14 @@ body.path-mod-opencast .episode > a {
 
 body.path-mod-opencast .episode > a:hover {
     text-decoration: none;
+    background-color: #f2f2f2;
 }
 
 body.path-mod-opencast .episode img {
     width: 100%;
     border: 1px solid #ccc;
+    aspect-ratio: 16 / 9; /* stylelint-disable-line */ /* not necessary, only improvement for those who support it. */
+    object-fit: contain;
 }
 
 body.path-mod-opencast .episode .title {
