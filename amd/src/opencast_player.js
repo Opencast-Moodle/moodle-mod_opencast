@@ -7,6 +7,10 @@ define(['jquery', 'mod_opencast/opencast_to_paella_converter'],
             $().ready(() => {
                 const iframeWindow = document.getElementById('player-iframe').contentWindow;
                 iframeWindow.paella_debug_baseUrl = wwwroot + '/mod/opencast/paella/repository/';
+                if (!iframeWindow.paella || !iframeWindow.paella.lazyLoad) {
+                    setTimeout(initManage, 20, configUrl);
+                    return;
+                }
                 iframeWindow.paella.lazyLoad('playerContainer', {
                     configUrl: configUrl,
                     loadVideo: function() {
