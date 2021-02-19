@@ -62,7 +62,7 @@ body.path-mod-opencast .episode .duration {
     bottom: 4px;
     right: 4px;
     line-height: 1em;
-    padding: 3px 3px 1px 3px;
+    padding: 3px;
     background-color: rgba(0, 0, 0, 0.8);
     color: #eee;
     border-radius: 2px;
