@@ -91,9 +91,11 @@ class output_helper {
 
         echo $OUTPUT->header();
 
-        echo \html_writer::script('window.episode = ' . json_encode($response->episode));
+        echo \html_writer::script('window.episode = ' .
+            json_encode(paella_transform::get_paella_data_json($episodeid, $seriesid)));
 
         echo $OUTPUT->heading($response->episode->dcTitle);
+
         echo '<br>';
 
         // Find aspect-ratio if only one video track.

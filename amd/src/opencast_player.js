@@ -1,5 +1,5 @@
-define(['jquery', 'mod_opencast/opencast_to_paella_converter'],
-    function($, initOcToPaella) {
+define(['jquery'],
+    function($) {
 
         var wwwroot = M.cfg.wwwroot;
 
@@ -15,9 +15,8 @@ define(['jquery', 'mod_opencast/opencast_to_paella_converter'],
                     configUrl: configUrl,
                     loadVideo: function() {
                         return new Promise((resolve) => {
-                            const OpencastToPaellaConverter = initOcToPaella(iframeWindow.base, iframeWindow.paella);
-                            let data = new OpencastToPaellaConverter().convertToDataJson(window.episode);
-                            resolve(data);
+                            console.log(window.episode);
+                            resolve(window.episode);
                         });
                     }
                 });

@@ -24,6 +24,7 @@
 
 namespace mod_opencast\local;
 
+use mod_h5pactivity\output\result\other;
 use tool_opencast\local\api;
 
 defined('MOODLE_INTERNAL') || die();
@@ -110,6 +111,28 @@ class apibridge {
         return $response;
     }
 
+
+    public function get_episode($episodeid, $ensure_series = null) {
+        $api = new api();
+        $resource = "/api/events/$episodeid?sign=true&withpublications=true&withmetadata=true";
+        $response = $api->oc_get($resource);
+
+        if ($api->get_http_code() != 200) {
+            return false;
+        }
+
+        $response = json_decode($response);
+        if ($response === null) {
+            return false;
+        }
+
+        if ($ensure_series) {
+            if ($response->is_part_of !== $ensure_series) {
+                return false;
+            }
+        }
+        return $response;
+    }
 
     /**
      * Finds out, if a opencastid specifies an episode, a series, or nothing.
