@@ -99,7 +99,7 @@ class paella_transform {
         return $framelist;
     }
 
-    private static function get_streams($publication, $framelist = []) {
+    private static function get_streams($publication) {
         $streams = [];
 
         foreach ($publication->media as $media) {
@@ -129,6 +129,23 @@ class paella_transform {
         return array_values($streams);
     }
 
+    private static function get_captions($publication) {
+        $captions = [];
+        foreach ($publication->attachments as $attachment) {
+            list($type1, $type2) = explode('/', $attachment->flavor, 2);
+            if ($type1 === 'captions') {
+                list($format, $lang) = explode('+', $type2, 2);
+                $captions[] = [
+                    'lang' => $lang,
+                    'text' => $lang,
+                    'format' => $format,
+                    'url' => $attachment->url
+                ];
+            }
+        }
+        return $captions;
+    }
+
     public static function get_paella_data_json($episodeid, $seriesid = null) {
         $api = new apibridge();
         if (($episode = $api->get_episode($episodeid, $seriesid)) === false) {
@@ -147,7 +164,7 @@ class paella_transform {
             ],
             'streams' => self::get_streams($publication),
             'frameList' => self::get_frame_list($publication),
-            'captions' => null
+            'captions' => self::get_captions($publication)
         ];
     }
 
