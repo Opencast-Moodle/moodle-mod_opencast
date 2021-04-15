@@ -52,31 +52,6 @@ class apibridge {
         return $apibridge;
     }
 
-    public function get_episode_json($episodeid, $seriesid = null) {
-        $result = new \stdClass();
-        $result->error = 0;
-
-        $api = new api();
-        $resource = "/search/episode.json?id=$episodeid&sign=true";
-        if ($seriesid) {
-            $resource .= "&sid=$seriesid";
-        }
-        $response = $api->oc_get($resource);
-
-        if ($api->get_http_code() != 200) {
-            $result->error = $api->get_http_code();
-            return $result;
-        }
-
-        $response = json_decode($response);
-        if (!$response || !property_exists($response->{'search-results'}, 'result')) {
-            return $result;
-        }
-
-        $result->episode = $response->{'search-results'}->result;
-        return $result;
-    }
-
     public function get_episodes_in_series($seriesid) {
         $api = new api();
         $resource = "/api/events?filter=is_part_of:$seriesid&withpublications=true&sort=start_date:DESC,title:ASC";

@@ -70,19 +70,19 @@ class output_helper {
     public static function output_episode($episodeid, $seriesid = null): void {
         global $PAGE, $OUTPUT;
 
-        $api = apibridge::get_instance();
-        $response = $api->get_episode_json($episodeid, $seriesid);
+        $data = paella_transform::get_paella_data_json($episodeid, $seriesid);
 
-        if (!property_exists($response, 'episode')) {
+        if (!$data) {
             echo $OUTPUT->header();
             echo $OUTPUT->heading(get_string('errorfetchingvideo', 'mod_opencast'));
             echo $OUTPUT->footer();
             return;
         }
 
+        $title = $data['metadata']['title'];
+
         if ($seriesid) {
             // If episode is viewed as part of a series, add episode title to navbar.
-            $title = $response->episode->dcTitle;
             if (strlen($title) > 50) {
                 $title = substr($title, 0, 50) . '...';
             }
@@ -91,28 +91,17 @@ class output_helper {
 
         echo $OUTPUT->header();
 
-        echo \html_writer::script('window.episode = ' .
-            json_encode(paella_transform::get_paella_data_json($episodeid, $seriesid)));
+        echo \html_writer::script('window.episode = ' . json_encode($data));
 
-        echo $OUTPUT->heading($response->episode->dcTitle);
+        echo $OUTPUT->heading($title);
 
         echo '<br>';
 
-        // Find aspect-ratio if only one video track.
-        $resolutions = [];
-        $tracks = $response->episode->mediapackage->media->track;
-        if (is_array($tracks)) {
-            foreach ($tracks as $track) {
-                if (!array_key_exists($track->ref, $resolutions)) {
-                    $resolutions[$track->ref] = $track->video->resolution;
-                }
-            }
-        } else {
-            $resolutions[$tracks->ref] = $tracks->video->resolution;
-        }
-
-        if (count($resolutions) === 1) {
-            $resolution = str_replace('x', '/', array_pop($resolutions));
+        // Find aspect-ratio if there is only one video track.
+        if (count($data['streams']) === 1) {
+            $sources = $data['streams'][0]['sources'];
+            $res = $sources[array_key_first($sources)][0]['res'];
+            $resolution = $res['w'] . '/' . $res['h'];
             echo \html_writer::start_div('player-wrapper', ['style' => '--aspect-ratio:' . $resolution]);
         } else {
             echo \html_writer::start_div('player-wrapper');
