@@ -15,7 +15,6 @@ define(['jquery'],
                     configUrl: configUrl,
                     loadVideo: function() {
                         return new Promise((resolve) => {
-                            console.log(window.episode);
                             resolve(window.episode);
                         });
                     }
