@@ -89,7 +89,7 @@ class apibridge {
 
     public function get_episode($episodeid, $ensure_series = null) {
         $api = new api();
-        $resource = "/api/events/$episodeid?sign=true&withpublications=true&withmetadata=true";
+        $resource = "/api/events/$episodeid?sign=true&withpublications=true";
         $response = $api->oc_get($resource);
 
         if ($api->get_http_code() != 200) {
