@@ -41,7 +41,7 @@ function xmldb_opencast_upgrade($oldversion) {
     //
     // You will also have to create the db/install.xml file by using the XMLDB Editor.
     // Documentation for the XMLDB Editor can be found at:
-    // https://docs.moodle.org/dev/XMLDB_editor
+    // https://docs.moodle.org/dev/XMLDB_editor .
 
     return true;
 }

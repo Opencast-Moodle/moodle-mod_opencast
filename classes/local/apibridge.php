@@ -87,7 +87,7 @@ class apibridge {
     }
 
 
-    public function get_episode($episodeid, $ensure_series = null) {
+    public function get_episode($episodeid, $ensureseries = null) {
         $api = new api();
         $resource = "/api/events/$episodeid?sign=true&withpublications=true";
         $response = $api->oc_get($resource);
@@ -101,8 +101,8 @@ class apibridge {
             return false;
         }
 
-        if ($ensure_series) {
-            if ($response->is_part_of !== $ensure_series) {
+        if ($ensureseries) {
+            if ($response->is_part_of !== $ensureseries) {
                 return false;
             }
         }

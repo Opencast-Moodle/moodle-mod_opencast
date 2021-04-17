@@ -123,7 +123,7 @@ class output_helper {
 
         $channel = get_config('mod_opencast', 'channel');
         foreach ($seriesjson as $event) {
-            $find_duration = !$event->duration;
+            $findduration = !$event->duration;
             $video = new \stdClass();
             $url = null;
             foreach ($event->publications as $publication) {
@@ -147,7 +147,7 @@ class output_helper {
                             $video->haspresentation = true;
                         }
                     }
-                    if ($find_duration) {
+                    if ($findduration) {
                         $event->duration = 0;
                         foreach ($publication->media as $media) {
                             if ($media->duration > $event->duration) {

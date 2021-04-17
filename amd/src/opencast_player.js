@@ -1,28 +1,25 @@
 define(['jquery'],
     function($) {
 
-        var wwwroot = M.cfg.wwwroot;
-
-        function initManage(configUrl) {
+        /**
+         * Initializes the Paella Player
+         * @param {string} configUrl URL of the config.json
+         */
+        function initPaella(configUrl) {
             $().ready(() => {
                 const iframeWindow = document.getElementById('player-iframe').contentWindow;
-                iframeWindow.paella_debug_baseUrl = wwwroot + '/mod/opencast/paella/repository/';
-                if (!iframeWindow.paella || !iframeWindow.paella.lazyLoad) {
-                    setTimeout(initManage, 20, configUrl);
+                if (!iframeWindow.paella || !iframeWindow.paella.lazyLoad || !window.episode) {
+                    setTimeout(initPaella, 20, configUrl);
                     return;
                 }
                 iframeWindow.paella.lazyLoad('playerContainer', {
                     configUrl: configUrl,
-                    loadVideo: function() {
-                        return new Promise((resolve) => {
-                            resolve(window.episode);
-                        });
-                    }
+                    data: window.episode
                 });
             });
         }
 
         return {
-            init: initManage
+            init: initPaella
         };
     });

@@ -37,18 +37,17 @@ use stdClass;
 class renderer extends plugin_renderer_base {
 
     public function render_listview_toggle($listviewactive) {
-        global $PAGE;
 
         $o = html_writer::start_div('mt-3 mb-1 w-100 text-right icon-size-4');
 
         if ($listviewactive) {
             $icon = $this->output->pix_icon('i/grid', get_string('gridview', 'mod_opencast'), 'mod_opencast');
-        } else  {
+        } else {
             $icon = $this->output->pix_icon('i/list', get_string('listview', 'mod_opencast'), 'mod_opencast');
         }
 
         $o .= html_writer::link(
-            new moodle_url($PAGE->url, ['list' => $listviewactive ? '0' : '1', 'sesskey' => sesskey()]),
+            new moodle_url($this->page->url, ['list' => $listviewactive ? '0' : '1', 'sesskey' => sesskey()]),
             $icon
         );
 
