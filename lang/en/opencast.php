@@ -25,12 +25,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Opencast Episode';
-$string['modulename'] = 'Opencast Episode';
-$string['modulenameplural'] = 'Opencast Episodes';
-$string['opencastname'] = 'Opencast Episode: {$a}';
-$string['pluginadministration'] = 'Opencast Episode administration';
-$string['opencast:addinstance'] = 'Add a new Opencast instance';
+$string['pluginname'] = 'View Opencast';
+$string['modulename'] = 'View Opencast';
+$string['modulenameplural'] = 'View Opencasts';
+$string['opencastname'] = 'View Opencast: {$a}';
+$string['pluginadministration'] = 'View Opencast administration';
+$string['opencast:addinstance'] = 'Add a new View Opencast instance';
 
 $string['opencastid'] = 'Opencast ID';
 $string['opencastidnotrecognized'] = 'This ID is neither recognized as a series nor a video.';

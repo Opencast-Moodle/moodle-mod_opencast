@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * API-bridge for mod_opencast. Contain all the function, which uses the external API.
+ * API-bridge for mod_opencast. Contains all the functions which use the external API.
  *
  * @package    mod_opencast
  * @copyright  2020 Justus Dieckmann WWU
@@ -24,17 +24,21 @@
 
 namespace mod_opencast\local;
 
-use mod_h5pactivity\output\result\other;
 use tool_opencast\local\api;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * API-bridge for mod_opencast. Contains all the functions which use the external API.
+ *
+ * @package    mod_opencast
+ * @copyright  2020 Justus Dieckmann WWU
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class apibridge {
 
     /**
      * Get an instance of an object of this class. Create as a singleton.
-     *
-     * @staticvar \apibridge $apibridge
      *
      * @param boolean $forcenewinstance true, when a new instance should be created.
      *
@@ -52,6 +56,11 @@ class apibridge {
         return $apibridge;
     }
 
+    /**
+     * Get all events in the specified series.
+     * @param string $seriesid
+     * @return false|mixed
+     */
     public function get_episodes_in_series($seriesid) {
         $api = new api();
         $resource = "/api/events?filter=is_part_of:$seriesid&withpublications=true&sort=start_date:DESC,title:ASC";
@@ -69,7 +78,11 @@ class apibridge {
         return $response;
     }
 
-
+    /**
+     * Gets the information about the given series.
+     * @param string $seriesid
+     * @return false|mixed
+     */
     public function get_series($seriesid) {
         $api = new api();
         $resource = "/api/series/$seriesid";
@@ -86,7 +99,12 @@ class apibridge {
         return $response;
     }
 
-
+    /**
+     * Gets the information about the given Episode.
+     * @param string $episodeid
+     * @param null|string $ensureseries If not null, will return false if the episode is not part of the series.
+     * @return false|mixed
+     */
     public function get_episode($episodeid, $ensureseries = null) {
         $api = new api();
         $resource = "/api/events/$episodeid?sign=true&withpublications=true";
@@ -112,7 +130,7 @@ class apibridge {
     /**
      * Finds out, if a opencastid specifies an episode, a series, or nothing.
      * @param string $id opencastid
-     * @return int the type {@link opencasttype}
+     * @return int the type {@see opencasttype}
      */
     public function find_opencast_type_for_id($id) {
         $api = new api();

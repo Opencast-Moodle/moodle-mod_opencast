@@ -65,12 +65,10 @@ jobs:
         run: moodle-plugin-ci phplint
 
       - name: PHP Copy/Paste Detector
-        continue-on-error: true
         if: ${{ always() }}
         run: moodle-plugin-ci phpcpd
 
       - name: PHP Mess Detector
-        continue-on-error: true
         if: ${{ always() }}
         run: moodle-plugin-ci phpmd
 
@@ -79,7 +77,6 @@ jobs:
         run: moodle-plugin-ci codechecker --max-warnings 0
 
       - name: Moodle PHPDoc Checker
-        continue-on-error: true
         if: ${{ always() }}
         run: moodle-plugin-ci phpdoc
 

@@ -36,6 +36,11 @@ use stdClass;
  */
 class renderer extends plugin_renderer_base {
 
+    /**
+     * Renders a toggle icon for toggling the Series List/Grid-View.
+     * @param bool $listviewactive whether the listview is active.
+     * @return string
+     */
     public function render_listview_toggle($listviewactive) {
 
         $o = html_writer::start_div('mt-3 mb-1 w-100 text-right icon-size-4');

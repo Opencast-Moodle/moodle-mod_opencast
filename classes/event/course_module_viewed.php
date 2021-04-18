@@ -31,7 +31,7 @@ defined('MOODLE_INTERNAL') || die();
  * The mod_opencast course module viewed event class.
  *
  * @package    mod_opencast
- * @copyright   2020 Tobias Reischmann <tobias.reischmann@wi.uni-muenster.de>
+ * @copyright  2020 Tobias Reischmann <tobias.reischmann@wi.uni-muenster.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_module_viewed extends \core\event\course_module_viewed {
@@ -45,6 +45,10 @@ class course_module_viewed extends \core\event\course_module_viewed {
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 
+    /**
+     * Returns the objectid mapping.
+     * @return string[]
+     */
     public static function get_objectid_mapping() {
         return array('db' => 'opencast', 'restore' => 'opencast');
     }

@@ -24,14 +24,22 @@
 
 namespace mod_opencast\local;
 
-use tool_opencast\local\api;
-
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Types of mod_opencast instances. Either SERIES, EPISODE or UNDEFINED.
+ *
+ * @package    mod_opencast
+ * @copyright  2020 Justus Dieckmann WWU
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class opencasttype {
 
+    /** @var int It is not known, what is specified by the ID */
     const UNDEFINED = 0;
+    /** @var int The ID specifies a Episode */
     const EPISODE = 1;
+    /** @var int The ID specifies a Series */
     const SERIES = 2;
 
 }

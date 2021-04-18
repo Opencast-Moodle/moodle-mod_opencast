@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Capability definitions for mod_opencast.
+ *
+ * @package    mod_opencast
+ * @copyright  2020 Tobias Reischmann WWU
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or late
+ */
+
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(

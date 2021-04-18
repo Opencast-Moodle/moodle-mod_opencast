@@ -34,10 +34,18 @@ require_once($CFG->libdir . '/tablelib.php');
  */
 class table_series_list_view extends \flexible_table {
 
+    /**
+     * table_series_list_view constructor.
+     */
     public function __construct() {
         parent::__construct('mod-opencast-series-list-view');
     }
 
+    /**
+     * Sets up the flexible table with the given $episodes.
+     * @param \stdClass[] $episodes array of episodes as given by
+     * \mod_opencast\local\output_helper::create_template_context_for_series.
+     */
     public function set_data($episodes) {
         $this->define_columns(['title', 'duration', 'date', 'video-icons']);
         $this->define_headers([
@@ -57,6 +65,11 @@ class table_series_list_view extends \flexible_table {
         }
     }
 
+    /**
+     * Returns the html code for the video-icon column.
+     * @param \stdClass $episode the row
+     * @return string
+     */
     private function format_video_icons($episode) {
         global $OUTPUT;
 
@@ -70,6 +83,11 @@ class table_series_list_view extends \flexible_table {
         return $output;
     }
 
+    /**
+     * Returns the html code for the title column.
+     * @param \stdClass $episode the row
+     * @return string
+     */
     private function format_title($episode): string {
         return \html_writer::link($episode->link, $episode->title);
     }

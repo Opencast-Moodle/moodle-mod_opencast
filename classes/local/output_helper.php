@@ -14,6 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Helper for generating page output for series and episodes.
+ * @package    mod_opencast
+ * @copyright  2021 Justus Dieckmann WWU
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 namespace mod_opencast\local;
 
 use core_date;
@@ -23,8 +29,19 @@ use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Helper for generating page output for series and episodes.
+ * @package    mod_opencast
+ * @copyright  2021 Justus Dieckmann WWU
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class output_helper {
 
+    /**
+     * Prints output for series view.
+     * @param string $seriesid opencast id of series.
+     * @param string $activityname name of Activity.
+     */
     public static function output_series($seriesid, $activityname): void {
         global $OUTPUT, $PAGE;
 
@@ -67,6 +84,11 @@ class output_helper {
         echo $OUTPUT->footer();
     }
 
+    /**
+     * Prints output for episode.
+     * @param string $episodeid The opencast episode id
+     * @param null|string $seriesid If given, it will be ensured that the episode is part of the series.
+     */
     public static function output_episode($episodeid, $seriesid = null): void {
         global $PAGE, $OUTPUT;
 
@@ -116,6 +138,11 @@ class output_helper {
         echo $OUTPUT->footer();
     }
 
+    /**
+     * Creates Context for use in series template.
+     * @param array $seriesjson Response from /api/events/
+     * @return stdClass (example in series.mustache)
+     */
     public static function create_template_context_for_series($seriesjson): stdClass {
         global $PAGE;
 
@@ -174,6 +201,11 @@ class output_helper {
         return $context;
     }
 
+    /**
+     * Formats a duration in seconds into h:mm:ss or m:ss
+     * @param int $duration
+     * @return string
+     */
     private static function format_duration($duration): string {
         $duration = intval($duration / 1000);
         $secs = $duration % 60;
@@ -188,6 +220,11 @@ class output_helper {
         }
     }
 
+    /**
+     * Formats a date.
+     * @param string $startdate
+     * @return string
+     */
     private static function format_date($startdate): string {
         $dt = new DateTime($startdate, core_date::get_server_timezone_object());
         return userdate($dt->getTimestamp(), get_string('strftimedatefullshort', 'core_langconfig'),
