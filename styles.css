@@ -1,0 +1,99 @@
+body.path-mod-opencast ul.series {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(clamp(225px, 20vw, 300px), 1fr)); /* stylelint-disable-line */
+    grid-column-gap: 8px;
+    grid-row-gap: 16px;
+    padding: 0;
+}
+
+body.path-mod-opencast ul.series,
+body.path-mod-opencast li.episode {
+    list-style: none;
+}
+
+body.path-mod-opencast .episode > a {
+    color: #333;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #bbb;
+    padding: 4px;
+}
+
+body.path-mod-opencast .episode > a:hover {
+    text-decoration: none;
+    background-color: #f2f2f2;
+}
+
+body.path-mod-opencast .episode img {
+    width: 100%;
+    border: 1px solid #ccc;
+    aspect-ratio: 16 / 9; /* stylelint-disable-line */ /* not necessary, only improvement for those who support it. */
+    object-fit: contain;
+}
+
+body.path-mod-opencast .episode .title {
+    margin: 6px 2px 4px 2px;
+    font-weight: bold;
+    line-height: 1.3em;
+    max-height: 2.6em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+}
+
+body.path-mod-opencast .episode .infos {
+    margin: auto 2px 2px 2px;
+}
+
+body.path-mod-opencast .episode .date {
+    color: #666;
+    font-size: 0.9em;
+    margin-top: auto;
+    margin-left: 2px;
+}
+
+body.path-mod-opencast .episode .thumbnail {
+    position: relative;
+}
+
+body.path-mod-opencast .episode .duration {
+    float: right;
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    line-height: 1em;
+    padding: 3px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #eee;
+    border-radius: 2px;
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+body.path-mod-opencast .player-wrapper {
+    position: relative;
+    margin: auto;
+    width: 100%;
+    height: 85vh;
+    border: 1px solid #bbb;
+}
+
+@supports (--custom:property) {
+    body.path-mod-opencast .player-wrapper[style*="--aspect-ratio"] {
+        height: 0;
+        width: min(100%, calc(85vh * (var(--aspect-ratio))));
+        padding-top: min(85vh, calc(100% / (var(--aspect-ratio))));
+    }
+}
+
+body.path-mod-opencast #player-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}

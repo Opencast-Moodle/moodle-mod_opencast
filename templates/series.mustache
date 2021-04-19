@@ -1,0 +1,53 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_opencast/series
+
+    This template renders the series.
+
+    Example context (json):
+    {
+      "episodes": [
+        {
+          "haspresenter": true,
+          "haspresentation": false,
+          "date": "14/12/20",
+          "title": "1. Mein Video, das hat aber irgendwie nen ganz schön langen Titel. Hui, das hätte ich ja nicht erwartet!",
+          "duration": "0:30",
+          "thumbnail": "http://localhost:8080/static/mh_default_org/api/bb495e5f-b737-41c2-9095-4e6e08c963d4/9ff8a2cc-a112-44bd-a799-a63b6c0d63d7/file_example_MOV_1280_1_4MB_1_000s_search.jpg",
+          "link": "http://localhost/moodle310/mod/opencast/view.php?id=11&e=bb495e5f-b737-41c2-9095-4e6e08c963d4",
+          "description": ""
+        }
+      ]
+    }
+}}
+<ul class="series">
+    {{#episodes}}
+        <li class="episode" title="{{ title }}">
+            <a href="{{link}}">
+                <div class="thumbnail">
+                    <img src="{{{ thumbnail }}}" alt="{{ title }}"/>
+                    {{# duration }}
+                        <span class="duration">{{ duration }}</span>
+                    {{/duration}}
+                </div>
+                <div class="title">{{ title }}</div>
+                <span class="date">{{ date }}</span>
+            </a>
+        </li>
+    {{/episodes}}
+</ul>
