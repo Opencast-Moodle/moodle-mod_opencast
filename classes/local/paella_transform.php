@@ -15,9 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Contains Functions to transform the opencast /api/events/{id} response into a data.json
- * as accepted by paella player.
- *
+ * Contains Functions to transform the opencast /api/events/{id} response into a data.json as accepted by paella player.
  * @package    mod_opencast
  * @copyright  2021 Justus Dieckmann WWU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -28,9 +26,21 @@ namespace mod_opencast\local;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Helper for preparing the data from the Opencast API for the paella player.
+ * @package mod_opencast
+ * @copyright  2021 Justus Dieckmann WWU
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class paella_transform
 {
 
+    /**
+     * Returns the publication with the correct release channel for a given episode.
+     * @param string $episode Episode id
+     * @return false|mixed Publication or false if no publication for the configured channel exists.
+     * @throws \dml_exception
+     */
     private static function get_api_publication($episode) {
         $channel = get_config('mod_opencast', 'channel');
         foreach ($episode->publications as $publication) {
@@ -41,6 +51,11 @@ class paella_transform
         return false;
     }
 
+    /**
+     * Returns the preview image for a publication.
+     * @param string $publication Publication id
+     * @return mixed|null Url to preview image or null if not existing
+     */
     private static function get_preview_image($publication) {
         $presenterpreview = null;
         $presentationpreview = null;
@@ -59,6 +74,11 @@ class paella_transform
         return $presentationpreview ?? $presenterpreview ?? $otherpreview;
     }
 
+    /**
+     * Returns the duration of a publication.
+     * @param string $publication Publication id
+     * @return float|int duration in seconds
+     */
     private static function get_duration($publication) {
         $duration = 0;
 
@@ -70,6 +90,11 @@ class paella_transform
         return $duration / 1000;
     }
 
+    /**
+     * Returns the frames of a publication.
+     * @param string $publication Publication id
+     * @return array of frames
+     */
     private static function get_frame_list($publication) {
         $framelist = [];
 
@@ -100,6 +125,11 @@ class paella_transform
         return $framelist;
     }
 
+    /**
+     * Creates the streams for a publication.
+     * @param string $publication Publication id
+     * @return array of streams
+     */
     private static function get_streams($publication) {
         $streams = [];
 
@@ -129,6 +159,11 @@ class paella_transform
         return array_values($streams);
     }
 
+    /**
+     * Returns the captions of a publication.
+     * @param string $publication Publication id
+     * @return array of captions
+     */
     private static function get_captions($publication) {
         $captions = [];
         foreach ($publication->attachments as $attachment) {
@@ -146,6 +181,13 @@ class paella_transform
         return $captions;
     }
 
+    /**
+     * Returns the video data from Opencast in the format for the paella player.
+     * @param string $episodeid Opencast episode id
+     * @param string|null $seriesid Opencast series id
+     * @return array|false Video data or false if data could not be retrieved
+     * @throws \dml_exception
+     */
     public static function get_paella_data_json($episodeid, $seriesid = null) {
         $api = new apibridge();
         if (($episode = $api->get_episode($episodeid, $seriesid)) === false) {
