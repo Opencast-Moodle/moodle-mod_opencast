@@ -28,11 +28,12 @@ namespace mod_opencast\local;
 
 defined('MOODLE_INTERNAL') || die();
 
-class paella_transform {
+class paella_transform
+{
 
     private static function get_api_publication($episode) {
         $channel = get_config('mod_opencast', 'channel');
-        foreach($episode->publications as $publication) {
+        foreach ($episode->publications as $publication) {
             if ($publication->channel == $channel) {
                 return $publication;
             }
@@ -117,7 +118,6 @@ class paella_transform {
             }
             $streams[$content]['sources'][$mime][] = [
                 'src' => $media->url,
-                // 'isLiveStream' => false, // TODO
                 'mimetype' => $media->mediatype,
                 'type' => $media->mediatype,
                 'res' => [
