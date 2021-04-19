@@ -65,7 +65,7 @@ class output_helper {
             echo '</br></br>';
             echo \html_writer::tag('h4', get_string('seriesisempty', 'mod_opencast'));
         } else {
-            echo $OUTPUT->heading($response[0]->series);
+            echo $OUTPUT->heading($activityname);
 
             $listviewactive = get_user_preferences('mod_opencast/list', false);
             /** @var renderer $renderer */

@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_opencast';
 $plugin->release = 'v3.9-r1';
-$plugin->version = 2020091001;
+$plugin->version = 2021041900;
 $plugin->requires = 2020061500;
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->dependencies = array(
