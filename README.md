@@ -1,13 +1,14 @@
 moodle-mod_opencast
 =====================
 This activity can be used to display and view Opencast episodes and series in Moodle.
-Users with respective priviledges (in the following called teacher) can specify the ID of an existing Opencast 
+Users with respective privileges (in the following called teacher) can specify the ID of an existing Opencast 
 episode/series to add it to their course. As with every activity, the teachers can restrict the access to the videos for students based on e.g. dates, grades or user profiles.
 The <a href="https://github.com/polimediaupv/paella">Paella player</a> is used to play the videos.
 
 The integration with the <a href="https://moodle.org/plugins/block_opencast">Opencast Videos</a> block makes the handling and access restriction of Opencast videos very simple. 
-Videos can be uploaded via the block and made available to the students via this activity.
-
+Videos can be uploaded via the block and made available via this activity. 
+The block offers the functionality to add activities so that teachers don't have to explicitly specify the Opencast IDs.
+Therefore, it is recommended to use the block for adding activities.
 
 System requirements
 ------------------
