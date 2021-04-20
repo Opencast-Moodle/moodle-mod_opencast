@@ -8,7 +8,7 @@ The <a href="https://github.com/polimediaupv/paella">Paella player</a> is used t
 The integration with the <a href="https://moodle.org/plugins/block_opencast">Opencast Videos</a> block makes the handling and access restriction of Opencast videos very simple. 
 Videos can be uploaded via the block and made available via this activity. 
 The block offers the functionality to add activities so that teachers don't have to explicitly specify the Opencast IDs.
-Therefore, it is recommended to use the block for adding activities.
+Therefore, it is recommended to use the block for adding activities. Futher information can be found in the documentation of the block.
 
 System requirements
 ------------------
