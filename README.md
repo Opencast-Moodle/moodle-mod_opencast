@@ -29,9 +29,9 @@ In the following, the two usage scenarios, providing a series or an episode, are
 The teacher wants to provide a series for students. For example, this series contains all lecture recordings.
 
 Steps to add the activity:
-1. Add a new "View Opencast" activity. 
+1. Add a new "Video (Opencast)" activity. 
 2. Enter the Opencast id of the series you want to display:</br>
-<img src="https://user-images.githubusercontent.com/28386141/115252656-f5891700-a12b-11eb-8e9e-d6deee434439.png" width="500"></br>
+<img src="https://user-images.githubusercontent.com/28386141/115534096-b5df3e00-a297-11eb-86c4-f69da06b0038.PNG" width="500"></br>
 3. If you want, you can specify further configurations like access restrictions.
 4. The videos in the series can be either displayed in a list view or in a preview view:</br>
 <img src="https://user-images.githubusercontent.com/28386141/115258489-523b0080-a131-11eb-9ac1-0819c9aee5a4.png" width="250">
@@ -40,7 +40,7 @@ Steps to add the activity:
 
 ### Use case 2 - Provide an episode ###
 The teacher wants to provide a single episode for students. For example, this episode belongs to a specific lecture.
-1. Add a new "View Opencast" activity.
+1. Add a new "Video (Opencast)" activity.
 2. Enter the Opencast id of the episode you want to display as in the previous use case. The activity automatically recognizes that the entered id is an episode.
 3. If you want, you can specify further configurations like access restrictions.
 4. The activity directly displays a player that shows the video:</br>
