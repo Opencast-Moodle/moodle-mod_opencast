@@ -48,3 +48,5 @@ $string['settings:configurl_desc'] = 'URL of the config.json used by Paella Play
 
 $string['errorfetchingvideo'] = 'There was a problem fetching the video.';
 $string['seriesisempty'] = 'This series is currently empty.';
+
+$string['privacy:metadata'] = 'Opencast Activities are just a way to show Opencast videos inside moodle. They do not store any user related data.';
