@@ -49,7 +49,7 @@ The teacher wants to provide a single episode for students. For example, this ep
 Configuration
 -------------
 The activity has two global configurations that can be modified by the administrator.
-<img src="https://user-images.githubusercontent.com/28386141/115256354-6f6ecf80-a12f-11eb-8750-d5a8442d8403.png" width="500"></br>
+<img src="https://user-images.githubusercontent.com/28386141/115534550-2f772c00-a298-11eb-98c9-70b3d62bd751.png" width="500"></br>
 
 The first configuration "Opencast Channel" specifies the Opencast channel to which the videos are published. Only videos published in this channel can be displayed with this activity.
 
