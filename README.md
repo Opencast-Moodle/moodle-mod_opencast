@@ -14,7 +14,6 @@ System requirements
 ------------------
 
 * Min. Moodle Version: 3.8
-    * The plugin might work with older versions as well but they are not officially supported.
 * Opencast API level:
     * Minimum: v1.0.0
     * Recommended: v1.1.0
