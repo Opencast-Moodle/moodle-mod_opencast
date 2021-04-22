@@ -33,6 +33,7 @@ defined('MOODLE_INTERNAL') || die();
 function opencast_supports($feature) {
     switch ($feature) {
         case FEATURE_MOD_INTRO:
+        case FEATURE_SHOW_DESCRIPTION:
         case FEATURE_BACKUP_MOODLE2:
             return true;
         default:
