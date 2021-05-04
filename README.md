@@ -16,9 +16,7 @@ System requirements
 * Min. Moodle Version: 3.8
 * Min. PHP Version: 7.3  
 * Opencast API level:
-    * Minimum: v1.0.0
-    * Recommended: v1.1.0
-    * Some features might do not works as expected, when using an older API level.
+    * Minimum: v1.1.0
 
 * Installed plugin: <a href="https://github.com/unirz-tu-ilmenau/moodle-tool_opencast">tool_opencast</a>
 
