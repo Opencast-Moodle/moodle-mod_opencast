@@ -151,8 +151,8 @@ class paella_transform
                 'mimetype' => $media->mediatype,
                 'type' => $media->mediatype,
                 'res' => [
-                    'w' => $media->width,
-                    'h' => $media->height
+                    'w' => isset($media->width) ? $media->width : 0,
+                    'h' => isset($media->height) ? $media->height : 0
                 ]
             ];
         }
