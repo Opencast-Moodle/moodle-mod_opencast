@@ -140,7 +140,7 @@ class paella_transform
                 $streams[$content] = [
                     'sources' => [],
                     'content' => $content,
-                    'type' => $type
+                    'type' => 'video'
                 ];
             }
             if (!array_key_exists($mime, $streams[$content]['sources'])) {
