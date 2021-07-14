@@ -125,6 +125,46 @@ class paella_transform
         return $framelist;
     }
 
+    private static function get_source_type_from_track($track) {
+        $protocol = parse_url($track->url);
+        $sourceType = null;
+
+        if ($protocol && $protocol['scheme']) {
+            switch ($protocol['scheme']) {
+                case 'rtmp':
+                case 'rtmps':
+                    if (in_array($track, ['video/mp4', 'video/ogg', 'video/webm', 'video/x-flv'])) {
+                        $sourceType = 'rtmp';
+                    }
+                    break;
+                case 'http':
+                case 'https':
+                    switch ($track->mediatype) {
+                        case 'video/mp4':
+                        case 'video/ogg':
+                        case 'video/webm':
+                            list($type, $sourceType) = explode('/', $track->mediatype, 2);
+                            break;
+                        case 'video/x-flv':
+                            $sourceType = 'flv';
+                            break;
+                        case 'application/x-mpegURL':
+                            $sourceType = 'hls';
+                            break;
+                        case 'application/dash+xml':
+                            $sourceType = 'mpd';
+                            break;
+                        case 'audio/m4a':
+                            $sourceType = 'audio';
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        return $sourceType;
+    }
+
     /**
      * Creates the streams for a publication.
      * @param string $publication Publication id
@@ -132,9 +172,10 @@ class paella_transform
      */
     private static function get_streams($publication) {
         $streams = [];
+        $hasAdaptiveMasterTrack = [];
 
         foreach ($publication->media as $media) {
-            list($type, $mime) = explode('/', $media->mediatype, 2);
+            $sourceType = self::get_source_type_from_track($media);
             $content = explode('/', $media->flavor, 2)[0];
             if (!array_key_exists($content, $streams)) {
                 $streams[$content] = [
@@ -142,20 +183,31 @@ class paella_transform
                     'content' => $content,
                     'type' => 'video'
                 ];
+                $hasAdaptiveMasterTrack[$content] = false;
             }
-            if (!array_key_exists($mime, $streams[$content]['sources'])) {
-                $streams[$content]['sources'][$mime] = [];
+
+            if (!array_key_exists($sourceType, $streams[$content]['sources'])) {
+                $streams[$content]['sources'][$sourceType] = [];
             }
-            $streams[$content]['sources'][$mime][] = [
+
+            $ismaster = false;
+            if(isset($media->is_master_playlist) && $media->is_master_playlist) {
+                $hasAdaptiveMasterTrack[$content] = true;
+                $ismaster = true;
+            }
+
+            $streams[$content]['sources'][$sourceType][] = [
                 'src' => $media->url,
                 'mimetype' => $media->mediatype,
-                'type' => $media->mediatype,
                 'res' => [
                     'w' => $media->width,
                     'h' => $media->height
-                ]
+                ],
+                'master' => $ismaster,
+                'isLiveStream' => isset($media->is_live) && $media->is_live
             ];
         }
+
         return array_values($streams);
     }
 
