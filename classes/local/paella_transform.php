@@ -172,7 +172,6 @@ class paella_transform
      */
     private static function get_streams($publication) {
         $streams = [];
-        $hasAdaptiveMasterTrack = [];
 
         foreach ($publication->media as $media) {
             $sourceType = self::get_source_type_from_track($media);
@@ -186,14 +185,18 @@ class paella_transform
                 $hasAdaptiveMasterTrack[$content] = false;
             }
 
-            if (!array_key_exists($sourceType, $streams[$content]['sources'])) {
-                $streams[$content]['sources'][$sourceType] = [];
-            }
-
             $ismaster = false;
             if(isset($media->is_master_playlist) && $media->is_master_playlist) {
                 $hasAdaptiveMasterTrack[$content] = true;
                 $ismaster = true;
+            }
+
+            if( $sourceType == 'hls' && !$ismaster) {
+                continue;
+            }
+
+            if (!array_key_exists($sourceType, $streams[$content]['sources'])) {
+                $streams[$content]['sources'][$sourceType] = [];
             }
 
             $streams[$content]['sources'][$sourceType][] = [
