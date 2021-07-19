@@ -85,12 +85,12 @@ $event->add_record_snapshot('opencast', $moduleinstance);
 $event->trigger();
 
 if ($moduleinstance->type == opencasttype::EPISODE) {
-    output_helper::output_episode($moduleinstance->opencastid);
+    output_helper::output_episode($moduleinstance->ocinstanceid, $moduleinstance->opencastid);
 } else if ($moduleinstance->type == opencasttype::SERIES) {
     if ($episode) {
-        output_helper::output_episode($episode, $moduleinstance->opencastid);
+        output_helper::output_episode($moduleinstance->ocinstanceid, $episode, $moduleinstance->opencastid);
     } else {
-        output_helper::output_series($moduleinstance->opencastid, $moduleinstance->name);
+        output_helper::output_series($moduleinstance->ocinstanceid, $moduleinstance->opencastid, $moduleinstance->name);
     }
 } else {
     throw new coding_exception('This opencast activity is neither a episode nor a series.');

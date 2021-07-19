@@ -91,5 +91,4 @@ class table_series_list_view extends \flexible_table {
     private function format_title($episode): string {
         return \html_writer::link($episode->link, $episode->title);
     }
-
 }

@@ -37,6 +37,15 @@ defined('MOODLE_INTERNAL') || die();
  */
 class apibridge {
 
+    private $ocinstanceid;
+
+    /**
+     * apibridge constructor.
+     */
+    private function __construct($ocinstanceid) {
+        $this->ocinstanceid = $ocinstanceid;
+    }
+
     /**
      * Get an instance of an object of this class. Create as a singleton.
      *
@@ -44,14 +53,15 @@ class apibridge {
      *
      * @return apibridge
      */
-    public static function get_instance($forcenewinstance = false) {
+    public static function get_instance($ocinstanceid, $forcenewinstance = false) {
         static $apibridge;
 
         if (isset($apibridge) && !$forcenewinstance) {
+            $apibridge->ocinstanceid = $ocinstanceid;
             return $apibridge;
         }
 
-        $apibridge = new apibridge();
+        $apibridge = new apibridge($ocinstanceid);
 
         return $apibridge;
     }
@@ -62,7 +72,7 @@ class apibridge {
      * @return false|mixed
      */
     public function get_episodes_in_series($seriesid) {
-        $api = new api();
+        $api = new api($this->ocinstanceid);
         $resource = "/api/events?filter=is_part_of:$seriesid&withpublications=true&sort=start_date:DESC,title:ASC";
         $response = $api->oc_get($resource);
 
@@ -84,7 +94,7 @@ class apibridge {
      * @return false|mixed
      */
     public function get_series($seriesid) {
-        $api = new api();
+        $api = new api($this->ocinstanceid);
         $resource = "/api/series/$seriesid";
         $response = $api->oc_get($resource);
 
@@ -106,7 +116,7 @@ class apibridge {
      * @return false|mixed
      */
     public function get_episode($episodeid, $ensureseries = null) {
-        $api = new api();
+        $api = new api($this->ocinstanceid);
         $resource = "/api/events/$episodeid?sign=true&withpublications=true";
         $response = $api->oc_get($resource);
 
@@ -133,7 +143,7 @@ class apibridge {
      * @return int the type {@see opencasttype}
      */
     public function find_opencast_type_for_id($id) {
-        $api = new api();
+        $api = new api($this->ocinstanceid);
         $api->oc_get("/api/events/$id");
         if ($api->get_http_code() == 200) {
             return opencasttype::EPISODE;

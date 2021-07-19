@@ -43,5 +43,26 @@ function xmldb_opencast_upgrade($oldversion) {
     // Documentation for the XMLDB Editor can be found at:
     // https://docs.moodle.org/dev/XMLDB_editor .
 
+    if ($oldversion < 2021071600) {
+        // Update configs to use default tenant (id=1).
+        $DB->execute("UPDATE m_config_plugins SET name=CONCAT(name,'_1') WHERE plugin='mod_opencast' AND name = 'channel' OR name = 'configurl'");
+
+        // Add new instance field to upload job table.
+        $table = new xmldb_table('opencast');
+        $field = new xmldb_field('ocinstanceid', XMLDB_TYPE_INTEGER, '10');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $DB->set_field('opencast', 'ocinstanceid', 1);
+
+        $field = new xmldb_field('ocinstanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL);
+        $dbman->change_field_notnull($table, $field);
+
+        // Opencast savepoint reached.
+        upgrade_mod_savepoint(true, 2021071600, 'opencast');
+    }
+
     return true;
 }

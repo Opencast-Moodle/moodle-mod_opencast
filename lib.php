@@ -55,7 +55,7 @@ function opencast_supports($feature) {
 function opencast_add_instance($moduleinstance, $mform = null) {
     global $DB;
 
-    $api = \mod_opencast\local\apibridge::get_instance();
+    $api = \mod_opencast\local\apibridge::get_instance($moduleinstance->ocinstanceid);
 
     $moduleinstance->timecreated = time();
 

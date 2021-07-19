@@ -41,8 +41,8 @@ class paella_transform
      * @return false|mixed Publication or false if no publication for the configured channel exists.
      * @throws \dml_exception
      */
-    private static function get_api_publication($episode) {
-        $channel = get_config('mod_opencast', 'channel');
+    private static function get_api_publication($ocinstanceid, $episode) {
+        $channel = get_config('mod_opencast', 'channel_' . $ocinstanceid);
         foreach ($episode->publications as $publication) {
             if ($publication->channel == $channel) {
                 return $publication;
@@ -243,13 +243,13 @@ class paella_transform
      * @return array|false Video data or false if data could not be retrieved
      * @throws \dml_exception
      */
-    public static function get_paella_data_json($episodeid, $seriesid = null) {
-        $api = new apibridge();
+    public static function get_paella_data_json($ocinstanceid, $episodeid, $seriesid = null) {
+        $api = apibridge::get_instance($ocinstanceid);
         if (($episode = $api->get_episode($episodeid, $seriesid)) === false) {
             return false;
         }
 
-        if (($publication = self::get_api_publication($episode)) === false) {
+        if (($publication = self::get_api_publication($ocinstanceid, $episode)) === false) {
             return false;
         }
 
@@ -264,5 +264,4 @@ class paella_transform
             'captions' => self::get_captions($publication)
         ];
     }
-
 }

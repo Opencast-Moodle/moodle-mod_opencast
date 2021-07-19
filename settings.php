@@ -26,11 +26,18 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-    $settings->add(new admin_setting_configtext('mod_opencast/channel',
-        new lang_string('settings:api-channel', 'mod_opencast'), '', 'api',
-        PARAM_ALPHANUMEXT));
+    $ocinstances = \tool_opencast\local\settings_api::get_ocinstances();
 
-    $settings->add(new admin_setting_configtext('mod_opencast/configurl',
-        new lang_string('settings:configurl', 'mod_opencast'),
-        new lang_string('settings:configurl_desc', 'mod_opencast'), '/mod/opencast/config.json'));
+    foreach($ocinstances as $ocinstance) {
+        $settings->add(
+            new admin_setting_heading('mod_opencast/settings_' . $ocinstance->id, $ocinstance->name, ''));
+
+        $settings->add(new admin_setting_configtext('mod_opencast/channel_' . $ocinstance->id,
+            new lang_string('settings:api-channel', 'mod_opencast'), '', 'api',
+            PARAM_ALPHANUMEXT));
+
+        $settings->add(new admin_setting_configtext('mod_opencast/configurl_' . $ocinstance->id,
+            new lang_string('settings:configurl', 'mod_opencast'),
+            new lang_string('settings:configurl_desc', 'mod_opencast'), '/mod/opencast/config.json'));
+    }
 }

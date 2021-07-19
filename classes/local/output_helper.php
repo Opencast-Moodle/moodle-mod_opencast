@@ -42,17 +42,17 @@ class output_helper {
      * @param string $seriesid opencast id of series.
      * @param string $activityname name of Activity.
      */
-    public static function output_series($seriesid, $activityname): void {
+    public static function output_series($ocinstanceid, $seriesid, $activityname): void {
         global $OUTPUT, $PAGE;
 
-        $api = apibridge::get_instance();
+        $api = apibridge::get_instance($ocinstanceid);
         $response = $api->get_episodes_in_series($seriesid);
 
         if ($response === false) {
             throw new \exception('There was a problem reaching opencast!');
         }
 
-        $context = self::create_template_context_for_series($response);
+        $context = self::create_template_context_for_series($ocinstanceid, $response);
 
         if (!$context) {
             throw new \coding_exception('There was a problem processing the series.');
@@ -89,10 +89,10 @@ class output_helper {
      * @param string $episodeid The opencast episode id
      * @param null|string $seriesid If given, it will be ensured that the episode is part of the series.
      */
-    public static function output_episode($episodeid, $seriesid = null): void {
+    public static function output_episode($ocinstanceid, $episodeid, $seriesid = null): void {
         global $PAGE, $OUTPUT;
 
-        $data = paella_transform::get_paella_data_json($episodeid, $seriesid);
+        $data = paella_transform::get_paella_data_json($ocinstanceid, $episodeid, $seriesid);
 
         if (!$data) {
             echo $OUTPUT->header();
@@ -132,7 +132,7 @@ class output_helper {
         echo '<iframe src="player.html" id="player-iframe" allowfullscreen"></iframe>';
         echo \html_writer::end_div();
 
-        $configurl = new \moodle_url(get_config('mod_opencast', 'configurl'));
+        $configurl = new \moodle_url(get_config('mod_opencast', 'configurl_' . $ocinstanceid));
         $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init', [$configurl->out(false)]);
 
         echo $OUTPUT->footer();
@@ -143,12 +143,12 @@ class output_helper {
      * @param array $seriesjson Response from /api/events/
      * @return stdClass (example in series.mustache)
      */
-    public static function create_template_context_for_series($seriesjson): stdClass {
+    public static function create_template_context_for_series($ocinstanceid, $seriesjson): stdClass {
         global $PAGE;
 
         $result = [];
 
-        $channel = get_config('mod_opencast', 'channel');
+        $channel = get_config('mod_opencast', 'channel_' . $ocinstanceid);
         foreach ($seriesjson as $event) {
             $findduration = !$event->duration;
             $video = new \stdClass();

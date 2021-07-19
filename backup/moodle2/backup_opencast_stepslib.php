@@ -35,13 +35,12 @@ class backup_opencast_activity_structure_step extends backup_activity_structure_
      * @return backup_nested_element
      */
     protected function define_structure() {
-
         // The Opencast module stores no user info.
 
         // Define each element separated.
         $opencast = new backup_nested_element('opencast', array('id'), array(
             'name', 'timecreated', 'timemodified', 'intro', 'introformat',
-                'opencastid', 'type'));
+                'opencastid', 'ocinstanceid', 'type'));
 
         // Define sources.
         $opencast->set_source_table('opencast', array('id' => backup::VAR_ACTIVITYID));
