@@ -43,7 +43,14 @@ function xmldb_opencast_upgrade($oldversion) {
     // Documentation for the XMLDB Editor can be found at:
     // https://docs.moodle.org/dev/XMLDB_editor .
 
-    if ($oldversion < 2021071600) {
+    if ($oldversion < 2021072000) {
+        // Check if settings were upgraded without upgrading the plugin.
+        if($DB->get_record('config_plugins', array('plugin' => 'mod_opencast', 'name' => 'channel')) &&
+            $DB->get_record('config_plugins', array('plugin' => 'mod_opencast', 'name'=>'channel_1'))) {
+            // Remove already upgraded settings and only keep old ones.
+            $DB->execute("DELETE FROM {config_plugins} WHERE plugin='mod_opencast' AND name = 'channel' OR name = 'configurl'");
+        }
+
         // Update configs to use default tenant (id=1).
         $DB->execute("UPDATE m_config_plugins SET name=CONCAT(name,'_1') WHERE plugin='mod_opencast' AND name = 'channel' OR name = 'configurl'");
 
@@ -61,7 +68,7 @@ function xmldb_opencast_upgrade($oldversion) {
         $dbman->change_field_notnull($table, $field);
 
         // Opencast savepoint reached.
-        upgrade_mod_savepoint(true, 2021071600, 'opencast');
+        upgrade_mod_savepoint(true, 2021072000, 'opencast');
     }
 
     return true;
