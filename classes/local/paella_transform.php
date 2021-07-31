@@ -203,8 +203,8 @@ class paella_transform
                 'src' => $media->url,
                 'mimetype' => $media->mediatype,
                 'res' => [
-                    'w' => $media->width,
-                    'h' => $media->height
+                    'w' => isset($media->width) ? $media->width : 0,
+                    'h' => isset($media->height) ? $media->height : 0
                 ],
                 'master' => $ismaster,
                 'isLiveStream' => isset($media->is_live) && $media->is_live
