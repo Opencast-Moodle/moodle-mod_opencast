@@ -36,6 +36,11 @@ if ($hassiteconfig) {
             new lang_string('settings:api-channel', 'mod_opencast'), '', 'api',
             PARAM_ALPHANUMEXT));
 
+        $settings->add(new admin_setting_configtext('mod_opencast/download_channel_' . $ocinstance->id,
+            new lang_string('settings:download-channel', 'mod_opencast'),
+            new lang_string('settings:download-channel_desc', 'mod_opencast'), 'api',
+            PARAM_ALPHANUMEXT));
+
         $settings->add(new admin_setting_configtext('mod_opencast/configurl_' . $ocinstance->id,
             new lang_string('settings:configurl', 'mod_opencast'),
             new lang_string('settings:configurl_desc', 'mod_opencast'), '/mod/opencast/config.json'));

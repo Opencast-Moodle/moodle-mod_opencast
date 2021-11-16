@@ -25,28 +25,36 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Opencast Video Provider';
+$string['allowdownload'] = 'Allow students to download the video(s)';
+
+$string['date'] = 'Date';
+$string['downloadvideo'] = 'Download video';
+$string['duration'] = 'Duration';
+
+$string['errorfetchingvideo'] = 'There was a problem fetching the video.';
+
+$string['gridview'] = 'View as grid';
+
+$string['listview'] = 'View as list';
+
 $string['modulename'] = 'Video (Opencast)';
 $string['modulenameplural'] = 'Videos (Opencast)';
-$string['opencastname'] = 'Opencast Video Provider: {$a}';
-$string['pluginadministration'] = 'Opencast Video Provider administration';
-$string['opencast:addinstance'] = 'Add a new Video (Opencast) instance';
 
+$string['opencastname'] = 'Opencast Video Provider: {$a}';
+$string['opencast:addinstance'] = 'Add a new Video (Opencast) instance';
 $string['opencastid'] = 'Opencast ID';
 $string['opencastidnotrecognized'] = 'This ID is neither recognized as a series nor a video.';
 
-$string['listview'] = 'View as list';
-$string['gridview'] = 'View as grid';
-
-$string['title'] = 'Title';
-$string['duration'] = 'Duration';
-$string['date'] = 'Date';
+$string['pluginname'] = 'Opencast Video Provider';
+$string['pluginadministration'] = 'Opencast Video Provider administration';
+$string['privacy:metadata'] = 'Opencast Activities are just a way to show Opencast videos inside moodle. They do not store any user related data.';
 
 $string['settings:api-channel'] = 'Opencast Channel';
+$string['settings:download-channel'] = 'Opencast Download Channel';
+$string['settings:download-channel_desc'] = 'Opencast publication channel from which the videos are served when downloading them.';
 $string['settings:configurl'] = 'URL to Paella config.json';
 $string['settings:configurl_desc'] = 'URL of the config.json used by Paella Player. Can either be a absolute URL or a URL relative to the wwwroot.';
-
-$string['errorfetchingvideo'] = 'There was a problem fetching the video.';
 $string['seriesisempty'] = 'This series is currently empty.';
 
-$string['privacy:metadata'] = 'Opencast Activities are just a way to show Opencast videos inside moodle. They do not store any user related data.';
+$string['title'] = 'Title';
+

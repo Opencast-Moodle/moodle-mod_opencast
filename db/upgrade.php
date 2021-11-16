@@ -71,5 +71,24 @@ function xmldb_opencast_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021072000, 'opencast');
     }
 
+    if ($oldversion < 2021110900) {
+
+        // Add new instance field to upload job table.
+        $table = new xmldb_table('opencast');
+        $field = new xmldb_field('allowdownload', XMLDB_TYPE_INTEGER, '1');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $DB->set_field('opencast', 'allowdownload', 0);
+
+        $field = new xmldb_field('allowdownload', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL);
+        $dbman->change_field_notnull($table, $field);
+
+        // Opencast savepoint reached.
+        upgrade_mod_savepoint(true, 2021110900, 'opencast');
+    }
+
     return true;
 }

@@ -20,11 +20,15 @@
  * @copyright  2021 Justus Dieckmann WWU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace mod_opencast\local;
 
+use action_menu;
+use action_menu_link_secondary;
 use core_date;
 use DateTime;
 use mod_opencast\output\renderer;
+use pix_icon;
 use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
@@ -35,7 +39,8 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2021 Justus Dieckmann WWU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class output_helper {
+class output_helper
+{
 
     /**
      * Prints output for series view.
@@ -89,8 +94,8 @@ class output_helper {
      * @param string $episodeid The opencast episode id
      * @param null|string $seriesid If given, it will be ensured that the episode is part of the series.
      */
-    public static function output_episode($ocinstanceid, $episodeid, $seriesid = null): void {
-        global $PAGE, $OUTPUT;
+    public static function output_episode($ocinstanceid, $episodeid, $modinstanceid, $seriesid = null): void {
+        global $PAGE, $OUTPUT, $DB;
 
         $data = paella_transform::get_paella_data_json($ocinstanceid, $episodeid, $seriesid);
 
@@ -135,7 +140,47 @@ class output_helper {
         $configurl = new \moodle_url(get_config('mod_opencast', 'configurl_' . $ocinstanceid));
         $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init', [$configurl->out(false)]);
 
+        $moduleinstance = $DB->get_record('opencast', array('id' => $modinstanceid), '*', MUST_EXIST);
+        if($moduleinstance->allowdownload) {
+            self::output_download_menu($ocinstanceid, $episodeid, $modinstanceid);
+        }
+
         echo $OUTPUT->footer();
+    }
+
+    public static function output_download_menu($ocinstanceid, $episodeid, $modinstanceid) {
+        global $PAGE;
+
+        $api = apibridge::get_instance($ocinstanceid);
+        if (($video = $api->get_episode($episodeid)) !== false) {
+
+            // Get the action menu options.
+            $actionmenu = new action_menu();
+            $actionmenu->set_alignment(action_menu::TL, action_menu::BL);
+            $actionmenu->prioritise = true;
+            $actionmenu->actionicon = new pix_icon('t/down', get_string('downloadvideo', 'mod_opencast'));
+            $actionmenu->actiontext = 'Download';
+            $actionmenu->set_menu_trigger(' ');
+            $actionmenu->attributes['class'] .= ' download-action-menu float-right pt-1';
+
+            foreach ($video->publications as $publication) {
+                if ($publication->channel == get_config('mod_opencast', 'download_channel_' . $ocinstanceid)) {
+                    foreach ($publication->media as $media) {
+                        $name = ucwords(explode('/', $media->flavor)[0]) . ' (' . $media->width . 'x' . $media->height . ')';
+                        $actionmenu->add(new action_menu_link_secondary(
+                            new \moodle_url('/mod/opencast/downloadvideo.php',
+                                array('e' => $video->identifier, 'o' => $modinstanceid,
+                                    'mediaid' => $media->id, 'ocinstanceid' => $ocinstanceid)),
+                            null,
+                            $name
+                        ));
+                    }
+                }
+            }
+
+            $output = $PAGE->get_renderer('mod_opencast');
+            echo $output->render($actionmenu);
+        }
     }
 
     /**
