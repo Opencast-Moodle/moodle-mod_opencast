@@ -45,8 +45,8 @@ function xmldb_opencast_upgrade($oldversion) {
 
     if ($oldversion < 2021072000) {
         // Check if settings were upgraded without upgrading the plugin.
-        if($DB->get_record('config_plugins', array('plugin' => 'mod_opencast', 'name' => 'channel')) &&
-            $DB->get_record('config_plugins', array('plugin' => 'mod_opencast', 'name'=>'channel_1'))) {
+        if ($DB->get_record('config_plugins', array('plugin' => 'mod_opencast', 'name' => 'channel')) &&
+            $DB->get_record('config_plugins', array('plugin' => 'mod_opencast', 'name' => 'channel_1'))) {
             // Remove already upgraded settings and only keep old ones.
             $DB->execute("DELETE FROM {config_plugins} WHERE plugin='mod_opencast' AND name = 'channel' OR name = 'configurl'");
         }
@@ -88,6 +88,18 @@ function xmldb_opencast_upgrade($oldversion) {
 
         // Opencast savepoint reached.
         upgrade_mod_savepoint(true, 2021110900, 'opencast');
+    }
+
+    if ($oldversion < 2021111600) {
+        // Changing the default of field allowdownload on table opencast to 0.
+        $table = new xmldb_table('opencast');
+        $field = new xmldb_field('allowdownload', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'ocinstanceid');
+
+        // Launch change of default for field allowdownload.
+        $dbman->change_field_default($table, $field);
+
+        // Opencast savepoint reached.
+        upgrade_mod_savepoint(true, 2021111600, 'opencast');
     }
 
     return true;
