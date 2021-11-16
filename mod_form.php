@@ -64,6 +64,13 @@ class mod_opencast_mod_form extends moodleform_mod {
         $mform->setType('opencastid', PARAM_ALPHANUMEXT);
         $mform->addRule('opencastid', get_string('required'), 'required');
 
+        $mform->addElement('advcheckbox', 'allowdownload', get_string('allowdownload', 'mod_opencast'));
+        $mform->setType('allowdownload', PARAM_INT);
+        $mform->setDefault('allowdownload', '0');
+
+        $mform->addElement('hidden', 'ocinstanceid');
+        $mform->setType('ocinstanceid', PARAM_INT);
+
         $mform->addElement('hidden', 'type');
         $mform->setType('type', PARAM_INT);
 
@@ -84,7 +91,7 @@ class mod_opencast_mod_form extends moodleform_mod {
         $errors = parent::validation($data, $files);
 
         if (!array_key_exists('opencastid', $errors)) {
-            $api = apibridge::get_instance();
+            $api = apibridge::get_instance($data['ocinstanceid']);
             $type = $api->find_opencast_type_for_id($data['opencastid']);
             if ($type === \mod_opencast\local\opencasttype::UNDEFINED) {
                 $errors['opencastid'] = get_string('opencastidnotrecognized', 'mod_opencast');
