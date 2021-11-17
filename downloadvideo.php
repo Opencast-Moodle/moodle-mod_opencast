@@ -41,7 +41,7 @@ require_login($course, true, $cm);
 $modulecontext = context_module::instance($cm->id);
 
 // Check if teacher enabled download.
-if(!get_config('mod_opencast', 'global_download_' . $ocinstanceid) && !$moduleinstance->allowdownload) {
+if (!get_config('mod_opencast', 'global_download_' . $ocinstanceid) && !$moduleinstance->allowdownload) {
     die();
 }
 
@@ -86,7 +86,5 @@ if (!$result->error) {
 
     readfile($downloadurl);
 } else {
-
-// todo pop up notification  that download failed ?!
     die();
 }

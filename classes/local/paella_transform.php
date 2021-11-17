@@ -127,14 +127,14 @@ class paella_transform
 
     private static function get_source_type_from_track($track) {
         $protocol = parse_url($track->url);
-        $sourceType = null;
+        $sourcetype = null;
 
         if ($protocol && $protocol['scheme']) {
             switch ($protocol['scheme']) {
                 case 'rtmp':
                 case 'rtmps':
                     if (in_array($track, ['video/mp4', 'video/ogg', 'video/webm', 'video/x-flv'])) {
-                        $sourceType = 'rtmp';
+                        $sourcetype = 'rtmp';
                     }
                     break;
                 case 'http':
@@ -143,26 +143,26 @@ class paella_transform
                         case 'video/mp4':
                         case 'video/ogg':
                         case 'video/webm':
-                            list($type, $sourceType) = explode('/', $track->mediatype, 2);
+                            list($type, $sourcetype) = explode('/', $track->mediatype, 2);
                             break;
                         case 'video/x-flv':
-                            $sourceType = 'flv';
+                            $sourcetype = 'flv';
                             break;
                         case 'application/x-mpegURL':
-                            $sourceType = 'hls';
+                            $sourcetype = 'hls';
                             break;
                         case 'application/dash+xml':
-                            $sourceType = 'mpd';
+                            $sourcetype = 'mpd';
                             break;
                         case 'audio/m4a':
-                            $sourceType = 'audio';
+                            $sourcetype = 'audio';
                             break;
                     }
                     break;
             }
         }
 
-        return $sourceType;
+        return $sourcetype;
     }
 
     /**
@@ -174,7 +174,7 @@ class paella_transform
         $streams = [];
 
         foreach ($publication->media as $media) {
-            $sourceType = self::get_source_type_from_track($media);
+            $sourcetype = self::get_source_type_from_track($media);
             $content = explode('/', $media->flavor, 2)[0];
             if (!array_key_exists($content, $streams)) {
                 $streams[$content] = [
@@ -182,24 +182,24 @@ class paella_transform
                     'content' => $content,
                     'type' => 'video'
                 ];
-                $hasAdaptiveMasterTrack[$content] = false;
+                $hasadaptivemastertrack[$content] = false;
             }
 
             $ismaster = false;
-            if(isset($media->is_master_playlist) && $media->is_master_playlist) {
-                $hasAdaptiveMasterTrack[$content] = true;
+            if (isset($media->is_master_playlist) && $media->is_master_playlist) {
+                $hasadaptivemastertrack[$content] = true;
                 $ismaster = true;
             }
 
-            if( $sourceType == 'hls' && !$ismaster) {
+            if ($sourcetype == 'hls' && !$ismaster) {
                 continue;
             }
 
-            if (!array_key_exists($sourceType, $streams[$content]['sources'])) {
-                $streams[$content]['sources'][$sourceType] = [];
+            if (!array_key_exists($sourcetype, $streams[$content]['sources'])) {
+                $streams[$content]['sources'][$sourcetype] = [];
             }
 
-            $streams[$content]['sources'][$sourceType][] = [
+            $streams[$content]['sources'][$sourcetype][] = [
                 'src' => $media->url,
                 'mimetype' => $media->mediatype,
                 'res' => [

@@ -52,7 +52,8 @@ function xmldb_opencast_upgrade($oldversion) {
         }
 
         // Update configs to use default tenant (id=1).
-        $DB->execute("UPDATE {config_plugins} SET name=CONCAT(name,'_1') WHERE plugin='mod_opencast' AND name = 'channel' OR name = 'configurl'");
+        $DB->execute("UPDATE {config_plugins} SET name=CONCAT(name,'_1') WHERE plugin='mod_opencast' " .
+            "AND name = 'channel' OR name = 'configurl'");
 
         // Add new instance field to upload job table.
         $table = new xmldb_table('opencast');
