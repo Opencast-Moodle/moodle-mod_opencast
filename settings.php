@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 if ($hassiteconfig) {
     $ocinstances = \tool_opencast\local\settings_api::get_ocinstances();
 
-    foreach($ocinstances as $ocinstance) {
+    foreach ($ocinstances as $ocinstance) {
         $settings->add(
             new admin_setting_heading('mod_opencast/settings_' . $ocinstance->id, $ocinstance->name, ''));
 
@@ -44,5 +44,9 @@ if ($hassiteconfig) {
         $settings->add(new admin_setting_configtext('mod_opencast/configurl_' . $ocinstance->id,
             new lang_string('settings:configurl', 'mod_opencast'),
             new lang_string('settings:configurl_desc', 'mod_opencast'), '/mod/opencast/config.json'));
+
+        $settings->add(new admin_setting_configcheckbox('mod_opencast/global_download_' . $ocinstance->id,
+            new lang_string('settings:global_download', 'mod_opencast'),
+            new lang_string('settings:global_download_desc', 'mod_opencast'), 0));
     }
 }

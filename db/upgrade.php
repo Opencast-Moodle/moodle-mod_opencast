@@ -72,7 +72,6 @@ function xmldb_opencast_upgrade($oldversion) {
     }
 
     if ($oldversion < 2021110900) {
-
         // Add new instance field to upload job table.
         $table = new xmldb_table('opencast');
         $field = new xmldb_field('allowdownload', XMLDB_TYPE_INTEGER, '1');
@@ -81,7 +80,7 @@ function xmldb_opencast_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
-        $DB->set_field('opencast', 'allowdownload', 0);
+        $DB->set_field('opencast', 'allowdownload', '0');
 
         $field = new xmldb_field('allowdownload', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL);
         $dbman->change_field_notnull($table, $field);
@@ -91,8 +90,9 @@ function xmldb_opencast_upgrade($oldversion) {
     }
 
     if ($oldversion < 2021111600) {
-        // Changing the default of field allowdownload on table opencast to 0.
         $table = new xmldb_table('opencast');
+
+        // Changing the default of field allowdownload on table opencast to 0.
         $field = new xmldb_field('allowdownload', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'ocinstanceid');
 
         // Launch change of default for field allowdownload.

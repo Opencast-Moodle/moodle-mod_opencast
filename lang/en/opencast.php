@@ -54,6 +54,9 @@ $string['settings:download-channel'] = 'Opencast Download Channel';
 $string['settings:download-channel_desc'] = 'Opencast publication channel from which the videos are served when downloading them.';
 $string['settings:configurl'] = 'URL to Paella config.json';
 $string['settings:configurl_desc'] = 'URL of the config.json used by Paella Player. Can either be a absolute URL or a URL relative to the wwwroot.';
+$string['settings:global_download'] = 'Force student download';
+$string['settings:global_download_desc'] = 'Allow globally that students can download videos. Teachers cannot overwrite this setting.';
+
 $string['seriesisempty'] = 'This series is currently empty.';
 
 $string['title'] = 'Title';

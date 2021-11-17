@@ -35,7 +35,8 @@ require_once($CFG->dirroot . '/course/moodleform_mod.php');
  * @copyright  2020 Tobias Reischmann <tobias.reischmann@wi.uni-muenster.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_opencast_mod_form extends moodleform_mod {
+class mod_opencast_mod_form extends moodleform_mod
+{
 
     /**
      * Defines forms elements
@@ -44,6 +45,12 @@ class mod_opencast_mod_form extends moodleform_mod {
         global $CFG;
 
         $mform = $this->_form;
+
+        if ($this->current->ocinstanceid) {
+            $ocinstanceid = $this->current->ocinstanceid;
+        } else {
+            $ocinstanceid = \tool_opencast\local\settings_api::get_default_ocinstance()->id;
+        }
 
         // Adding the "general" fieldset, where all the common settings are shown.
         $mform->addElement('header', 'general', get_string('general', 'form'));
@@ -60,16 +67,23 @@ class mod_opencast_mod_form extends moodleform_mod {
         $this->standard_intro_elements();
 
         $mform->addElement('text', 'opencastid', get_string('opencastid', 'mod_opencast'),
-                array('size' => 64));
+            array('size' => 64));
         $mform->setType('opencastid', PARAM_ALPHANUMEXT);
         $mform->addRule('opencastid', get_string('required'), 'required');
 
-        $mform->addElement('advcheckbox', 'allowdownload', get_string('allowdownload', 'mod_opencast'));
-        $mform->setType('allowdownload', PARAM_INT);
-        $mform->setDefault('allowdownload', '0');
+        if (get_config('mod_opencast', 'global_download_' . $ocinstanceid)) {
+            $mform->addElement('hidden', 'allowdownload');
+            $mform->setType('allowdownload', PARAM_INT);
+            $mform->setDefault('allowdownload', '1');
+        } else {
+            $mform->addElement('advcheckbox', 'allowdownload', get_string('allowdownload', 'mod_opencast'));
+            $mform->setType('allowdownload', PARAM_INT);
+            $mform->setDefault('allowdownload', '0');
+        }
 
         $mform->addElement('hidden', 'ocinstanceid');
         $mform->setType('ocinstanceid', PARAM_INT);
+        $mform->setDefault('ocinstanceid', \tool_opencast\local\settings_api::get_default_ocinstance()->id);
 
         $mform->addElement('hidden', 'type');
         $mform->setType('type', PARAM_INT);
