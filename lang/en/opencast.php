@@ -50,8 +50,11 @@ $string['pluginadministration'] = 'Opencast Video Provider administration';
 $string['privacy:metadata'] = 'Opencast Activities are just a way to show Opencast videos inside moodle. They do not store any user related data.';
 
 $string['settings:api-channel'] = 'Opencast Channel';
+$string['settings:download_header'] = 'Student Download Configuration';
 $string['settings:download-channel'] = 'Opencast Download Channel';
 $string['settings:download-channel_desc'] = 'Opencast publication channel from which the videos are served when downloading them.';
+$string['settings:download-default'] = 'Allow download by default';
+$string['settings:download-default_desc'] = 'If activated, the checkbox for allowing downloads in activity forms is checked by default.';
 $string['settings:configurl'] = 'URL to Paella config.json';
 $string['settings:configurl_desc'] = 'URL of the config.json used by Paella Player. Can either be a absolute URL or a URL relative to the wwwroot.';
 $string['settings:global_download'] = 'Force student download';
