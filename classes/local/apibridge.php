@@ -37,10 +37,12 @@ defined('MOODLE_INTERNAL') || die();
  */
 class apibridge {
 
+    /** @var int Opencast instance id */
     private $ocinstanceid;
 
     /**
      * apibridge constructor.
+     * @param int $ocinstanceid Opencast instance id
      */
     private function __construct($ocinstanceid) {
         $this->ocinstanceid = $ocinstanceid;
@@ -49,9 +51,9 @@ class apibridge {
     /**
      * Get an instance of an object of this class. Create as a singleton.
      *
+     * @param int $ocinstanceid Opencast instance id
      * @param boolean $forcenewinstance true, when a new instance should be created.
-     *
-     * @return apibridge
+     * @return mixed|apibridge
      */
     public static function get_instance($ocinstanceid, $forcenewinstance = false) {
         static $apibridge;

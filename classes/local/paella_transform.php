@@ -37,6 +37,7 @@ class paella_transform
 
     /**
      * Returns the publication with the correct release channel for a given episode.
+     * @param int $ocinstanceid Opencast instance id
      * @param string $episode Episode id
      * @return false|mixed Publication or false if no publication for the configured channel exists.
      * @throws \dml_exception
@@ -125,6 +126,11 @@ class paella_transform
         return $framelist;
     }
 
+    /**
+     * Return the source type for a track
+     * @param string $track Track
+     * @return mixed|string|null
+     */
     private static function get_source_type_from_track($track) {
         $protocol = parse_url($track->url);
         $sourcetype = null;
@@ -238,6 +244,7 @@ class paella_transform
 
     /**
      * Returns the video data from Opencast in the format for the paella player.
+     * @param int $ocinstanceid Opencast instance id
      * @param string $episodeid Opencast episode id
      * @param string|null $seriesid Opencast series id
      * @return array|false Video data or false if data could not be retrieved

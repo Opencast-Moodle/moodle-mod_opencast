@@ -44,8 +44,10 @@ class output_helper
 
     /**
      * Prints output for series view.
+     * @param int $ocinstanceid Opencast instance id
      * @param string $seriesid opencast id of series.
      * @param string $activityname name of Activity.
+     * @throws \coding_exception
      */
     public static function output_series($ocinstanceid, $seriesid, $activityname): void {
         global $OUTPUT, $PAGE;
@@ -91,8 +93,14 @@ class output_helper
 
     /**
      * Prints output for episode.
+     *
+     * @param int $ocinstanceid Opencast instance id
      * @param string $episodeid The opencast episode id
+     * @param int $modinstanceid Module instance id
      * @param null|string $seriesid If given, it will be ensured that the episode is part of the series.
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
      */
     public static function output_episode($ocinstanceid, $episodeid, $modinstanceid, $seriesid = null): void {
         global $PAGE, $OUTPUT, $DB;
@@ -148,6 +156,15 @@ class output_helper
         echo $OUTPUT->footer();
     }
 
+    /**
+     * Prints output for the student download menu.
+     * @param int $ocinstanceid Opencast instance id
+     * @param string $episodeid The opencast episode id
+     * @param string $modinstanceid Module instance id
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
     public static function output_download_menu($ocinstanceid, $episodeid, $modinstanceid) {
         global $PAGE;
 
@@ -185,6 +202,7 @@ class output_helper
 
     /**
      * Creates Context for use in series template.
+     * @param int $ocinstanceid Opencast instance id
      * @param array $seriesjson Response from /api/events/
      * @return stdClass (example in series.mustache)
      */
