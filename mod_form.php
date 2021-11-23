@@ -46,7 +46,7 @@ class mod_opencast_mod_form extends moodleform_mod
 
         $mform = $this->_form;
 
-        if ($this->current->ocinstanceid) {
+        if (property_exists($this->current, 'ocinstanceid')) {
             $ocinstanceid = $this->current->ocinstanceid;
         } else {
             $ocinstanceid = \tool_opencast\local\settings_api::get_default_ocinstance()->id;
