@@ -25,21 +25,25 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['allvideos'] = 'All videos';
 $string['allowdownload'] = 'Allow students to download the video(s)';
 
 $string['date'] = 'Date';
 $string['downloadvideo'] = 'Download video';
 $string['duration'] = 'Duration';
 
+$string['episode'] = 'Opencast episode';
 $string['errorfetchingvideo'] = 'There was a problem fetching the video.';
 
 $string['gridview'] = 'View as grid';
 
 $string['listview'] = 'View as list';
 
+$string['manualocid'] = 'Directly enter the Opencast ID of the series/episode';
 $string['modulename'] = 'Video (Opencast)';
 $string['modulenameplural'] = 'Videos (Opencast)';
 
+$string['ocinstance'] = 'Opencast instance';
 $string['opencastname'] = 'Opencast Video Provider: {$a}';
 $string['opencast:addinstance'] = 'Add a new Video (Opencast) instance';
 $string['opencastid'] = 'Opencast ID';
@@ -60,6 +64,7 @@ $string['settings:configurl_desc'] = 'URL of the config.json used by Paella Play
 $string['settings:global_download'] = 'Force student download';
 $string['settings:global_download_desc'] = 'Allow globally that students can download videos. Teachers cannot overwrite this setting.';
 
+$string['series'] = 'Opencast series';
 $string['seriesisempty'] = 'This series is currently empty.';
 
 $string['title'] = 'Title';

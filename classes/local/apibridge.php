@@ -25,6 +25,7 @@
 namespace mod_opencast\local;
 
 use tool_opencast\local\api;
+use tool_opencast\seriesmapping;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -35,7 +36,8 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2020 Justus Dieckmann WWU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class apibridge {
+class apibridge
+{
 
     /** @var int Opencast instance id */
     private $ocinstanceid;
@@ -137,6 +139,40 @@ class apibridge {
             }
         }
         return $response;
+    }
+
+    /**
+     * Creates an array with all available series in the course and an array with all episodes,
+     * independent of the Opencast instance.
+     * @param int $courseid Course id
+     * @return array[] First item: series, second item: episodes
+     * @throws \coding_exception
+     */
+    public static function get_course_series_and_episodes($courseid) {
+        $series = seriesmapping::get_records(array('courseid' => $courseid));
+        $serieschoices = array();
+        $episodechoices = array();
+
+        foreach ($series as $s) {
+            $apibridge = new apibridge($s->get('ocinstanceid'));
+            $ocseries = $apibridge->get_series($s->get('series'));
+            if ($ocseries) {
+                $serieskey = $ocseries->identifier . '_' . $s->get('ocinstanceid');
+
+                $serieschoices[$serieskey] = $ocseries->title;
+                $episodes = $apibridge->get_episodes_in_series($ocseries->identifier);
+
+                if ($episodes) {
+                    $episodechoices[$serieskey] = array('allvideos' => get_string('allvideos', 'mod_opencast'));
+
+                    foreach ($episodes as $episode) {
+                        $episodechoices[$serieskey][$episode->identifier] = $episode->title;
+                    }
+                }
+            }
+        }
+
+        return [$serieschoices, $episodechoices];
     }
 
     /**

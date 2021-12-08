@@ -42,7 +42,7 @@ class mod_opencast_mod_form extends moodleform_mod
      * Defines forms elements
      */
     public function definition() {
-        global $CFG;
+        global $CFG, $PAGE;
 
         $mform = $this->_form;
 
@@ -66,10 +66,35 @@ class mod_opencast_mod_form extends moodleform_mod
 
         $this->standard_intro_elements();
 
+        $mform->addElement('advcheckbox', 'manualocid', get_string('manualocid', 'mod_opencast'));
+        $mform->setType('manualocid', PARAM_BOOL);
+        $mform->setDefault('manualocid', '0');
+
+        $choices = apibridge::get_course_series_and_episodes($this->get_course()->id);
+        $mform->addElement('select', 'series', get_string('series', 'mod_opencast'), $choices[0]);
+        $mform->setType('series', PARAM_ALPHANUMEXT);
+        $mform->hideIf('series', 'manualocid', 'eq', '1');
+
+        $mform->addElement('select', 'episode', get_string('episode', 'mod_opencast'), array_merge(...array_values($choices[1])));
+        $mform->setType('episode', PARAM_ALPHANUMEXT);
+        $mform->hideIf('episode', 'manualocid', 'eq', '1');
+
+        $ocoptions = array();
+        foreach (\tool_opencast\local\settings_api::get_ocinstances() as $oci) {
+            $ocoptions[$oci->id] = $oci->name;
+        }
+
+        $mform->addElement('select', 'ocinstanceid', get_string('ocinstance', 'mod_opencast'), $ocoptions);
+        $mform->setType('ocinstanceid', PARAM_INT);
+        $mform->setDefault('ocinstanceid', \tool_opencast\local\settings_api::get_default_ocinstance()->id);
+        $mform->addRule('ocinstanceid', get_string('required'), 'required');
+        $mform->hideIf('ocinstanceid', 'manualocid', 'eq', '0');
+
         $mform->addElement('text', 'opencastid', get_string('opencastid', 'mod_opencast'),
             array('size' => 64));
         $mform->setType('opencastid', PARAM_ALPHANUMEXT);
         $mform->addRule('opencastid', get_string('required'), 'required');
+        $mform->hideIf('opencastid', 'manualocid', 'eq', '0');
 
         if (get_config('mod_opencast', 'global_download_' . $ocinstanceid)) {
             $mform->addElement('hidden', 'allowdownload');
@@ -81,10 +106,6 @@ class mod_opencast_mod_form extends moodleform_mod
             $mform->setDefault('allowdownload', get_config('mod_opencast', 'download_default_' . $ocinstanceid));
         }
 
-        $mform->addElement('hidden', 'ocinstanceid');
-        $mform->setType('ocinstanceid', PARAM_INT);
-        $mform->setDefault('ocinstanceid', \tool_opencast\local\settings_api::get_default_ocinstance()->id);
-
         $mform->addElement('hidden', 'type');
         $mform->setType('type', PARAM_INT);
 
@@ -93,6 +114,8 @@ class mod_opencast_mod_form extends moodleform_mod
 
         // Add standard buttons.
         $this->add_action_buttons();
+
+        $PAGE->requires->js_call_amd('mod_opencast/form_dependent_select', 'init', array($choices[1]));
     }
 
     /**

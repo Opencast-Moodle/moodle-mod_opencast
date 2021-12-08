@@ -25,8 +25,8 @@
 use mod_opencast\local\opencasttype;
 use mod_opencast\local\output_helper;
 
-require(__DIR__.'/../../config.php');
-require_once(__DIR__.'/lib.php');
+require(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/lib.php');
 
 global $OUTPUT, $DB, $PAGE;
 
@@ -34,20 +34,20 @@ global $OUTPUT, $DB, $PAGE;
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id.
-$o  = optional_param('o', 0, PARAM_INT);
+$o = optional_param('o', 0, PARAM_INT);
 
 $episode = optional_param('e', null, PARAM_ALPHANUMEXT);
 
 if ($id) {
-    $cm             = get_coursemodule_from_id('opencast', $id, 0, false, MUST_EXIST);
-    $course         = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
+    $cm = get_coursemodule_from_id('opencast', $id, 0, false, MUST_EXIST);
+    $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
     $moduleinstance = $DB->get_record('opencast', array('id' => $cm->instance), '*', MUST_EXIST);
 } else if ($o) {
     $moduleinstance = $DB->get_record('opencast', array('id' => $o), '*', MUST_EXIST);
-    $course         = $DB->get_record('course', array('id' => $moduleinstance->course), '*', MUST_EXIST);
-    $cm             = get_coursemodule_from_instance('opencast', $moduleinstance->id, $course->id, false, MUST_EXIST);
+    $course = $DB->get_record('course', array('id' => $moduleinstance->course), '*', MUST_EXIST);
+    $cm = get_coursemodule_from_instance('opencast', $moduleinstance->id, $course->id, false, MUST_EXIST);
 } else {
-    print_error(get_string('missingidandcmid', 'mod_opencast'));
+    throw new moodle_exception('missingidandcmid', 'mod_opencast');
 }
 
 require_login($course, true, $cm);
