@@ -50,7 +50,8 @@ Configuration
 The activity has two global configurations that can be modified by the administrator.
 <img src="https://user-images.githubusercontent.com/28386141/115534550-2f772c00-a298-11eb-98c9-70b3d62bd751.png" width="500"></br>
 
-The first configuration "Opencast Channel" specifies the Opencast channel to which the videos are published. Only videos published in this channel can be displayed with this activity.
+The first configuration "Opencast Channel" specifies the Opencast channel to which the videos are published. Only videos published in this channel can be displayed with this activity. The publication must include media files, e.g. `.mp4` files, that can be served to the paella player.
+
 
 The second configuration "URL to Paella config.json" specifies the path to the Paella player config. This config can be adapted if you want to modify the look or behavior of the Paella player.
 
