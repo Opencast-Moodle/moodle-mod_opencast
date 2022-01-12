@@ -66,16 +66,27 @@ class mod_opencast_mod_form extends moodleform_mod
 
         $this->standard_intro_elements();
 
+        $choices = apibridge::get_course_series_and_episodes($this->get_course()->id);
         $mform->addElement('advcheckbox', 'manualocid', get_string('manualocid', 'mod_opencast'));
         $mform->setType('manualocid', PARAM_BOOL);
-        $mform->setDefault('manualocid', '0');
+        if(count($choices[0]) === 0) {
+            $mform->setDefault('manualocid', '1');
+        }
+        else {
+            $mform->setDefault('manualocid', '0');
+        }
 
-        $choices = apibridge::get_course_series_and_episodes($this->get_course()->id);
         $mform->addElement('select', 'series', get_string('series', 'mod_opencast'), $choices[0]);
         $mform->setType('series', PARAM_ALPHANUMEXT);
         $mform->hideIf('series', 'manualocid', 'eq', '1');
 
-        $mform->addElement('select', 'episode', get_string('episode', 'mod_opencast'), array_merge(...array_values($choices[1])));
+        if (count($choices[1]) === 0) {
+            $mform->addElement('select', 'episode',
+                get_string('episode', 'mod_opencast'), array());
+        } else {
+            $mform->addElement('select', 'episode',
+                get_string('episode', 'mod_opencast'), array_merge(...array_values($choices[1])));
+        }
         $mform->setType('episode', PARAM_ALPHANUMEXT);
         $mform->hideIf('episode', 'manualocid', 'eq', '1');
 

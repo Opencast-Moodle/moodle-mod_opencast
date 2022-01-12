@@ -56,8 +56,10 @@ export const init = (choices) => {
         }
 
     } else {
-        // Use defaults.
-        selectseries.dispatchEvent(new Event('change'));
+        // Use defaults if there are any.
+        if (selectseries.options.length > 0) {
+            selectseries.dispatchEvent(new Event('change'));
+        }
     }
 
     // Disabled values should also be submitted in this case.
