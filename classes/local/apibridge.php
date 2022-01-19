@@ -162,12 +162,10 @@ class apibridge
                 $serieschoices[$serieskey] = $ocseries->title;
                 $episodes = $apibridge->get_episodes_in_series($ocseries->identifier);
 
-                if ($episodes) {
-                    $episodechoices[$serieskey] = array('allvideos' => get_string('allvideos', 'mod_opencast'));
+                $episodechoices[$serieskey] = array('allvideos' => get_string('allvideos', 'mod_opencast'));
 
-                    foreach ($episodes as $episode) {
-                        $episodechoices[$serieskey][$episode->identifier] = $episode->title;
-                    }
+                foreach ($episodes as $episode) {
+                    $episodechoices[$serieskey][$episode->identifier] = $episode->title;
                 }
             }
         }
