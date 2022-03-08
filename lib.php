@@ -31,15 +31,28 @@ defined('MOODLE_INTERNAL') || die();
  * @return true | null True if the feature is supported, null otherwise.
  */
 function opencast_supports($feature) {
-    switch ($feature) {
-        case FEATURE_MOD_INTRO:
-        case FEATURE_SHOW_DESCRIPTION:
-        case FEATURE_BACKUP_MOODLE2:
-            return true;
-        case FEATURE_MOD_PURPOSE:
-            return MOD_PURPOSE_CONTENT;
-        default:
-            return null;
+    global $CFG;
+
+    if ($CFG->branch >= 400) {
+        switch ($feature) {
+            case FEATURE_MOD_INTRO:
+            case FEATURE_SHOW_DESCRIPTION:
+            case FEATURE_BACKUP_MOODLE2:
+                return true;
+            case FEATURE_MOD_PURPOSE:
+                return MOD_PURPOSE_CONTENT;
+            default:
+                return null;
+        }
+    } else {
+        switch ($feature) {
+            case FEATURE_MOD_INTRO:
+            case FEATURE_SHOW_DESCRIPTION:
+            case FEATURE_BACKUP_MOODLE2:
+                return true;
+            default:
+                return null;
+        }
     }
 }
 
