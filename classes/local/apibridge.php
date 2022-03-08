@@ -77,7 +77,7 @@ class apibridge
      */
     public function get_episodes_in_series($seriesid) {
         $api = new api($this->ocinstanceid);
-        $resource = "/api/events?filter=is_part_of:$seriesid&withpublications=true&sort=start_date:DESC,title:ASC";
+        $resource = "/api/events?filter=is_part_of:$seriesid&withpublications=true&sort=start_date:DESC,title:ASC&sign=true";
         $response = $api->oc_get($resource);
 
         if ($api->get_http_code() != 200) {
