@@ -73,12 +73,12 @@ body.path-mod-opencast .episode .duration {
     font-size: 0.9em;
 }
 
+
 body.path-mod-opencast .player-wrapper {
     position: relative;
     margin: auto;
     width: 100%;
     height: 85vh;
-    border: 1px solid #bbb;
 }
 
 @supports (--custom:property) {
@@ -89,7 +89,7 @@ body.path-mod-opencast .player-wrapper {
     }
 }
 
-body.path-mod-opencast #player-iframe {
+body.path-mod-opencast .mod-opencast-paella-player {
     position: absolute;
     top: 0;
     left: 0;

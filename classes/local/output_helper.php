@@ -39,8 +39,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2021 Justus Dieckmann WWU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class output_helper
-{
+class output_helper {
 
     /**
      * Prints output for series view.
@@ -126,6 +125,7 @@ class output_helper
 
         echo $OUTPUT->header();
 
+        $configurl = new \moodle_url(get_config('mod_opencast', 'configurl_' . $ocinstanceid));
         echo \html_writer::script('window.episode = ' . json_encode($data));
 
         echo $OUTPUT->heading($title);
@@ -142,10 +142,9 @@ class output_helper
             echo \html_writer::start_div('player-wrapper');
         }
 
-        echo '<iframe src="player.html" id="player-iframe" allowfullscreen"></iframe>';
+        echo '<iframe src="player.html" id="player-iframe" class="mod-opencast-paella-player" allowfullscreen"></iframe>';
         echo \html_writer::end_div();
 
-        $configurl = new \moodle_url(get_config('mod_opencast', 'configurl_' . $ocinstanceid));
         $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init', [$configurl->out(false)]);
 
         $moduleinstance = $DB->get_record('opencast', array('id' => $modinstanceid), '*', MUST_EXIST);
