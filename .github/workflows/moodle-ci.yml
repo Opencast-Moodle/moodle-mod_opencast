@@ -11,7 +11,7 @@ jobs:
         php: ['7.4']
         moodle-branch: ['MOODLE_311_STABLE']
         database: ['pgsql']
-        opencast: ['9.3']
+        opencast: ['11.4']
 
     steps:
       - name: Start PostgreSQL
@@ -104,9 +104,9 @@ jobs:
       fail-fast: false
       matrix:
         php: ['7.3', '7.4']
-        moodle-branch: ['MOODLE_38_STABLE', 'MOODLE_39_STABLE', 'MOODLE_310_STABLE', 'MOODLE_311_STABLE']
+        moodle-branch: ['MOODLE_39_STABLE', 'MOODLE_310_STABLE', 'MOODLE_311_STABLE', 'master']
         database: ['mariadb', 'pgsql']
-        opencast: ['9.3']
+        opencast: ['11.4']
 
     steps:
       - name: Start MariaDB
@@ -114,8 +114,12 @@ jobs:
         run: docker run -p 3306:3306 -e MYSQL_USER=root -e MYSQL_ALLOW_EMPTY_PASSWORD=true -d mariadb:10
 
       - name: Start PostgreSQL
-        if: matrix.database == 'pgsql'
+        if: matrix.database == 'pgsql' && matrix.moodle-branch != 'master'
         run: docker run -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_HOST_AUTH_METHOD=trust -d postgres:9.6
+
+      - name: Start PostgreSQL
+        if: matrix.database == 'pgsql' && matrix.moodle-branch == 'master'
+        run: docker run -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_HOST_AUTH_METHOD=trust -d postgres:10
 
       - name: Check out opencast-docker
         uses: actions/checkout@v2
