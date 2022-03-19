@@ -31,8 +31,6 @@ use mod_opencast\output\renderer;
 use pix_icon;
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Helper for generating page output for series and episodes.
  * @package    mod_opencast

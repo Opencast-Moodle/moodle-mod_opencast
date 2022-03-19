@@ -35,8 +35,7 @@ require_once($CFG->dirroot . '/course/moodleform_mod.php');
  * @copyright  2020 Tobias Reischmann <tobias.reischmann@wi.uni-muenster.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_opencast_mod_form extends moodleform_mod
-{
+class mod_opencast_mod_form extends moodleform_mod {
 
     /**
      * Defines forms elements
@@ -69,10 +68,9 @@ class mod_opencast_mod_form extends moodleform_mod
         $choices = apibridge::get_course_series_and_episodes($this->get_course()->id);
         $mform->addElement('advcheckbox', 'manualocid', get_string('manualocid', 'mod_opencast'));
         $mform->setType('manualocid', PARAM_BOOL);
-        if(count($choices[0]) === 0) {
+        if (count($choices[0]) === 0) {
             $mform->setDefault('manualocid', '1');
-        }
-        else {
+        } else {
             $mform->setDefault('manualocid', '0');
         }
 

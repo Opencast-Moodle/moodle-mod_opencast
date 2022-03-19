@@ -22,10 +22,7 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 namespace mod_opencast\event;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * The mod_opencast course module viewed event class.

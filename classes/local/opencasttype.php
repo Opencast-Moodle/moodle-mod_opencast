@@ -24,8 +24,6 @@
 
 namespace mod_opencast\local;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Types of mod_opencast instances. Either SERIES, EPISODE or UNDEFINED.
  *

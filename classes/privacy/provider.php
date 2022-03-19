@@ -24,8 +24,6 @@
 
 namespace mod_opencast\privacy;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The mod_opencast module does not store any data.
  *

@@ -23,17 +23,13 @@
 
 namespace mod_opencast\local;
 
-
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Helper for preparing the data from the Opencast API for the paella player.
  * @package mod_opencast
  * @copyright  2021 Justus Dieckmann WWU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class paella_transform
-{
+class paella_transform {
 
     /**
      * Returns the publication with the correct release channel for a given episode.

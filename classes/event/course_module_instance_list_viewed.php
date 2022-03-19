@@ -24,8 +24,6 @@
 
 namespace mod_opencast\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The mod_opencast instance list viewed event class.
  *
@@ -33,7 +31,6 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2021 Tamara Gunkel <tamara.gunkel@wi.uni-muenster.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_module_instance_list_viewed extends \core\event\course_module_instance_list_viewed
-{
+class course_module_instance_list_viewed extends \core\event\course_module_instance_list_viewed {
     // No code required here as the parent class handles it all.
 }

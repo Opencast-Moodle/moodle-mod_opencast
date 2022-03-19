@@ -27,8 +27,6 @@ namespace mod_opencast\local;
 use tool_opencast\local\api;
 use tool_opencast\seriesmapping;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * API-bridge for mod_opencast. Contains all the functions which use the external API.
  *
@@ -36,8 +34,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2020 Justus Dieckmann WWU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class apibridge
-{
+class apibridge {
 
     /** @var int Opencast instance id */
     private $ocinstanceid;
