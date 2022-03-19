@@ -3,7 +3,7 @@
   "private": true,
   "dependencies": {
     "paella-basic-plugins": "^1.0.10",
-    "paella-core": "^1.0.31",
+    "paella-core": "^1.0.34",
     "paella-slide-plugins": "^1.0.8",
     "paella-user-tracking": "^1.0.9",
     "paella-zoom-plugin": "^1.0.8"
