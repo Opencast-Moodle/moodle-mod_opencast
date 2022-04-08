@@ -227,7 +227,7 @@ class output_helper {
                             $otherpreview = $attachment->url;
                         }
                     }
-                    $url = $presenterpreview ?? $presentationpreview ?? $otherpreview;
+                    $url = $presentationpreview ?? $presenterpreview ?? $otherpreview;
 
                     $video->haspresenter = false;
                     $video->haspresentation = false;
