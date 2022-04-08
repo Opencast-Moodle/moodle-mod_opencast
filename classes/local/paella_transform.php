@@ -68,7 +68,7 @@ class paella_transform {
             }
         }
 
-        return $presentationpreview ?? $presenterpreview ?? $otherpreview;
+        return $presenterpreview ?? $presentationpreview ?? $otherpreview;
     }
 
     /**
