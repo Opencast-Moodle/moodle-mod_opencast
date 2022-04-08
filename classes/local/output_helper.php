@@ -221,13 +221,11 @@ class output_helper {
                     foreach ($publication->attachments as $attachment) {
                         if ($attachment->flavor == 'presenter/search+preview') {
                             $presenterpreview = $attachment->url;
-                        }
-                        if ($attachment->flavor == 'presentation/search+preview') {
+                        } else if ($attachment->flavor == 'presentation/search+preview') {
                             $presentationpreview = $attachment->url;
-                        }
-                        if (str_ends_with($attachment->flavor, '/search+preview')) {
+                        } else if (substr($attachment->flavor, -15) === '/search+preview') {
                             $otherpreview = $attachment->url;
-                        }   
+                        }
                     }
                     $url = $presenterpreview ?? $presentationpreview ?? $otherpreview;
 
