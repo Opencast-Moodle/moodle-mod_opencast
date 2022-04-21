@@ -213,7 +213,13 @@ class paella_transform {
             ];
         }
 
-        return array_values($streams);
+        $streams = array_values($streams);
+
+        if (count($streams) == 1) {
+            $streams[0]['role'] = 'mainAudio';
+        }
+
+        return $streams;
     }
 
     /**
