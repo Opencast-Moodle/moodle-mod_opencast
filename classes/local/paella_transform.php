@@ -119,7 +119,7 @@ class paella_transform {
                 }
             }
         }
-        return $framelist;
+        return array_values($framelist);
     }
 
     /**
