@@ -174,6 +174,7 @@ class paella_transform {
      */
     private static function get_streams($publication) {
         $streams = [];
+        $ismainaudioset = false;
 
         foreach ($publication->media as $media) {
             $sourcetype = self::get_source_type_from_track($media);
@@ -211,15 +212,14 @@ class paella_transform {
                 'master' => $ismaster,
                 'isLiveStream' => isset($media->is_live) && $media->is_live
             ];
+
+            if (!$ismainaudioset && isset($media->has_audio) && $media->has_audio) {
+                $streams[$content]['role'] = 'mainAudio';
+                $ismainaudioset = true;
+            }
         }
 
-        $streams = array_values($streams);
-
-        if (count($streams) == 1) {
-            $streams[0]['role'] = 'mainAudio';
-        }
-
-        return $streams;
+        return array_values($streams);
     }
 
     /**
