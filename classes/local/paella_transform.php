@@ -110,9 +110,9 @@ class paella_transform {
                         ];
                     } else {
                         if (substr($attachment->flavor, -5) === 'hires') {
-                            $framelist[$time]->url = $attachment->url;
+                            $framelist[$time]['url'] = $attachment->url;
                         } else {
-                            $framelist[$time]->thumb = $attachment->url;
+                            $framelist[$time]['thumb'] = $attachment->url;
                         }
 
                     }
