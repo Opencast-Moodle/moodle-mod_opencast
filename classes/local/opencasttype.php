@@ -39,5 +39,6 @@ class opencasttype {
     const EPISODE = 1;
     /** @var int The ID specifies a Series */
     const SERIES = 2;
-
+    /** @var int The ID specifies an Upload */
+    const UPLOAD = 3;
 }

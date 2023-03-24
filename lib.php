@@ -117,3 +117,44 @@ function mod_opencast_get_fontawesome_icon_map() {
         'mod_opencast:i/tv' => 'fa-tv'
     ];
 }
+
+/**
+ * Register the ability to handle drag and drop file uploads
+ * @return array containing details of the files / types the mod can handle
+ */
+function opencast_dndupload_register() {
+    // Getting default opencast instance.
+    $defaultocinstanceid = \tool_opencast\local\settings_api::get_default_ocinstance()->id;
+    // Getting file extensions from the block_opencast configuration using default ocinstanceid.
+    $videotypescfg = get_config('block_opencast', 'uploadfileextensions_' . $defaultocinstanceid);
+    $videoexts = empty($videotypescfg) || $videotypescfg == 'video' ?
+        file_get_typegroup('extension', 'video') :
+        array_map('trim', explode(',', $videotypescfg));
+    $extensionsarray = [];
+    foreach ($videoexts as $videoext) {
+        $videoext = trim($videoext, '.');
+        $extensionsarray[] = ['extension' => $videoext, 'message' => get_string('dnduploadvideofile', 'mod_opencast')];
+    }
+    $files = ['files' => $extensionsarray];
+    return $files;
+}
+
+/**
+ * Handle a file that has been uploaded
+ * @param object $uploadinfo details of the file / content that has been uploaded
+ * @return int instance id of the newly created mod
+ */
+function opencast_dndupload_handle($uploadinfo) {
+    global $DB;
+    // Gather the required info.
+    $data = new stdClass();
+    $data->course = $uploadinfo->course->id;
+    $data->name = get_string('uploadtitledisplay', 'mod_opencast', $uploadinfo->displayname);
+    $data->ocinstanceid = \tool_opencast\local\settings_api::get_default_ocinstance()->id;
+    $data->type = \mod_opencast\local\opencasttype::UPLOAD;
+    $data->uploaddraftitemid = $uploadinfo->draftitemid;
+    $data->opencastid = 'newfileupload';
+
+    $data->id = opencast_add_instance($data, null);
+    return $data->id ? $data->id : false;
+}

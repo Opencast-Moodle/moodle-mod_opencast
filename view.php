@@ -92,6 +92,30 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
     } else {
         output_helper::output_series($moduleinstance->ocinstanceid, $moduleinstance->opencastid, $moduleinstance->name);
     }
+} else if ($moduleinstance->type == opencasttype::UPLOAD) {
+    // Redirect to the upload video page in the mod_opencast by default.
+    $messagetext = get_string('uploadlandinginfo', 'mod_opencast');
+    $messagestatus = \core\output\notification::NOTIFY_INFO;
+    $url = new moodle_url('/mod/opencast/uploadvideo.php', array('cmid' => $cm->id));
+    // Check the addvideo capability from block_opencast.
+    $coursecontext = context_course::instance($course->id);
+    if (!has_capability('block/opencast:addvideo', $coursecontext)) {
+        // If capability is not met, redirect back with message.
+        $url = new moodle_url('/course/view.php', array('id' => $course->id));
+        $messagetext = get_string('uploadnotallowed', 'mod_opencast');
+        $messagestatus = \core\output\notification::NOTIFY_ERROR;
+    } else if (empty($moduleinstance->uploaddraftitemid)) {
+        // If the file draft id is not avialable, we remove the instance and redirect back with message.
+        $url = new moodle_url('/course/view.php', array('id' => $course->id));
+        $messagetext = get_string('uploadmissingfile', 'mod_opencast');
+        $messagestatus = \core\output\notification::NOTIFY_ERROR;
+
+        // Delete this module as it is faulty.
+        course_delete_module($cm->id);
+        opencast_delete_instance($moduleinstance->id);
+    }
+    // Perform the redirect.
+    redirect($url, $messagetext, null, $messagestatus);
 } else {
     throw new coding_exception('This opencast activity is neither a episode nor a series.');
 }
