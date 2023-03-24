@@ -53,7 +53,7 @@ $PAGE->set_pagelayout('frametop');
 $PAGE->set_context($context);
 
 if (empty($moduleinstance->uploaddraftitemid)) {
-    print_error('uploadmissingfile', 'mod_opencast');
+    throw new moodle_exception('uploadmissingfile', 'mod_opencast');
 }
 
 // Preparing the content to be shown in the form.

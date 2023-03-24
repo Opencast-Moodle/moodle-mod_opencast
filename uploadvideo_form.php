@@ -29,9 +29,20 @@ require_once($CFG->libdir . '/formslib.php');
 
 use \block_opencast\local\autocomplete_suggestion_helper;
 
+/**
+ * Video Upload form
+ *
+ * @package    mod_opencast
+ * @copyright  2023 Farbod Zamani Boroujeni, ELAN e.V.
+ * @author     Farbod Zamani Boroujeni <zamani@elan-ev.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mod_opencast_uploadvideo_form extends moodleform {
 
-    function definition() {
+    /**
+     * Defines forms elements
+     */
+    public function definition() {
         global $CFG, $PAGE, $OUTPUT;
         // Get the renderer to use its methods.
         $renderer = $PAGE->get_renderer('block_opencast');
@@ -70,7 +81,7 @@ class mod_opencast_uploadvideo_form extends moodleform {
 
         // Select the sereis of that ocinstances.
         foreach ($ocinstances as $ocinstance) {
-            $serieslist =  $allseries[$ocinstance->id];
+            $serieslist = $allseries[$ocinstance->id];
             $defaultseries = 0;
             $seriesselection = [];
             foreach ($serieslist as $series) {
@@ -93,7 +104,7 @@ class mod_opencast_uploadvideo_form extends moodleform {
 
         // Providing sets od metadata based on ocinstances.
         foreach ($ocinstances as $ocinstance) {
-            $metadatacatalog =  $metadatacatalogs[$ocinstance->id];
+            $metadatacatalog = $metadatacatalogs[$ocinstance->id];
             $settitle = true;
             foreach ($metadatacatalog as $field) {
                 $elementid = "{$field->name}_{$ocinstance->id}";
