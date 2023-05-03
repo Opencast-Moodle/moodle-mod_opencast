@@ -101,7 +101,7 @@ function xmldb_opencast_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021111600, 'opencast');
     }
 
-    if ($oldversion < 2023032300) {
+    if ($oldversion < 2023050300) {
         // Define field uploaddraftitemid to be added to opencast.
         $table = new xmldb_table('opencast');
         $field = new xmldb_field('uploaddraftitemid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'opencastid');
@@ -112,7 +112,7 @@ function xmldb_opencast_upgrade($oldversion) {
         }
 
         // Opencast savepoint reached.
-        upgrade_mod_savepoint(true, 2023032300, 'opencast');
+        upgrade_mod_savepoint(true, 2023050300, 'opencast');
     }
 
     return true;
