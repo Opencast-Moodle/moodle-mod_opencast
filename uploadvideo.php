@@ -216,19 +216,23 @@ if ($mform->is_cancelled()) {
     }
 
     if (!empty($uploadjobid)) {
-        $title = $metadata[array_search('title', array_column($metadata, 'id'))]['value'];
-        // Gather more information about this module so that we can update the module info in the end.
-        list($unusedcm, $unusedcontext, $unusedmodule, $opencastmoduledata, $unusedcw) =
-            get_moduleinfo_data($cm , $course);
-
-        // Replace the module info to update its type and other info.
-        $opencastmoduledata->name = $title ? $title : get_string('defaultuploadedvideotitle', 'mod_opencast');
-        $opencastmoduledata->uploadjobid = $uploadjobid;
-        // Using a dummy parameter 'opencastmodtype' to be replaced with type at when updating record in db.
-        $opencastmoduledata->opencastmodtype = \mod_opencast\local\opencasttype::UPLOADED;
-        $opencastmoduledata->ocinstanceid = $ocinstanceid;
-        // Update the module info directly.
-        update_module($opencastmoduledata);
+        try {
+            $title = $metadata[array_search('title', array_column($metadata, 'id'))]['value'];
+            // Gather more information about this module so that we can update the module info in the end.
+            list($unusedcm, $unusedcontext, $unusedmodule, $opencastmoduledata, $unusedcw) =
+                get_moduleinfo_data($cm , $course);
+    
+            // Replace the module info to update its type and other info.
+            $opencastmoduledata->name = $title ? $title : get_string('defaultuploadedvideotitle', 'mod_opencast');
+            $opencastmoduledata->uploadjobid = $uploadjobid;
+            // Using a dummy parameter 'opencastmodtype' to be replaced with type at when updating record in db.
+            $opencastmoduledata->opencastmodtype = \mod_opencast\local\opencasttype::UPLOADED;
+            $opencastmoduledata->ocinstanceid = $ocinstanceid;
+            // Update the module info directly.
+            update_module($opencastmoduledata);
+        } catch (\Exception $e) {
+            \core\notification::warning($e->getMessage());
+        }
     }
     $blockopencastlink = new moodle_url('/blocks/opencast/index.php',
         array('courseid' => $course->id, 'ocinstanceid' => $ocinstanceid));

@@ -141,16 +141,21 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
         $messagestatus = \core\output\notification::NOTIFY_INFO;
         redirect($url, $messagetext, null, $messagestatus);
     } else {
-        // Gather more information about this module so that we can update the module info in the end.
-        list($unusedcm, $unusedcontext, $unusedmodule, $opencastmoduledata, $unusedcw) =
-            get_moduleinfo_data($cm , $course);
+        try {
+            // Gather more information about this module so that we can update the module info in the end.
+            list($unusedcm, $unusedcontext, $unusedmodule, $opencastmoduledata, $unusedcw) =
+                get_moduleinfo_data($cm , $course);
 
-        // Using a dummy parameter 'opencastmodtype' to be replaced with type at when updating record in db.
-        $opencastmoduledata->opencastmodtype = opencasttype::EPISODE;
-        $opencastmoduledata->opencastid = $opencasteventid;
-        // Update the module info directly.
-        update_module($opencastmoduledata);
-        output_helper::output_episode($opencastmoduledata->ocinstanceid, $opencastmoduledata->opencastid, $opencastmoduledata->id);
+            // Using a dummy parameter 'opencastmodtype' to be replaced with type at when updating record in db.
+            $opencastmoduledata->opencastmodtype = opencasttype::EPISODE;
+            $opencastmoduledata->opencastid = $opencasteventid;
+            // Update the module info directly.
+            update_module($opencastmoduledata);
+            output_helper::output_episode($opencastmoduledata->ocinstanceid, $opencastmoduledata->opencastid,
+                $opencastmoduledata->id);
+        } catch (\Exception $e) {
+            \core\notification::warning($e->getMessage());
+        }
     }
 } else {
     throw new coding_exception('This opencast activity is neither a episode nor a series.');
