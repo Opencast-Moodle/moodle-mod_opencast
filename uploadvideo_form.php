@@ -49,6 +49,7 @@ class mod_opencast_uploadvideo_form extends moodleform {
 
         $cmid = $this->_customdata['cmid'];
         $ocinstances = $this->_customdata['ocinstances'];
+        $ocmoduleinstance = $this->_customdata['moduleinstance'];
         $allseries = $this->_customdata['allseries'];
         $metadatacatalogs = $this->_customdata['metadatacatalogs'];
         $eventdefaults = $this->_customdata['eventdefaults'];
@@ -172,6 +173,13 @@ class mod_opencast_uploadvideo_form extends moodleform {
                 $mform->setType($elementid, PARAM_TEXT);
                 $mform->disabledIf($elementid, 'ocinstance' , 'neq', $ocinstance->id);
                 $mform->hideif($elementid, 'ocinstance' , 'neq', $ocinstance->id);
+            }
+
+            // Make sure that title has default value of the upload file name.
+            if (!empty($ocmoduleinstance->name)) {
+                $titleelementid = 'title_' . $ocinstance->id;
+                $filename = str_replace(get_string('uploadtitledisplay', 'mod_opencast'), '', $ocmoduleinstance->name);
+                $mform->setDefault($titleelementid, trim($filename));
             }
 
             // Radio boxes for video flavor.

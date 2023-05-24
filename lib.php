@@ -64,8 +64,10 @@ function opencast_add_instance($moduleinstance, $mform = null) {
 
     $id = $DB->insert_record('opencast', $moduleinstance);
 
-    \core_completion\api::update_completion_date_event($moduleinstance->coursemodule, 'opencast', $id,
-            $moduleinstance->completionexpected ?? null);
+    if (property_exists($moduleinstance, 'coursemodule')) {
+        \core_completion\api::update_completion_date_event($moduleinstance->coursemodule, 'opencast', $id,
+                $moduleinstance->completionexpected ?? null);
+    }
 
     return $id;
 }
@@ -84,12 +86,19 @@ function opencast_update_instance($moduleinstance, $mform = null) {
     global $DB;
 
     $moduleinstance->timemodified = time();
-    if (!property_exists($moduleinstance, 'id') && property_exists($moduleinstance, 'instance')) {
-        $moduleinstance->id = $moduleinstance->instance;
+    $moduleinstance->id = $moduleinstance->instance;
+
+    // When updating moodule in a normal way, the 'type' is used to by moodle itself and it is set to mod,
+    // therefore for us to update the type we need to use a dummy parameter and replace it here.
+    if (property_exists($moduleinstance, 'opencastmodtype')) {
+        $moduleinstance->type = intval($moduleinstance->opencastmodtype);
+        unset($moduleinstance->opencastmodtype);
     }
 
-    \core_completion\api::update_completion_date_event($moduleinstance->coursemodule, 'opencast', $moduleinstance->id,
-            $moduleinstance->completionexpected ?? null);
+    if (property_exists($moduleinstance, 'coursemodule')) {
+        \core_completion\api::update_completion_date_event($moduleinstance->coursemodule, 'opencast', $moduleinstance->id,
+                $moduleinstance->completionexpected ?? null);
+    }
 
     return $DB->update_record('opencast', $moduleinstance);
 }
@@ -157,7 +166,7 @@ function opencast_dndupload_handle($uploadinfo) {
     // Gather the required info.
     $data = new stdClass();
     $data->course = $uploadinfo->course->id;
-    $data->name = get_string('uploadtitledisplay', 'mod_opencast', $uploadinfo->displayname);
+    $data->name = get_string('uploadtitledisplay', 'mod_opencast') . " {$uploadinfo->displayname}";
     $data->ocinstanceid = \tool_opencast\local\settings_api::get_default_ocinstance()->id;
     $data->type = \mod_opencast\local\opencasttype::UPLOAD;
     $data->uploaddraftitemid = $uploadinfo->draftitemid;

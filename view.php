@@ -27,6 +27,8 @@ use mod_opencast\local\output_helper;
 
 require(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
+require_once($CFG->dirroot . '/course/modlib.php');
+require_once($CFG->libdir . '/gradelib.php');
 
 global $OUTPUT, $DB, $PAGE;
 
@@ -139,10 +141,16 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
         $messagestatus = \core\output\notification::NOTIFY_INFO;
         redirect($url, $messagetext, null, $messagestatus);
     } else {
-        $moduleinstance->type = opencasttype::EPISODE;
-        $moduleinstance->opencastid = $opencasteventid;
-        opencast_update_instance($moduleinstance);
-        output_helper::output_episode($moduleinstance->ocinstanceid, $moduleinstance->opencastid, $moduleinstance->id);
+        // Gather more information about this module so that we can update the module info in the end.
+        list($unusedcm, $unusedcontext, $unusedmodule, $opencastmoduledata, $unusedcw) =
+            get_moduleinfo_data($cm , $course);
+
+        // Using a dummy parameter 'opencastmodtype' to be replaced with type at when updating record in db.
+        $opencastmoduledata->opencastmodtype = opencasttype::EPISODE;
+        $opencastmoduledata->opencastid = $opencasteventid;
+        // Update the module info directly.
+        update_module($opencastmoduledata);
+        output_helper::output_episode($opencastmoduledata->ocinstanceid, $opencastmoduledata->opencastid, $opencastmoduledata->id);
     }
 } else {
     throw new coding_exception('This opencast activity is neither a episode nor a series.');

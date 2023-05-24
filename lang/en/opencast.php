@@ -70,7 +70,7 @@ $string['seriesisempty'] = 'This series is currently empty.';
 $string['title'] = 'Title';
 // Strings for upload feature.
 $string['dnduploadvideofile'] = 'Upload video file to Opencast';
-$string['uploadtitledisplay'] = 'Upload video: {$a}';
+$string['uploadtitledisplay'] = 'Upload video:';
 $string['uploadlandinginfo'] = 'You are about to upload video to Opencast, please make sure the required information are entered.';
 $string['uploadnotallowed'] = 'Performing this action is not allowed';
 $string['uploadformtitle'] = 'Upload the video to Opencast';

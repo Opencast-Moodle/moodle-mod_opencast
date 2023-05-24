@@ -224,10 +224,11 @@ if ($mform->is_cancelled()) {
         // Replace the module info to update its type and other info.
         $opencastmoduledata->name = $title ? $title : get_string('defaultuploadedvideotitle', 'mod_opencast');
         $opencastmoduledata->uploadjobid = $uploadjobid;
-        $opencastmoduledata->type = \mod_opencast\local\opencasttype::UPLOADED;
+        // Using a dummy parameter 'opencastmodtype' to be replaced with type at when updating record in db.
+        $opencastmoduledata->opencastmodtype = \mod_opencast\local\opencasttype::UPLOADED;
         $opencastmoduledata->ocinstanceid = $ocinstanceid;
         // Update the module info directly.
-        list($cm, $moduleinfo) = update_moduleinfo($cm, $opencastmoduledata, $course, null);
+        update_module($opencastmoduledata);
     }
     $blockopencastlink = new moodle_url('/blocks/opencast/index.php',
         array('courseid' => $course->id, 'ocinstanceid' => $ocinstanceid));
