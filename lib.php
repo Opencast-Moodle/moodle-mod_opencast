@@ -64,6 +64,9 @@ function opencast_add_instance($moduleinstance, $mform = null) {
 
     $id = $DB->insert_record('opencast', $moduleinstance);
 
+    \core_completion\api::update_completion_date_event($moduleinstance->coursemodule, 'opencast', $id,
+            $moduleinstance->completionexpected ?? null);
+
     return $id;
 }
 
@@ -85,6 +88,9 @@ function opencast_update_instance($moduleinstance, $mform = null) {
         $moduleinstance->id = $moduleinstance->instance;
     }
 
+    \core_completion\api::update_completion_date_event($moduleinstance->coursemodule, 'opencast', $moduleinstance->id,
+            $moduleinstance->completionexpected ?? null);
+
     return $DB->update_record('opencast', $moduleinstance);
 }
 
@@ -101,6 +107,9 @@ function opencast_delete_instance($id) {
     if (!$exists) {
         return false;
     }
+
+    $cm = get_coursemodule_from_instance('opencast', $id);
+    \core_completion\api::update_completion_date_event($cm->id, 'opencast', $id, null);
 
     $DB->delete_records('opencast', array('id' => $id));
 
