@@ -60,8 +60,6 @@ function opencast_supports($feature) {
 function opencast_add_instance($moduleinstance, $mform = null) {
     global $DB;
 
-    $api = \mod_opencast\local\apibridge::get_instance($moduleinstance->ocinstanceid);
-
     $moduleinstance->timecreated = time();
 
     $id = $DB->insert_record('opencast', $moduleinstance);
@@ -83,7 +81,9 @@ function opencast_update_instance($moduleinstance, $mform = null) {
     global $DB;
 
     $moduleinstance->timemodified = time();
-    $moduleinstance->id = $moduleinstance->instance;
+    if (!property_exists($moduleinstance, 'id') && property_exists($moduleinstance, 'instance')) {
+        $moduleinstance->id = $moduleinstance->instance;
+    }
 
     return $DB->update_record('opencast', $moduleinstance);
 }
@@ -145,7 +145,6 @@ function opencast_dndupload_register() {
  * @return int instance id of the newly created mod
  */
 function opencast_dndupload_handle($uploadinfo) {
-    global $DB;
     // Gather the required info.
     $data = new stdClass();
     $data->course = $uploadinfo->course->id;

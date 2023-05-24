@@ -43,12 +43,11 @@ class mod_opencast_uploadvideo_form extends moodleform {
      * Defines forms elements
      */
     public function definition() {
-        global $CFG, $PAGE, $OUTPUT;
+        global $PAGE, $OUTPUT;
         // Get the renderer to use its methods.
         $renderer = $PAGE->get_renderer('block_opencast');
 
         $cmid = $this->_customdata['cmid'];
-        $opencastmodinstance = $this->_customdata['moduleinstance'];
         $ocinstances = $this->_customdata['ocinstances'];
         $allseries = $this->_customdata['allseries'];
         $metadatacatalogs = $this->_customdata['metadatacatalogs'];
@@ -133,7 +132,7 @@ class mod_opencast_uploadvideo_form extends moodleform {
 
                     if ($field->name == 'creator' || $field->name == 'contributor') {
                         $param = array_merge($param,
-                            autocomplete_suggestion_helper::get_suggestions_for_creator_and_contributor($ocinstanceid));
+                            autocomplete_suggestion_helper::get_suggestions_for_creator_and_contributor($ocinstance->id));
                     }
                 }
 

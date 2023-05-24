@@ -24,6 +24,8 @@
  */
 
 require(__DIR__ . '/../../config.php');
+require_once($CFG->dirroot . '/course/modlib.php');
+require_once($CFG->libdir . '/gradelib.php');
 require_once(__DIR__ . '/uploadvideo_form.php');
 
 use \block_opencast\local\apibridge;
@@ -202,9 +204,31 @@ if ($mform->is_cancelled()) {
     $options->presentation = isset($storedfilepresentation) && $storedfilepresentation ? $storedfilepresentation->get_itemid() : '';
     upload_helper::save_upload_jobs($ocinstanceid, $course->id, $options);
 
-    // After saving the upload job, we need to delete this module as it is no longer useful.
-    course_delete_module($cm->id);
-    opencast_delete_instance($moduleinstance->id);
+    // Get the id of new added record for that upload job.
+    $uploadjobid = 0;
+    $uploadjobs = upload_helper::get_upload_jobs($ocinstanceid, $course->id);
+    foreach ($uploadjobs as $uploadjob) {
+        if ($videoflavor === 0 && $uploadjob->presenter_fileid == $storedfilepresenter->get_id() ||
+            $videoflavor === 1 && $uploadjob->presentation_fileid == $storedfilepresentation->get_id()) {
+            $uploadjobid = $uploadjob->id;
+            break;
+        }
+    }
+
+    if (!empty($uploadjobid)) {
+        $title = $metadata[array_search('title', array_column($metadata, 'id'))]['value'];
+        // Gather more information about this module so that we can update the module info in the end.
+        list($unusedcm, $unusedcontext, $unusedmodule, $opencastmoduledata, $unusedcw) =
+            get_moduleinfo_data($cm , $course);
+
+        // Replace the module info to update its type and other info.
+        $opencastmoduledata->name = $title ? $title : get_string('defaultuploadedvideotitle', 'mod_opencast');
+        $opencastmoduledata->uploadjobid = $uploadjobid;
+        $opencastmoduledata->type = \mod_opencast\local\opencasttype::UPLOADED;
+        $opencastmoduledata->ocinstanceid = $ocinstanceid;
+        // Update the module info directly.
+        list($cm, $moduleinfo) = update_moduleinfo($cm, $opencastmoduledata, $course, null);
+    }
     $blockopencastlink = new moodle_url('/blocks/opencast/index.php',
         array('courseid' => $course->id, 'ocinstanceid' => $ocinstanceid));
     redirect($redirecturl,

@@ -101,7 +101,7 @@ function xmldb_opencast_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021111600, 'opencast');
     }
 
-    if ($oldversion < 2023050300) {
+    if ($oldversion < 2023052300) {
         // Define field uploaddraftitemid to be added to opencast.
         $table = new xmldb_table('opencast');
         $field = new xmldb_field('uploaddraftitemid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'opencastid');
@@ -111,8 +111,15 @@ function xmldb_opencast_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
+        // Define field uploadjobid to be added to opencast.
+        $uploadjobidfield = new xmldb_field('uploadjobid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'uploaddraftitemid');
+        // Conditionally launch add field uploadjobid.
+        if (!$dbman->field_exists($table, $uploadjobidfield)) {
+            $dbman->add_field($table, $uploadjobidfield);
+        }
+
         // Opencast savepoint reached.
-        upgrade_mod_savepoint(true, 2023050300, 'opencast');
+        upgrade_mod_savepoint(true, 2023052300, 'opencast');
     }
 
     return true;

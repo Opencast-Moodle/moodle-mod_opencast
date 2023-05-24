@@ -81,7 +81,7 @@ foreach ($opencastinstances as $opencastinstance) {
             format_string($opencastinstance->name, true));
     }
 
-    if ($course->format == 'weeks' or $course->format == 'topics') {
+    if ($course->format == 'weeks' || $course->format == 'topics') {
         $table->data[] = array($opencastinstance->section, $link);
     } else {
         $table->data[] = array($link);

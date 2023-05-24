@@ -116,6 +116,34 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
     }
     // Perform the redirect.
     redirect($url, $messagetext, null, $messagestatus);
+} else if ($moduleinstance->type == opencasttype::UPLOADED) {
+    $url = new moodle_url('/course/view.php', array('id' => $course->id));
+    $uploadjob = $DB->get_record('block_opencast_uploadjob', ['id' => $moduleinstance->uploadjobid]);
+    if (empty($uploadjob) || empty($uploadjob->opencasteventid)) {
+        $messagetext = get_string('uploadinprogress', 'mod_opencast', $moduleinstance->name);
+        $messagestatus = \core\output\notification::NOTIFY_INFO;
+        // Delete this module as it is faulty.
+        if (empty($uploadjob)) {
+            course_delete_module($cm->id);
+            opencast_delete_instance($moduleinstance->id);
+            $messagetext = get_string('uploadjobmissing', 'mod_opencast');
+            $messagestatus = \core\output\notification::NOTIFY_ERROR;
+        }
+        redirect($url, $messagetext, null, $messagestatus);
+    }
+    $opencasteventid = $uploadjob->opencasteventid;
+    $apibridge = \block_opencast\local\apibridge::get_instance($moduleinstance->ocinstanceid);
+    $video = $apibridge->get_opencast_video($opencasteventid);
+    if ($video->video->processing_state != 'SUCCEEDED') {
+        $messagetext = get_string('uploadedvideoisbeingprocesses', 'mod_opencast', $moduleinstance->name);
+        $messagestatus = \core\output\notification::NOTIFY_INFO;
+        redirect($url, $messagetext, null, $messagestatus);
+    } else {
+        $moduleinstance->type = opencasttype::EPISODE;
+        $moduleinstance->opencastid = $opencasteventid;
+        opencast_update_instance($moduleinstance);
+        output_helper::output_episode($moduleinstance->ocinstanceid, $moduleinstance->opencastid, $moduleinstance->id);
+    }
 } else {
     throw new coding_exception('This opencast activity is neither a episode nor a series.');
 }
