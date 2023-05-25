@@ -221,7 +221,7 @@ if ($mform->is_cancelled()) {
             // Gather more information about this module so that we can update the module info in the end.
             list($unusedcm, $unusedcontext, $unusedmodule, $opencastmoduledata, $unusedcw) =
                 get_moduleinfo_data($cm , $course);
-    
+
             // Replace the module info to update its type and other info.
             $opencastmoduledata->name = $title ? $title : get_string('defaultuploadedvideotitle', 'mod_opencast');
             $opencastmoduledata->uploadjobid = $uploadjobid;
