@@ -71,6 +71,7 @@ $string['title'] = 'Title';
 // Strings for upload feature.
 $string['dnduploadvideofile'] = 'Upload video file to Opencast';
 $string['uploadtitledisplay'] = 'Upload video:';
+$string['uploaddefaultintrodisplay'] = 'This is an opencast activity module for uploading a video.';
 $string['uploadlandinginfo'] = 'You are about to upload video to Opencast, please make sure the required information are entered.';
 $string['uploadnotallowed'] = 'Performing this action is not allowed';
 $string['uploadformtitle'] = 'Upload the video to Opencast';

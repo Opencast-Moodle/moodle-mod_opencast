@@ -64,10 +64,12 @@ function opencast_add_instance($moduleinstance, $mform = null) {
 
     $id = $DB->insert_record('opencast', $moduleinstance);
 
-    if (property_exists($moduleinstance, 'coursemodule')) {
-        \core_completion\api::update_completion_date_event($moduleinstance->coursemodule, 'opencast', $id,
-                $moduleinstance->completionexpected ?? null);
-    }
+    // Make sure that the course module has the latest data, in order for everything to work as intended.
+    $cmid = $moduleinstance->coursemodule;
+    $DB->set_field('course_modules', 'instance', $id, array('id' => $cmid));
+
+    \core_completion\api::update_completion_date_event($cmid, 'opencast', $id,
+            $moduleinstance->completionexpected ?? null);
 
     return $id;
 }
@@ -95,10 +97,8 @@ function opencast_update_instance($moduleinstance, $mform = null) {
         unset($moduleinstance->opencastmodtype);
     }
 
-    if (property_exists($moduleinstance, 'coursemodule')) {
-        \core_completion\api::update_completion_date_event($moduleinstance->coursemodule, 'opencast', $moduleinstance->id,
-                $moduleinstance->completionexpected ?? null);
-    }
+    \core_completion\api::update_completion_date_event($moduleinstance->coursemodule, 'opencast', $moduleinstance->id,
+            $moduleinstance->completionexpected ?? null);
 
     return $DB->update_record('opencast', $moduleinstance);
 }
@@ -171,6 +171,9 @@ function opencast_dndupload_handle($uploadinfo) {
     $data->type = \mod_opencast\local\opencasttype::UPLOAD;
     $data->uploaddraftitemid = $uploadinfo->draftitemid;
     $data->opencastid = 'newfileupload';
+    $data->intro = get_string('uploaddefaultintrodisplay', 'mod_opencast');
+    $data->introformat = FORMAT_MOODLE;
+    $data->coursemodule = $uploadinfo->coursemodule;
 
     $data->id = opencast_add_instance($data, null);
     return $data->id ? $data->id : false;

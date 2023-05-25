@@ -149,6 +149,7 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
             // Using a dummy parameter 'opencastmodtype' to be replaced with type at when updating record in db.
             $opencastmoduledata->opencastmodtype = opencasttype::EPISODE;
             $opencastmoduledata->opencastid = $opencasteventid;
+            $opencastmoduledata->intro = '';
             // Update the module info directly.
             update_module($opencastmoduledata);
             output_helper::output_episode($opencastmoduledata->ocinstanceid, $opencastmoduledata->opencastid,
