@@ -47,7 +47,7 @@ if (!get_config('mod_opencast', 'global_download_' . $ocinstanceid) && !$modulei
 }
 
 // Check if activity is visible for student.
-if (empty($cm->visible) and !has_capability('moodle/course:viewhiddenactivities', $modulecontext)) {
+if (empty($cm->visible) && !has_capability('moodle/course:viewhiddenactivities', $modulecontext)) {
     die();
 }
 

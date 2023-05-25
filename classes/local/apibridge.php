@@ -187,6 +187,10 @@ class apibridge {
             return opencasttype::SERIES;
         }
 
+        if ($id == 'newfileupload') {
+            return opencasttype::UPLOAD;
+        }
+
         return opencasttype::UNDEFINED;
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/opencast/db" VERSION="20200910" COMMENT="XMLDB file for Moodle mod_opencast"
+<XMLDB PATH="mod/opencast/db" VERSION="20230523" COMMENT="XMLDB file for Moodle mod_opencast"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -14,9 +14,11 @@
         <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Activity description."/>
         <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The format of the intro field."/>
         <FIELD NAME="opencastid" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="uploaddraftitemid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="uploadjobid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The uploadjob id to refer to after upload"/>
         <FIELD NAME="type" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The type of instance. See opencasttype"/>
         <FIELD NAME="ocinstanceid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="allowdownload" TYPE="int" LENGTH="1" DEFAULT="0" SEQUENCE="false" NOTNULL="true" />
+        <FIELD NAME="allowdownload" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
