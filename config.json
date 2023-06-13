@@ -1,5 +1,30 @@
 {
   "defaultLayout": "presenter-presentation",
+  "videoContainer": {
+    "overPlaybackBar": false,
+    "restorePlaybackRate": true,
+    "restoreVolume": true,
+    "restoreVideoLayout": {
+      "enabled": true,
+      "global": true
+    },
+    "restoreLastTime": {
+      "enabled": true,
+      "remainingSeconds": 5
+    }
+  },
+  "buttonGroups": [
+    {
+      "enabled": true,
+      "groupName": "optionsContainer",
+      "description": "Options",
+      "icon": "settings-icon.svg",
+      "order": 4,
+      "side": "right",
+      "tabIndex": 10,
+      "parentContainer": "playbackBar"
+    }
+  ],
   "plugins": {
     "es.upv.paella.singleVideo": {
       "enabled": true,
@@ -136,19 +161,9 @@
       "enabled": true,
       "side": "right",
       "order": 101,
-      "parentContainer": "videoContainer"
-    },
-    "es.upv.paella.playbackRateButton": {
-      "enabled": true,
-      "side": "right",
-      "order": 102,
-      "parentContainer": "videoContainer",
-      "rates": [
-        0.75,
-        1,
-        1.5,
-        2
-      ]
+      "parentContainer": "playbackBar",
+      "menuTitle": "Layout",
+      "tabIndex": 16
     },
     "es.upv.paella.volumeButtonPlugin": {
       "enabled": true,
@@ -193,25 +208,43 @@
     "es.upv.paella.captionsSelectorPlugin": {
       "enabled": true,
       "side": "right",
-      "parentContainer": "videoContainer"
+      "parentContainer": "optionsContainer",
+      "tabIndex": 13,
+      "popUpType": "no-modal"
+    },
+    "es.upv.paella.findCaptionsPlugin": {
+      "enabled": true,
+      "side": "right",
+      "description": "Search in captions",
+      "parentContainer": "optionsContainer"
     },
     "es.upv.paella.qualitySelector": {
       "enabled": true,
       "side": "right",
-      "parentContainer": "videoContainer"
+      "parentContainer": "optionsContainer",
+      "menuTitle": "Select quality",
+      "tabIndex": 11,
+      "popUpType": "no-modal"
     },
     "es.upv.paella.audioSelector": {
       "enabled": true,
       "side": "right"
     },
-    "es.upv.paella.defaultShortcuts": {
+    "es.upv.paella.playbackRateButton": {
       "enabled": true,
-      "validPlaybackRates": [
+      "side": "left",
+      "order": 3,
+      "parentContainer": "optionsContainer",
+      "rates": [
         0.75,
-        2,
         1,
-        1.5
-      ]
+        1.5,
+        2
+      ],
+      "menuTitle": "Playback Rate",
+      "showIcon": false,
+      "tabIndex": 12,
+      "popUpType": "no-modal"
     },
     "es.upv.paella.arrowSlidesNavigator": {
       "enabled": true,
@@ -220,11 +253,24 @@
         "presenter"
       ]
     },
+    "es.upv.paella.defaultShortcuts": {
+      "enabled": true,
+      "validPlaybackRates": [
+        0.75,
+        1,
+        1.5,
+        2
+      ]
+    },
     "es.upv.paella.keyboardShortcutsHelp": {
       "enabled": true,
       "order": 80,
       "description": "Keyboard Shortcuts",
-      "side": "right"
+      "side": "right",
+      "menuTitle": "Keyboard Shortcuts",
+      "parentContainer": "optionsContainer",
+      "tabIndex": 15,
+      "popUpType": "no-modal"
     },
     "es.upv.paella.userEventTracker": {
       "enabled": false,
