@@ -124,6 +124,7 @@ class output_helper {
         echo $OUTPUT->header();
 
         $configurl = new \moodle_url(get_config('mod_opencast', 'configurl_' . $ocinstanceid));
+        $themeurl = new \moodle_url(get_config('mod_opencast', 'themeurl_' . $ocinstanceid));
         echo \html_writer::script('window.episode = ' . json_encode($data));
 
         echo $OUTPUT->heading($title);
@@ -143,7 +144,8 @@ class output_helper {
         echo '<iframe src="player.html" id="player-iframe" class="mod-opencast-paella-player" allowfullscreen"></iframe>';
         echo \html_writer::end_div();
 
-        $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init', [$configurl->out(false)]);
+        $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init',
+                [$configurl->out(false), $themeurl->out(false)]);
 
         $moduleinstance = $DB->get_record('opencast', array('id' => $modinstanceid), '*', MUST_EXIST);
         if (get_config('mod_opencast', 'global_download_' . $ocinstanceid) || $moduleinstance->allowdownload) {

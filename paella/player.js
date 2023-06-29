@@ -13,7 +13,7 @@ const loadVideoManifestFunction = () => {
 const noop = () => {
 };
 
-export const initPaella = (configurl, manifest) => {
+export const initPaella = (configurl, themeurl, manifest) => {
     window.episode = manifest;
     let paella = new Paella('playerContainer', {
         logLevel: "DEBUG",
@@ -22,12 +22,14 @@ export const initPaella = (configurl, manifest) => {
         getManifestFileUrl: noop,
         loadVideoManifest: loadVideoManifestFunction,
         customPluginContext: [
+            require.context('./plugins', true, /\.js/),
             getBasicPluginContext(),
             getSlidePluginContext(),
             getZoomPluginContext(),
             getUserTrackingPluginsContext()
         ]
     });
+    paella.skin.loadSkin(themeurl);
     paella.loadManifest()
         .then(() => console.log("Initialization done"))
         .catch(e => console.error(e));

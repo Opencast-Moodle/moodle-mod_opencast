@@ -63,6 +63,8 @@ $string['settings:configurl'] = 'URL to Paella config.json';
 $string['settings:configurl_desc'] = 'URL of the config.json used by Paella Player. Can either be a absolute URL or a URL relative to the wwwroot.';
 $string['settings:global_download'] = 'Force student download';
 $string['settings:global_download_desc'] = 'Allow globally that students can download videos. Teachers cannot overwrite this setting.';
+$string['settings:themeurl'] = 'URL to Paella theme.json';
+$string['settings:themeurl_desc'] = 'URL of the theme.json used by Paella Player. Can either be a absolute URL or a URL relative to the wwwroot.';
 
 $string['series'] = 'Opencast series';
 $string['seriesisempty'] = 'This series is currently empty.';
