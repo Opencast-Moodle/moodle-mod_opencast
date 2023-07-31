@@ -36,7 +36,7 @@
     },
     "icons": [
         { "plugin": "es.upv.paella.fullscreenButton", "identifier": "fullscreenIcon", "icon": "./icons/fullscreen-icon.svg" },
-        { "plu,gin": "es.upv.paella.fullscreenButton", "identifier": "windowedIcon", "icon": "./icons/fullscreen-exit.svg" },
+        { "plugin": "es.upv.paella.fullscreenButton", "identifier": "windowedIcon", "icon": "./icons/fullscreen-exit.svg" },
 
         { "plugin": "es.upv.paella.volumeButtonPlugin","identifier": "volumeHighIcon", "icon": "./icons/volume-high.svg"},
         { "plugin": "es.upv.paella.volumeButtonPlugin","identifier": "volumeMidIcon", "icon": "./icons/volume-mid.svg"},
