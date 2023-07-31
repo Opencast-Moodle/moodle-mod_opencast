@@ -41,6 +41,11 @@ if ($hassiteconfig) {
             new lang_string('settings:configurl', 'mod_opencast'),
             new lang_string('settings:configurl_desc', 'mod_opencast'), '/mod/opencast/config.json'));
 
+        $settings->add(new admin_setting_configtext('mod_opencast/themeurl_' . $ocinstance->id,
+                new lang_string('settings:themeurl', 'mod_opencast'),
+                new lang_string('settings:themeurl_desc', 'mod_opencast'),
+                '/mod/opencast/paella/default_theme/theme.json'));
+
         $settings->add(
             new admin_setting_heading('mod_opencast/download_' . $ocinstance->id,
                 $ocinstance->name . ': ' . get_string('settings:download_header', 'mod_opencast'),
