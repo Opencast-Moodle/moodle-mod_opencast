@@ -123,6 +123,14 @@ class mod_opencast_mod_form extends moodleform_mod {
                 $mform->setType('allowdownload', PARAM_INT);
                 $mform->setDefault('allowdownload', get_config('mod_opencast', 'download_default_' . $ocinstanceid));
             }
+
+            $mform->addElement('header', 'advancedsettings', get_string('advancedsettings', 'mod_opencast'));
+
+            $mform->addElement('select', 'sortseriesby', get_string('sortseriesby', 'mod_opencast'), [
+                    0 => get_string('uploaddate', 'mod_opencast'),
+                    1 => get_string('videotitle', 'mod_opencast')
+            ]);
+            $mform->addHelpButton('sortseriesby', 'sortseriesby', 'mod_opencast');
         }
 
         $mform->addElement('hidden', 'type');

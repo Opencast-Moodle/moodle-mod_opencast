@@ -92,7 +92,7 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
     if ($episode) {
         output_helper::output_episode($moduleinstance->ocinstanceid, $episode, $moduleinstance->id, $moduleinstance->opencastid);
     } else {
-        output_helper::output_series($moduleinstance->ocinstanceid, $moduleinstance->opencastid, $moduleinstance->name);
+        output_helper::output_series($moduleinstance);
     }
 } else if ($moduleinstance->type == opencasttype::UPLOAD) {
     // Redirect to the upload video page in the mod_opencast by default.

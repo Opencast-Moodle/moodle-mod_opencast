@@ -41,16 +41,19 @@ class output_helper {
 
     /**
      * Prints output for series view.
-     * @param int $ocinstanceid Opencast instance id
-     * @param string $seriesid opencast id of series.
-     * @param string $activityname name of Activity.
+     * @param stdClass $moduleinstance
      * @throws \coding_exception
      */
-    public static function output_series($ocinstanceid, $seriesid, $activityname): void {
+    public static function output_series(stdClass $moduleinstance): void {
         global $OUTPUT, $PAGE;
 
+        $ocinstanceid = $moduleinstance->ocinstanceid;
+        $seriesid = $moduleinstance->opencastid;
+        $activityname = $moduleinstance->name;
+        $sortseriesby = $moduleinstance->sortseriesby;
+
         $api = apibridge::get_instance($ocinstanceid);
-        $response = $api->get_episodes_in_series($seriesid);
+        $response = $api->get_episodes_in_series($seriesid, $sortseriesby);
 
         if ($response === false) {
             throw new \exception('There was a problem reaching opencast!');
