@@ -217,16 +217,20 @@ class output_helper {
             $url = null;
             foreach ($event->publications as $publication) {
                 if ($publication->channel == $channel) {
+                    $presenterpreview = null;
+                    $presentationpreview = null;
+                    $otherpreview = null;
                     foreach ($publication->attachments as $attachment) {
-                        // If presentation preview available, use that, else use presenter preview.
-                        if ($attachment->flavor == 'presentation/search+preview') {
-                            $url = $attachment->url;
-                            break;
-                        }
                         if ($attachment->flavor == 'presenter/search+preview') {
-                            $url = $attachment->url;
+                            $presenterpreview = $attachment->url;
+                        } else if ($attachment->flavor == 'presentation/search+preview') {
+                            $presentationpreview = $attachment->url;
+                        } else if (substr($attachment->flavor, -15) === '/search+preview') {
+                            $otherpreview = $attachment->url;
                         }
                     }
+                    $url = $presentationpreview ?? $presenterpreview ?? $otherpreview;
+
                     $video->haspresenter = false;
                     $video->haspresentation = false;
                     foreach ($publication->media as $media) {
