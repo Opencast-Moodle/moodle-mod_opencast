@@ -75,11 +75,10 @@ if (!$result->error) {
 
     header('Content-Description: Download Video');
     header('Content-Type: ' . $mimetype);
-    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    header('Content-Disposition: attachment; filename*=UTF-8\'\'' . rawurlencode($filename));
     if (is_numeric($size) && $size > 0) {
         header('Content-Length: ' . $size);
     }
-
 
     if (is_https()) { // HTTPS sites - watch out for IE! KB812935 and KB316431.
         header('Cache-Control: private, max-age=10, no-transform');
