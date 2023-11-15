@@ -92,3 +92,10 @@ $string['defaultuploadedvideotitle'] = 'Uploaded video';
 $string['uploadinprogress'] = 'Uploading video ({$a}) is in progress, please try again later.';
 $string['uploadedvideoisbeingprocesses'] = 'This video ({$a}) is already uploaded and is being processed by Opencast, please wait!';
 $string['uploadjobmissing'] = 'There was an error fetching upload data for this video, please try uploading a new one. Due to insufficient data this module is deleted.';
+
+// Strings for mod form.
+$string['sortseriesby'] = 'Order videos by';
+$string['sortseriesby_help'] = 'Only affects series';
+$string['uploaddate'] = 'Upload date';
+$string['videotitle'] = 'Video title';
+$string['advancedsettings'] = 'Advanced settings';

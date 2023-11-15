@@ -122,5 +122,20 @@ function xmldb_opencast_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2023052300, 'opencast');
     }
 
+    if ($oldversion < 2023100900) {
+
+        // Define field sortseriesby to be added to opencast.
+        $table = new xmldb_table('opencast');
+        $field = new xmldb_field('sortseriesby', XMLDB_TYPE_INTEGER, '2', null, null, null, null, 'allowdownload');
+
+        // Conditionally launch add field sortseriesby.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Opencast savepoint reached.
+        upgrade_mod_savepoint(true, 2023100900, 'opencast');
+    }
+
     return true;
 }

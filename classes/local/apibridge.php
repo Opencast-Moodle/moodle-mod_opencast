@@ -70,11 +70,18 @@ class apibridge {
     /**
      * Get all events in the specified series.
      * @param string $seriesid
+     * @param int|null $sortseriesby 1 for sorting by title. Everything else for sorting by date.
      * @return false|mixed
      */
-    public function get_episodes_in_series($seriesid) {
+    public function get_episodes_in_series($seriesid, $sortseriesby = null) {
+
+        $sortstring = 'start_date:DESC,title:ASC';
+        if ($sortseriesby == 1) {
+            $sortstring = 'title:ASC,start_date:DESC';
+        }
+
         $api = new api($this->ocinstanceid);
-        $resource = "/api/events?filter=is_part_of:$seriesid&withpublications=true&sort=start_date:DESC,title:ASC&sign=true";
+        $resource = "/api/events?filter=is_part_of:$seriesid&withpublications=true&sort=$sortstring&sign=true";
         $response = $api->oc_get($resource);
 
         if ($api->get_http_code() != 200) {
