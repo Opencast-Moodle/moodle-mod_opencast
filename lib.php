@@ -60,11 +60,16 @@ function opencast_supports($feature) {
 function opencast_add_instance($moduleinstance, $mform = null) {
     global $DB;
 
-    $api = \mod_opencast\local\apibridge::get_instance($moduleinstance->ocinstanceid);
-
     $moduleinstance->timecreated = time();
 
     $id = $DB->insert_record('opencast', $moduleinstance);
+
+    // Make sure that the course module has the latest data, in order for everything to work as intended.
+    $cmid = $moduleinstance->coursemodule;
+    $DB->set_field('course_modules', 'instance', $id, array('id' => $cmid));
+
+    \core_completion\api::update_completion_date_event($cmid, 'opencast', $id,
+            $moduleinstance->completionexpected ?? null);
 
     return $id;
 }
@@ -85,6 +90,16 @@ function opencast_update_instance($moduleinstance, $mform = null) {
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
 
+    // When updating moodule in a normal way, the 'type' is used to by moodle itself and it is set to mod,
+    // therefore for us to update the type we need to use a dummy parameter and replace it here.
+    if (property_exists($moduleinstance, 'opencastmodtype')) {
+        $moduleinstance->type = intval($moduleinstance->opencastmodtype);
+        unset($moduleinstance->opencastmodtype);
+    }
+
+    \core_completion\api::update_completion_date_event($moduleinstance->coursemodule, 'opencast', $moduleinstance->id,
+            $moduleinstance->completionexpected ?? null);
+
     return $DB->update_record('opencast', $moduleinstance);
 }
 
@@ -102,6 +117,9 @@ function opencast_delete_instance($id) {
         return false;
     }
 
+    $cm = get_coursemodule_from_instance('opencast', $id);
+    \core_completion\api::update_completion_date_event($cm->id, 'opencast', $id, null);
+
     $DB->delete_records('opencast', array('id' => $id));
 
     return true;
@@ -116,4 +134,47 @@ function mod_opencast_get_fontawesome_icon_map() {
         'mod_opencast:i/list' => 'fa-list-ul',
         'mod_opencast:i/tv' => 'fa-tv'
     ];
+}
+
+/**
+ * Register the ability to handle drag and drop file uploads
+ * @return array containing details of the files / types the mod can handle
+ */
+function opencast_dndupload_register() {
+    // Getting default opencast instance.
+    $defaultocinstanceid = \tool_opencast\local\settings_api::get_default_ocinstance()->id;
+    // Getting file extensions from the block_opencast configuration using default ocinstanceid.
+    $videotypescfg = get_config('block_opencast', 'uploadfileextensions_' . $defaultocinstanceid);
+    $videoexts = empty($videotypescfg) || $videotypescfg == 'video' ?
+        file_get_typegroup('extension', 'video') :
+        array_map('trim', explode(',', $videotypescfg));
+    $extensionsarray = [];
+    foreach ($videoexts as $videoext) {
+        $videoext = trim($videoext, '.');
+        $extensionsarray[] = ['extension' => $videoext, 'message' => get_string('dnduploadvideofile', 'mod_opencast')];
+    }
+    $files = ['files' => $extensionsarray];
+    return $files;
+}
+
+/**
+ * Handle a file that has been uploaded
+ * @param object $uploadinfo details of the file / content that has been uploaded
+ * @return int instance id of the newly created mod
+ */
+function opencast_dndupload_handle($uploadinfo) {
+    // Gather the required info.
+    $data = new stdClass();
+    $data->course = $uploadinfo->course->id;
+    $data->name = get_string('uploadtitledisplay', 'mod_opencast') . " {$uploadinfo->displayname}";
+    $data->ocinstanceid = \tool_opencast\local\settings_api::get_default_ocinstance()->id;
+    $data->type = \mod_opencast\local\opencasttype::UPLOAD;
+    $data->uploaddraftitemid = $uploadinfo->draftitemid;
+    $data->opencastid = 'newfileupload';
+    $data->intro = get_string('uploaddefaultintrodisplay', 'mod_opencast');
+    $data->introformat = FORMAT_MOODLE;
+    $data->coursemodule = $uploadinfo->coursemodule;
+
+    $data->id = opencast_add_instance($data, null);
+    return $data->id ? $data->id : false;
 }

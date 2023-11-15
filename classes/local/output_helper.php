@@ -41,16 +41,19 @@ class output_helper {
 
     /**
      * Prints output for series view.
-     * @param int $ocinstanceid Opencast instance id
-     * @param string $seriesid opencast id of series.
-     * @param string $activityname name of Activity.
+     * @param stdClass $moduleinstance
      * @throws \coding_exception
      */
-    public static function output_series($ocinstanceid, $seriesid, $activityname): void {
+    public static function output_series(stdClass $moduleinstance): void {
         global $OUTPUT, $PAGE;
 
+        $ocinstanceid = $moduleinstance->ocinstanceid;
+        $seriesid = $moduleinstance->opencastid;
+        $activityname = $moduleinstance->name;
+        $sortseriesby = $moduleinstance->sortseriesby;
+
         $api = apibridge::get_instance($ocinstanceid);
-        $response = $api->get_episodes_in_series($seriesid);
+        $response = $api->get_episodes_in_series($seriesid, $sortseriesby);
 
         if ($response === false) {
             throw new \exception('There was a problem reaching opencast!');
@@ -124,6 +127,7 @@ class output_helper {
         echo $OUTPUT->header();
 
         $configurl = new \moodle_url(get_config('mod_opencast', 'configurl_' . $ocinstanceid));
+        $themeurl = new \moodle_url(get_config('mod_opencast', 'themeurl_' . $ocinstanceid));
         echo \html_writer::script('window.episode = ' . json_encode($data));
 
         echo $OUTPUT->heading($title);
@@ -143,7 +147,8 @@ class output_helper {
         echo '<iframe src="player.html" id="player-iframe" class="mod-opencast-paella-player" allowfullscreen"></iframe>';
         echo \html_writer::end_div();
 
-        $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init', [$configurl->out(false)]);
+        $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init',
+                [$configurl->out(false), $themeurl->out(false)]);
 
         $moduleinstance = $DB->get_record('opencast', array('id' => $modinstanceid), '*', MUST_EXIST);
         if (get_config('mod_opencast', 'global_download_' . $ocinstanceid) || $moduleinstance->allowdownload) {
@@ -215,16 +220,20 @@ class output_helper {
             $url = null;
             foreach ($event->publications as $publication) {
                 if ($publication->channel == $channel) {
+                    $presenterpreview = null;
+                    $presentationpreview = null;
+                    $otherpreview = null;
                     foreach ($publication->attachments as $attachment) {
-                        // If presentation preview available, use that, else use presenter preview.
-                        if ($attachment->flavor == 'presentation/search+preview') {
-                            $url = $attachment->url;
-                            break;
-                        }
                         if ($attachment->flavor == 'presenter/search+preview') {
-                            $url = $attachment->url;
+                            $presenterpreview = $attachment->url;
+                        } else if ($attachment->flavor == 'presentation/search+preview') {
+                            $presentationpreview = $attachment->url;
+                        } else if (substr($attachment->flavor, -15) === '/search+preview') {
+                            $otherpreview = $attachment->url;
                         }
                     }
+                    $url = $presentationpreview ?? $presenterpreview ?? $otherpreview;
+
                     $video->haspresenter = false;
                     $video->haspresentation = false;
                     foreach ($publication->media as $media) {

@@ -47,7 +47,7 @@ if (!get_config('mod_opencast', 'global_download_' . $ocinstanceid) && !$modulei
 }
 
 // Check if activity is visible for student.
-if (empty($cm->visible) and !has_capability('moodle/course:viewhiddenactivities', $modulecontext)) {
+if (empty($cm->visible) && !has_capability('moodle/course:viewhiddenactivities', $modulecontext)) {
     die();
 }
 
@@ -67,13 +67,18 @@ if (!$result->error) {
             }
         }
     }
+    if (!$downloadurl) {
+        throw new coding_exception('Publication could not be found!');
+    }
+
     $filename = $video->title . '.' . pathinfo($downloadurl, PATHINFO_EXTENSION);
 
     header('Content-Description: Download Video');
     header('Content-Type: ' . $mimetype);
     header('Content-Disposition: attachment; filename*=UTF-8\'\'' . rawurlencode($filename));
-    header('Content-Length: ' . $size);
-
+    if (is_numeric($size) && $size > 0) {
+        header('Content-Length: ' . $size);
+    }
 
     if (is_https()) { // HTTPS sites - watch out for IE! KB812935 and KB316431.
         header('Cache-Control: private, max-age=10, no-transform');

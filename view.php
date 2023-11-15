@@ -27,6 +27,8 @@ use mod_opencast\local\output_helper;
 
 require(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
+require_once($CFG->dirroot . '/course/modlib.php');
+require_once($CFG->libdir . '/gradelib.php');
 
 global $OUTPUT, $DB, $PAGE;
 
@@ -90,7 +92,71 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
     if ($episode) {
         output_helper::output_episode($moduleinstance->ocinstanceid, $episode, $moduleinstance->id, $moduleinstance->opencastid);
     } else {
-        output_helper::output_series($moduleinstance->ocinstanceid, $moduleinstance->opencastid, $moduleinstance->name);
+        output_helper::output_series($moduleinstance);
+    }
+} else if ($moduleinstance->type == opencasttype::UPLOAD) {
+    // Redirect to the upload video page in the mod_opencast by default.
+    $messagetext = get_string('uploadlandinginfo', 'mod_opencast');
+    $messagestatus = \core\output\notification::NOTIFY_INFO;
+    $url = new moodle_url('/mod/opencast/uploadvideo.php', array('cmid' => $cm->id));
+    // Check the addvideo capability from block_opencast.
+    $coursecontext = context_course::instance($course->id);
+    if (!has_capability('block/opencast:addvideo', $coursecontext)) {
+        // If capability is not met, redirect back with message.
+        $url = new moodle_url('/course/view.php', array('id' => $course->id));
+        $messagetext = get_string('uploadnotallowed', 'mod_opencast');
+        $messagestatus = \core\output\notification::NOTIFY_ERROR;
+    } else if (empty($moduleinstance->uploaddraftitemid)) {
+        // If the file draft id is not avialable, we remove the instance and redirect back with message.
+        $url = new moodle_url('/course/view.php', array('id' => $course->id));
+        $messagetext = get_string('uploadmissingfile', 'mod_opencast');
+        $messagestatus = \core\output\notification::NOTIFY_ERROR;
+
+        // Delete this module as it is faulty.
+        course_delete_module($cm->id);
+        opencast_delete_instance($moduleinstance->id);
+    }
+    // Perform the redirect.
+    redirect($url, $messagetext, null, $messagestatus);
+} else if ($moduleinstance->type == opencasttype::UPLOADED) {
+    $url = new moodle_url('/course/view.php', array('id' => $course->id));
+    $uploadjob = $DB->get_record('block_opencast_uploadjob', ['id' => $moduleinstance->uploadjobid]);
+    if (empty($uploadjob) || empty($uploadjob->opencasteventid)) {
+        $messagetext = get_string('uploadinprogress', 'mod_opencast', $moduleinstance->name);
+        $messagestatus = \core\output\notification::NOTIFY_INFO;
+        // Delete this module as it is faulty.
+        if (empty($uploadjob)) {
+            course_delete_module($cm->id);
+            opencast_delete_instance($moduleinstance->id);
+            $messagetext = get_string('uploadjobmissing', 'mod_opencast');
+            $messagestatus = \core\output\notification::NOTIFY_ERROR;
+        }
+        redirect($url, $messagetext, null, $messagestatus);
+    }
+    $opencasteventid = $uploadjob->opencasteventid;
+    $apibridge = \block_opencast\local\apibridge::get_instance($moduleinstance->ocinstanceid);
+    $video = $apibridge->get_opencast_video($opencasteventid);
+    if ($video->video->processing_state != 'SUCCEEDED') {
+        $messagetext = get_string('uploadedvideoisbeingprocesses', 'mod_opencast', $moduleinstance->name);
+        $messagestatus = \core\output\notification::NOTIFY_INFO;
+        redirect($url, $messagetext, null, $messagestatus);
+    } else {
+        try {
+            // Gather more information about this module so that we can update the module info in the end.
+            list($unusedcm, $unusedcontext, $unusedmodule, $opencastmoduledata, $unusedcw) =
+                get_moduleinfo_data($cm , $course);
+
+            // Using a dummy parameter 'opencastmodtype' to be replaced with type at when updating record in db.
+            $opencastmoduledata->opencastmodtype = opencasttype::EPISODE;
+            $opencastmoduledata->opencastid = $opencasteventid;
+            $opencastmoduledata->intro = '';
+            // Update the module info directly.
+            update_module($opencastmoduledata);
+            output_helper::output_episode($opencastmoduledata->ocinstanceid, $opencastmoduledata->opencastid,
+                $opencastmoduledata->id);
+        } catch (\Exception $e) {
+            \core\notification::warning($e->getMessage());
+        }
     }
 } else {
     throw new coding_exception('This opencast activity is neither a episode nor a series.');

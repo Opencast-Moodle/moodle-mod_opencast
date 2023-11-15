@@ -110,9 +110,9 @@ class paella_transform {
                         ];
                     } else {
                         if (substr($attachment->flavor, -5) === 'hires') {
-                            $framelist[$time]->url = $attachment->url;
+                            $framelist[$time]['url'] = $attachment->url;
                         } else {
-                            $framelist[$time]->thumb = $attachment->url;
+                            $framelist[$time]['thumb'] = $attachment->url;
                         }
 
                     }
@@ -179,6 +179,10 @@ class paella_transform {
         foreach ($publication->media as $media) {
             $sourcetype = self::get_source_type_from_track($media);
             $content = explode('/', $media->flavor, 2)[0];
+            // From Opencast 13, captions are shiffted to media, therefore we need to skip them here for streams.
+            if ($content == 'captions') {
+                continue;
+            }
             if (!array_key_exists($content, $streams)) {
                 $streams[$content] = [
                     'sources' => [],
@@ -243,6 +247,19 @@ class paella_transform {
                     'text' => $lang,
                     'format' => $format,
                     'url' => $attachment->url
+                ];
+            }
+        }
+        // Opencast 13 handles captions under media, therefore we need to capture them here as well.
+        foreach ($publication->media as $media) {
+            list($type1, $type2) = explode('/', $media->flavor, 2);
+            if ($type1 === 'captions') {
+                list($format, $lang) = explode('+', $type2, 2);
+                $captions[] = [
+                    'lang' => $lang,
+                    'text' => $lang,
+                    'format' => $format,
+                    'url' => $media->url
                 ];
             }
         }
