@@ -153,9 +153,9 @@ class apibridge {
      * @throws \coding_exception
      */
     public static function get_course_series_and_episodes($courseid) {
-        $series = seriesmapping::get_records(array('courseid' => $courseid));
-        $serieschoices = array();
-        $episodechoices = array();
+        $series = seriesmapping::get_records(['courseid' => $courseid]);
+        $serieschoices = [];
+        $episodechoices = [];
 
         foreach ($series as $s) {
             $apibridge = new apibridge($s->get('ocinstanceid'));
@@ -166,7 +166,7 @@ class apibridge {
                 $serieschoices[$serieskey] = $ocseries->title;
                 $episodes = $apibridge->get_episodes_in_series($ocseries->identifier);
 
-                $episodechoices[$serieskey] = array('allvideos' => get_string('allvideos', 'mod_opencast'));
+                $episodechoices[$serieskey] = ['allvideos' => get_string('allvideos', 'mod_opencast')];
 
                 foreach ($episodes as $episode) {
                     $episodechoices[$serieskey][$episode->identifier] = $episode->title;

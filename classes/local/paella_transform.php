@@ -106,7 +106,7 @@ class paella_transform {
                             'mimetype' => $attachment->mediatype,
                             'time' => $time,
                             'url' => $attachment->url,
-                            'thumb' => $attachment->url
+                            'thumb' => $attachment->url,
                         ];
                     } else {
                         if (substr($attachment->flavor, -5) === 'hires') {
@@ -187,7 +187,7 @@ class paella_transform {
                 $streams[$content] = [
                     'sources' => [],
                     'content' => $content,
-                    'type' => 'video'
+                    'type' => 'video',
                 ];
                 $hasadaptivemastertrack[$content] = false;
             }
@@ -211,10 +211,10 @@ class paella_transform {
                 'mimetype' => $media->mediatype,
                 'res' => [
                     'w' => isset($media->width) ? $media->width : 0,
-                    'h' => isset($media->height) ? $media->height : 0
+                    'h' => isset($media->height) ? $media->height : 0,
                 ],
                 'master' => $ismaster,
-                'isLiveStream' => isset($media->is_live) && $media->is_live
+                'isLiveStream' => isset($media->is_live) && $media->is_live,
             ];
 
             if (!$ismainaudioset && isset($media->has_audio) && $media->has_audio) {
@@ -246,7 +246,7 @@ class paella_transform {
                     'lang' => $lang,
                     'text' => $lang,
                     'format' => $format,
-                    'url' => $attachment->url
+                    'url' => $attachment->url,
                 ];
             }
         }
@@ -259,7 +259,7 @@ class paella_transform {
                     'lang' => $lang,
                     'text' => $lang,
                     'format' => $format,
-                    'url' => $media->url
+                    'url' => $media->url,
                 ];
             }
         }
@@ -288,11 +288,11 @@ class paella_transform {
             'metadata' => [
                 'title' => $episode->title,
                 'duration' => self::get_duration($publication),
-                'preview' => self::get_preview_image($publication)
+                'preview' => self::get_preview_image($publication),
             ],
             'streams' => self::get_streams($publication),
             'frameList' => self::get_frame_list($publication),
-            'captions' => self::get_captions($publication)
+            'captions' => self::get_captions($publication),
         ];
     }
 }

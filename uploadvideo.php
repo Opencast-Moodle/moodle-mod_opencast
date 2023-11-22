@@ -28,21 +28,21 @@ require_once($CFG->dirroot . '/course/modlib.php');
 require_once($CFG->libdir . '/gradelib.php');
 require_once(__DIR__ . '/uploadvideo_form.php');
 
-use \block_opencast\local\apibridge;
-use \tool_opencast\local\settings_api;
-use \block_opencast\local\upload_helper;
+use block_opencast\local\apibridge;
+use tool_opencast\local\settings_api;
+use block_opencast\local\upload_helper;
 
 global $PAGE, $OUTPUT, $USER, $DB;
 
 $cmid = required_param('cmid', PARAM_INT);
 
 $cm = get_coursemodule_from_id('opencast', $cmid, 0, false, MUST_EXIST);
-$course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
-$moduleinstance = $DB->get_record('opencast', array('id' => $cm->instance), '*', MUST_EXIST);
+$course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
+$moduleinstance = $DB->get_record('opencast', ['id' => $cm->instance], '*', MUST_EXIST);
 
-$baseurl = new moodle_url('/mod/opencast/uploadvideo.php', array('cmid' => $cm->id));
+$baseurl = new moodle_url('/mod/opencast/uploadvideo.php', ['cmid' => $cm->id]);
 $PAGE->set_url($baseurl);
-$redirecturl = new moodle_url('/course/view.php', array('id' => $course->id));
+$redirecturl = new moodle_url('/course/view.php', ['id' => $course->id]);
 
 require_login($course, false, $cm);
 
@@ -82,10 +82,10 @@ foreach ($ocinstances as $ocinstance) {
     }
     // Series.
     $seriesrecords = $DB->get_records('tool_opencast_series',
-        array('courseid' => $course->id, 'ocinstanceid' => $ocinstance->id));
+        ['courseid' => $course->id, 'ocinstanceid' => $ocinstance->id]);
     if ($seriesrecords) {
         $defaultseries = array_search('1', array_column($seriesrecords, 'isdefault', 'series'));
-        $seriesoption = array();
+        $seriesoption = [];
 
         try {
             $seriesrecords = $apibridge->get_multiple_series_by_identifier($seriesrecords);
@@ -116,7 +116,7 @@ $formdata = [
     'ocinstances' => $ocinstances,
     'allseries' => $allseries,
     'metadatacatalogs' => $metadatacatalogs,
-    'eventdefaults' => $usereventdefaults
+    'eventdefaults' => $usereventdefaults,
 ];
 
 $mform = new mod_opencast_uploadvideo_form(null , $formdata);
@@ -149,10 +149,10 @@ if ($mform->is_cancelled()) {
     $videoflavor = intval($data->$flavorfieldname);
     $seiresfieldname = 'series_' . $ocinstanceid;
     $metadata = [];
-    $metadata[] = array(
+    $metadata[] = [
         'id' => 'isPartOf',
-        'value' => $data->$seiresfieldname
-    );
+        'value' => $data->$seiresfieldname,
+    ];
     $gettitle = true; // Make sure title (required) is added into metadata.
     foreach ($metadatacatalogs[$ocinstanceid] as $field) {
         $id = $field->name . '_' . $ocinstanceid;
@@ -161,11 +161,11 @@ if ($mform->is_cancelled()) {
                 $gettitle = false;
             }
             if ($field->name == 'subjects') {
-                !is_array($data->$id) ? $data->$id = array($data->$id) : $data->$id = $data->$id;
+                !is_array($data->$id) ? $data->$id = [$data->$id] : $data->$id = $data->$id;
             }
             $obj = [
                 'id' => $field->name,
-                'value' => $data->$id
+                'value' => $data->$id,
             ];
             $metadata[] = $obj;
         }
@@ -175,7 +175,7 @@ if ($mform->is_cancelled()) {
         $id = 'title_' . $ocinstanceid;
         $titleobj = [
             'id' => 'title',
-            'value' => $data->$id ? $data->$id : 'upload-task'
+            'value' => $data->$id ? $data->$id : 'upload-task',
         ];
         $metadata[] = $titleobj;
     }
@@ -184,11 +184,11 @@ if ($mform->is_cancelled()) {
     $sd->setTimestamp(time());
     $startdate = [
         'id' => 'startDate',
-        'value' => $sd->format('Y-m-d')
+        'value' => $sd->format('Y-m-d'),
     ];
     $starttime = [
         'id' => 'startTime',
-        'value' => $sd->format('H:i:s') . 'Z'
+        'value' => $sd->format('H:i:s') . 'Z',
     ];
     $metadata[] = $startdate;
     $metadata[] = $starttime;
@@ -235,7 +235,7 @@ if ($mform->is_cancelled()) {
         }
     }
     $blockopencastlink = new moodle_url('/blocks/opencast/index.php',
-        array('courseid' => $course->id, 'ocinstanceid' => $ocinstanceid));
+        ['courseid' => $course->id, 'ocinstanceid' => $ocinstanceid]);
     redirect($redirecturl,
         get_string('uploadsaved', 'mod_opencast', $blockopencastlink->out()), null, \core\output\notification::NOTIFY_SUCCESS);
 }

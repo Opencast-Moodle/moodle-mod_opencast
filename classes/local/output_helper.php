@@ -150,7 +150,7 @@ class output_helper {
         $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init',
                 [$configurl->out(false), $themeurl->out(false)]);
 
-        $moduleinstance = $DB->get_record('opencast', array('id' => $modinstanceid), '*', MUST_EXIST);
+        $moduleinstance = $DB->get_record('opencast', ['id' => $modinstanceid], '*', MUST_EXIST);
         if (get_config('mod_opencast', 'global_download_' . $ocinstanceid) || $moduleinstance->allowdownload) {
             self::output_download_menu($ocinstanceid, $episodeid, $modinstanceid);
         }
@@ -188,8 +188,8 @@ class output_helper {
                         $name = ucwords(explode('/', $media->flavor)[0]) . ' (' . $media->width . 'x' . $media->height . ')';
                         $actionmenu->add(new action_menu_link_secondary(
                             new \moodle_url('/mod/opencast/downloadvideo.php',
-                                array('e' => $video->identifier, 'o' => $modinstanceid,
-                                    'mediaid' => $media->id, 'ocinstanceid' => $ocinstanceid)),
+                                ['e' => $video->identifier, 'o' => $modinstanceid,
+                                    'mediaid' => $media->id, 'ocinstanceid' => $ocinstanceid, ]),
                             null,
                             $name
                         ));
