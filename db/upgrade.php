@@ -43,8 +43,8 @@ function xmldb_opencast_upgrade($oldversion) {
 
     if ($oldversion < 2021072000) {
         // Check if settings were upgraded without upgrading the plugin.
-        if ($DB->get_record('config_plugins', array('plugin' => 'mod_opencast', 'name' => 'channel')) &&
-            $DB->get_record('config_plugins', array('plugin' => 'mod_opencast', 'name' => 'channel_1'))) {
+        if ($DB->get_record('config_plugins', ['plugin' => 'mod_opencast', 'name' => 'channel']) &&
+            $DB->get_record('config_plugins', ['plugin' => 'mod_opencast', 'name' => 'channel_1'])) {
             // Remove already upgraded settings and only keep old ones.
             $DB->execute("DELETE FROM {config_plugins} WHERE plugin='mod_opencast' AND name = 'channel' OR name = 'configurl'");
         }

@@ -52,7 +52,7 @@ class table_series_list_view extends \flexible_table {
             get_string('title', 'mod_opencast'),
             get_string('duration', 'mod_opencast'),
             get_string('date', 'mod_opencast'),
-            ''
+            '',
         ]);
         $this->setup();
         foreach ($episodes as $episode) {

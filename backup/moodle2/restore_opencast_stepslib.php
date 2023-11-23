@@ -33,7 +33,7 @@ class restore_opencast_activity_structure_step extends restore_activity_structur
      */
     protected function define_structure() {
 
-        $paths = array();
+        $paths = [];
         $paths[] = new restore_path_element('opencast', '/activity/opencast');
 
         // Return the paths wrapped into standard activity structure.

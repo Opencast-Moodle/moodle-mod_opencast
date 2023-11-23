@@ -34,8 +34,8 @@ $episode = required_param('e', PARAM_ALPHANUMEXT);
 $mediaid = required_param('mediaid', PARAM_ALPHANUMEXT);
 $ocinstanceid = optional_param('ocinstanceid', \tool_opencast\local\settings_api::get_default_ocinstance()->id, PARAM_INT);
 
-$moduleinstance = $DB->get_record('opencast', array('id' => $o), '*', MUST_EXIST);
-$course = $DB->get_record('course', array('id' => $moduleinstance->course), '*', MUST_EXIST);
+$moduleinstance = $DB->get_record('opencast', ['id' => $o], '*', MUST_EXIST);
+$course = $DB->get_record('course', ['id' => $moduleinstance->course], '*', MUST_EXIST);
 $cm = get_coursemodule_from_instance('opencast', $moduleinstance->id, $course->id, false, MUST_EXIST);
 
 require_login($course, true, $cm);

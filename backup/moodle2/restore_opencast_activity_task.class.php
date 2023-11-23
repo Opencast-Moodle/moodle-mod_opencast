@@ -51,9 +51,9 @@ class restore_opencast_activity_task extends restore_activity_task {
      * processed by the link decoder
      */
     public static function define_decode_contents() {
-        $contents = array();
+        $contents = [];
 
-        $contents[] = new restore_decode_content('opencast', array('intro'), 'opencast');
+        $contents[] = new restore_decode_content('opencast', ['intro'], 'opencast');
 
         return $contents;
     }
@@ -63,7 +63,7 @@ class restore_opencast_activity_task extends restore_activity_task {
      * to the activity to be executed by the link decoder
      */
     public static function define_decode_rules() {
-        $rules = array();
+        $rules = [];
 
         $rules[] = new restore_decode_rule('OPENCASTINDEX', '/mod/opencast/index.php?id=$1', 'course');
         $rules[] = new restore_decode_rule('OPENCASTVIEWBYID', '/mod/opencast/view.php?id=$1', 'course_module');
@@ -80,7 +80,7 @@ class restore_opencast_activity_task extends restore_activity_task {
      * of {@see restore_log_rule} objects
      */
     public static function define_restore_log_rules() {
-        $rules = array();
+        $rules = [];
 
         $rules[] = new restore_log_rule('opencast', 'add', 'view.php?id={course_module}', '{opencast}');
         $rules[] = new restore_log_rule('opencast', 'update', 'view.php?id={course_module}', '{opencast}');
@@ -100,7 +100,7 @@ class restore_opencast_activity_task extends restore_activity_task {
      * activity level. All them are rules not linked to any module instance (cmid = 0)
      */
     public static function define_restore_log_rules_for_course() {
-        $rules = array();
+        $rules = [];
 
         $rules[] = new restore_log_rule('opencast', 'view all', 'index.php?id={course}', null);
 

@@ -66,7 +66,7 @@ function opencast_add_instance($moduleinstance, $mform = null) {
 
     // Make sure that the course module has the latest data, in order for everything to work as intended.
     $cmid = $moduleinstance->coursemodule;
-    $DB->set_field('course_modules', 'instance', $id, array('id' => $cmid));
+    $DB->set_field('course_modules', 'instance', $id, ['id' => $cmid]);
 
     \core_completion\api::update_completion_date_event($cmid, 'opencast', $id,
             $moduleinstance->completionexpected ?? null);
@@ -112,7 +112,7 @@ function opencast_update_instance($moduleinstance, $mform = null) {
 function opencast_delete_instance($id) {
     global $DB;
 
-    $exists = $DB->get_record('opencast', array('id' => $id));
+    $exists = $DB->get_record('opencast', ['id' => $id]);
     if (!$exists) {
         return false;
     }
@@ -120,7 +120,7 @@ function opencast_delete_instance($id) {
     $cm = get_coursemodule_from_instance('opencast', $id);
     \core_completion\api::update_completion_date_event($cm->id, 'opencast', $id, null);
 
-    $DB->delete_records('opencast', array('id' => $id));
+    $DB->delete_records('opencast', ['id' => $id]);
 
     return true;
 }
@@ -132,7 +132,7 @@ function mod_opencast_get_fontawesome_icon_map() {
     return [
         'mod_opencast:i/grid' => 'fa-th-large',
         'mod_opencast:i/list' => 'fa-list-ul',
-        'mod_opencast:i/tv' => 'fa-tv'
+        'mod_opencast:i/tv' => 'fa-tv',
     ];
 }
 

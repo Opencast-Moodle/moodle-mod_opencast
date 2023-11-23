@@ -56,7 +56,7 @@ class mod_opencast_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         // Adding the standard "name" field.
-        $mform->addElement('text', 'name', get_string('modulename', 'mod_opencast'), array('size' => '64'));
+        $mform->addElement('text', 'name', get_string('modulename', 'mod_opencast'), ['size' => '64']);
 
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
@@ -89,7 +89,7 @@ class mod_opencast_mod_form extends moodleform_mod {
 
             if (count($choices[1]) === 0) {
                 $mform->addElement('select', 'episode',
-                    get_string('episode', 'mod_opencast'), array());
+                    get_string('episode', 'mod_opencast'), []);
             } else {
                 $mform->addElement('select', 'episode',
                     get_string('episode', 'mod_opencast'), array_merge(...array_values($choices[1])));
@@ -97,7 +97,7 @@ class mod_opencast_mod_form extends moodleform_mod {
             $mform->setType('episode', PARAM_ALPHANUMEXT);
             $mform->hideIf('episode', 'manualocid', 'eq', '1');
 
-            $ocoptions = array();
+            $ocoptions = [];
             foreach (\tool_opencast\local\settings_api::get_ocinstances() as $oci) {
                 $ocoptions[$oci->id] = $oci->name;
             }
@@ -109,7 +109,7 @@ class mod_opencast_mod_form extends moodleform_mod {
             $mform->hideIf('ocinstanceid', 'manualocid', 'eq', '0');
 
             $mform->addElement('text', 'opencastid', get_string('opencastid', 'mod_opencast'),
-                array('size' => 64));
+                ['size' => 64]);
             $mform->setType('opencastid', PARAM_ALPHANUMEXT);
             $mform->addRule('opencastid', get_string('required'), 'required');
             $mform->hideIf('opencastid', 'manualocid', 'eq', '0');
@@ -128,7 +128,7 @@ class mod_opencast_mod_form extends moodleform_mod {
 
             $mform->addElement('select', 'sortseriesby', get_string('sortseriesby', 'mod_opencast'), [
                     0 => get_string('uploaddate', 'mod_opencast'),
-                    1 => get_string('videotitle', 'mod_opencast')
+                    1 => get_string('videotitle', 'mod_opencast'),
             ]);
             $mform->addHelpButton('sortseriesby', 'sortseriesby', 'mod_opencast');
         }
@@ -143,7 +143,7 @@ class mod_opencast_mod_form extends moodleform_mod {
         $this->add_action_buttons();
 
         if ($isuploadinstance) {
-            $PAGE->requires->js_call_amd('mod_opencast/form_dependent_select', 'init', array($choices[1]));
+            $PAGE->requires->js_call_amd('mod_opencast/form_dependent_select', 'init', [$choices[1]]);
         }
     }
 

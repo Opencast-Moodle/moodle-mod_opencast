@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->libdir . '/formslib.php');
 
-use \block_opencast\local\autocomplete_suggestion_helper;
+use block_opencast\local\autocomplete_suggestion_helper;
 
 /**
  * Video Upload form
@@ -108,8 +108,8 @@ class mod_opencast_uploadvideo_form extends moodleform {
             $settitle = true;
             foreach ($metadatacatalog as $field) {
                 $elementid = "{$field->name}_{$ocinstance->id}";
-                $param = array();
-                $attributes = array();
+                $param = [];
+                $attributes = [];
                 if ($field->name == 'title') {
                     if ($field->required) {
                         $settitle = false;
@@ -128,7 +128,7 @@ class mod_opencast_uploadvideo_form extends moodleform {
                         'showsuggestions' => true,
                         'noselectionstring' => get_string('metadata_autocomplete_noselectionstring', 'block_opencast',
                             $this->try_get_string($field->name, 'block_opencast')),
-                        'tags' => true
+                        'tags' => true,
                     ];
 
                     if ($field->name == 'creator' || $field->name == 'contributor') {
@@ -185,7 +185,7 @@ class mod_opencast_uploadvideo_form extends moodleform {
             // Radio boxes for video flavor.
             $elementid = 'flavor_' . $ocinstance->id;
             $lbltext = get_string('uploadform_flavor_label', 'mod_opencast');
-            $radioarray = array();
+            $radioarray = [];
             $radioarray[] = $mform->addElement('radio', $elementid, $lbltext,
                 get_string('uploadform_flavor_presenter', 'mod_opencast'), 0);
             $radioarray[] = $mform->addElement('radio', $elementid, '',

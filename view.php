@@ -42,11 +42,11 @@ $episode = optional_param('e', null, PARAM_ALPHANUMEXT);
 
 if ($id) {
     $cm = get_coursemodule_from_id('opencast', $id, 0, false, MUST_EXIST);
-    $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
-    $moduleinstance = $DB->get_record('opencast', array('id' => $cm->instance), '*', MUST_EXIST);
+    $course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
+    $moduleinstance = $DB->get_record('opencast', ['id' => $cm->instance], '*', MUST_EXIST);
 } else if ($o) {
-    $moduleinstance = $DB->get_record('opencast', array('id' => $o), '*', MUST_EXIST);
-    $course = $DB->get_record('course', array('id' => $moduleinstance->course), '*', MUST_EXIST);
+    $moduleinstance = $DB->get_record('opencast', ['id' => $o], '*', MUST_EXIST);
+    $course = $DB->get_record('course', ['id' => $moduleinstance->course], '*', MUST_EXIST);
     $cm = get_coursemodule_from_instance('opencast', $moduleinstance->id, $course->id, false, MUST_EXIST);
 } else {
     throw new moodle_exception('missingidandcmid', 'mod_opencast');
@@ -57,9 +57,9 @@ require_login($course, true, $cm);
 $modulecontext = context_module::instance($cm->id);
 
 if ($episode) {
-    $PAGE->set_url('/mod/opencast/view.php', array('id' => $cm->id, 'e' => $episode));
+    $PAGE->set_url('/mod/opencast/view.php', ['id' => $cm->id, 'e' => $episode]);
 } else {
-    $PAGE->set_url('/mod/opencast/view.php', array('id' => $cm->id));
+    $PAGE->set_url('/mod/opencast/view.php', ['id' => $cm->id]);
 }
 
 $PAGE->set_title(format_string($moduleinstance->name));
@@ -78,10 +78,10 @@ if ($viewlist !== null) {
     die();
 }
 
-$event = \mod_opencast\event\course_module_viewed::create(array(
+$event = \mod_opencast\event\course_module_viewed::create([
     'objectid' => $moduleinstance->id,
-    'context' => $modulecontext
-));
+    'context' => $modulecontext,
+]);
 $event->add_record_snapshot('course', $course);
 $event->add_record_snapshot('opencast', $moduleinstance);
 $event->trigger();
@@ -98,17 +98,17 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
     // Redirect to the upload video page in the mod_opencast by default.
     $messagetext = get_string('uploadlandinginfo', 'mod_opencast');
     $messagestatus = \core\output\notification::NOTIFY_INFO;
-    $url = new moodle_url('/mod/opencast/uploadvideo.php', array('cmid' => $cm->id));
+    $url = new moodle_url('/mod/opencast/uploadvideo.php', ['cmid' => $cm->id]);
     // Check the addvideo capability from block_opencast.
     $coursecontext = context_course::instance($course->id);
     if (!has_capability('block/opencast:addvideo', $coursecontext)) {
         // If capability is not met, redirect back with message.
-        $url = new moodle_url('/course/view.php', array('id' => $course->id));
+        $url = new moodle_url('/course/view.php', ['id' => $course->id]);
         $messagetext = get_string('uploadnotallowed', 'mod_opencast');
         $messagestatus = \core\output\notification::NOTIFY_ERROR;
     } else if (empty($moduleinstance->uploaddraftitemid)) {
         // If the file draft id is not avialable, we remove the instance and redirect back with message.
-        $url = new moodle_url('/course/view.php', array('id' => $course->id));
+        $url = new moodle_url('/course/view.php', ['id' => $course->id]);
         $messagetext = get_string('uploadmissingfile', 'mod_opencast');
         $messagestatus = \core\output\notification::NOTIFY_ERROR;
 
@@ -119,7 +119,7 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
     // Perform the redirect.
     redirect($url, $messagetext, null, $messagestatus);
 } else if ($moduleinstance->type == opencasttype::UPLOADED) {
-    $url = new moodle_url('/course/view.php', array('id' => $course->id));
+    $url = new moodle_url('/course/view.php', ['id' => $course->id]);
     $uploadjob = $DB->get_record('block_opencast_uploadjob', ['id' => $moduleinstance->uploadjobid]);
     if (empty($uploadjob) || empty($uploadjob->opencasteventid)) {
         $messagetext = get_string('uploadinprogress', 'mod_opencast', $moduleinstance->name);
