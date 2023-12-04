@@ -68,12 +68,9 @@ class output_helper {
         echo $OUTPUT->header();
 
         if (count($context->episodes) == 0) {
-            echo $OUTPUT->heading($activityname);
             echo '</br></br>';
             echo \html_writer::tag('h4', get_string('seriesisempty', 'mod_opencast'));
         } else {
-            echo $OUTPUT->heading($activityname);
-
             $listviewactive = get_user_preferences('mod_opencast/list', false);
             /** @var renderer $renderer */
             $renderer = $PAGE->get_renderer('mod_opencast');
