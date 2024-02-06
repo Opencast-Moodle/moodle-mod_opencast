@@ -68,7 +68,8 @@ class paella_transform {
             }
         }
 
-        return $presentationpreview ?? $presenterpreview ?? $otherpreview;
+        return $presentationpreview ?? $presenterpreview ?? $otherpreview
+                ?? (new \moodle_url('/mod/opencast/pix/nothumbnail.png'))->out(false);
     }
 
     /**
