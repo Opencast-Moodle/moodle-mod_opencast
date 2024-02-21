@@ -135,7 +135,7 @@ class output_helper {
         echo '<br>';
 
         // Find aspect-ratio if there is only one video track.
-        if (count($data['streams']) === 1) {
+        if (count($data['streams']) === 1 && !empty($data['streams'][0]['sources'])) {
             $sources = $data['streams'][0]['sources'];
             $res = $sources[array_key_first($sources)][0]['res'];
             $resolution = $res['w'] . '/' . $res['h'];
