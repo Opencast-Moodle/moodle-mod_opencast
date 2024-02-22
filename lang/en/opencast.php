@@ -34,6 +34,7 @@ $string['duration'] = 'Duration';
 
 $string['episode'] = 'Opencast episode';
 $string['errorfetchingvideo'] = 'There was a problem fetching the video.';
+$string['erroremptystreamsources'] = 'There is no video source available. Please contact your system administrator.';
 
 $string['gridview'] = 'View as grid';
 

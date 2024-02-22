@@ -141,6 +141,7 @@ class output_helper {
             $resolution = $res['w'] . '/' . $res['h'];
             echo \html_writer::start_div('player-wrapper', ['style' => '--aspect-ratio:' . $resolution]);
         } else {
+            \core\notification::error(get_string('erroremptystreamsources', 'mod_opencast'));
             echo \html_writer::start_div('player-wrapper');
         }
 
