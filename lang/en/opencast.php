@@ -43,6 +43,7 @@ $string['listview'] = 'View as list';
 $string['manualocid'] = 'Directly enter the Opencast ID of the series/episode';
 $string['modulename'] = 'Video (Opencast)';
 $string['modulenameplural'] = 'Videos (Opencast)';
+$string['modulename_help'] = '<p>The Video (Opencast) module is used to display videos or series from a connected Opencast platform.</p><p>In most cases, it is easier not to create the activity directly but to do it via the block "Opencast Videos" instead.</p>';
 
 $string['ocinstance'] = 'Opencast instance';
 $string['opencastname'] = 'Opencast Video Provider: {$a}';
