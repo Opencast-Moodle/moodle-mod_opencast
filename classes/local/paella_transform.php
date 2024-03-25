@@ -255,16 +255,71 @@ class paella_transform {
         foreach ($publication->media as $media) {
             list($type1, $type2) = explode('/', $media->flavor, 2);
             if ($type1 === 'captions') {
-                list($format, $lang) = explode('+', $type2, 2);
+                $lang = 'undefined';
+                $format = 'vtt'; // Default standard format.
+                $text = 'unknown';
+                // Prior to Opencast 15 or manually added subtitles in block opencast.
+                if (strpos($type2, 'vtt+') !== false) {
+                    list($format, $lang) = explode('+', $type2, 2);
+                    $text = $lang;
+                } else if (in_array($type2, ['delivery', 'prepared', 'vtt']) && !empty($media->tags)) { // Opencast 15 coverage.
+                    $tagdataarr = [];
+                    foreach ($media->tags as $tag) {
+                        // The safety checker.
+                        if (!is_string($tag)) {
+                            continue;
+                        }
+                        if (strpos($tag, 'lang:') !== false) {
+                            $lang = str_replace('lang:', '', $tag);
+                            $tagdataarr['lang'] = $lang;
+                        }
+                        if (strpos($tag, 'generator-type:') !== false) {
+                            $tagdataarr['generatortype'] = str_replace('generator-type:', '', $tag);
+                        }
+                        if (strpos($tag, 'generator:') !== false) {
+                            $tagdataarr['generator'] = str_replace('generator:', '', $tag);
+                        }
+                        if (strpos($tag, 'type:') !== false) {
+                            $tagdataarr['type'] = str_replace('type:', '', $tag);
+                        }
+                    }
+                    $text = self::prepare_caption_text($tagdataarr);
+                    list($mimefiletype, $format) = explode('/', $media->mediatype, 2);
+                }
                 $captions[] = [
                     'lang' => $lang,
-                    'text' => $lang,
+                    'text' => $text,
                     'format' => $format,
                     'url' => $media->url,
                 ];
             }
         }
         return $captions;
+    }
+
+    /**
+     * Generates the caption text in case the caption info is included in the tags (as introduced in Opencast 15)
+     * @param array $tagdataarr array of caption data.
+     * @return string the complied text for the caption.
+     */
+    private static function prepare_caption_text($tagdataarr) {
+        $titlearr = [];
+        if (array_key_exists('lang', $tagdataarr)) {
+            $titlearr[] = $tagdataarr['lang'];
+        }
+        if (array_key_exists('generator', $tagdataarr)) {
+            $generator = ucfirst($tagdataarr['generator']);
+            $titlearr[] = $generator;
+        }
+        if (array_key_exists('generator_type', $tagdataarr)) {
+            $generator_type = $tagdataarr['generator_type'] == 'auto' ? 'A' : 'M';
+            $titlearr[] = "($generator_type)";
+        }
+        if (array_key_exists('type', $tagdataarr)) {
+            $type = ucfirst($tagdataarr['type']);
+            $titlearr[] = "($type)";
+        }
+        return implode(' - ', $titlearr);
     }
 
     /**
