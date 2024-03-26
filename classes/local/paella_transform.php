@@ -311,9 +311,9 @@ class paella_transform {
             $generator = ucfirst($tagdataarr['generator']);
             $titlearr[] = $generator;
         }
-        if (array_key_exists('generator_type', $tagdataarr)) {
-            $generator_type = $tagdataarr['generator_type'] == 'auto' ? 'A' : 'M';
-            $titlearr[] = "($generator_type)";
+        if (array_key_exists('generatortype', $tagdataarr)) {
+            $generatortype = $tagdataarr['generatortype'] == 'auto' ? 'A' : 'M';
+            $titlearr[] = "($generatortype)";
         }
         if (array_key_exists('type', $tagdataarr)) {
             $type = ucfirst($tagdataarr['type']);
