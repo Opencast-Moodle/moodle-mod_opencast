@@ -126,9 +126,6 @@ class output_helper {
         $configurl = new \moodle_url(get_config('mod_opencast', 'configurl_' . $ocinstanceid));
         $themeurl = new \moodle_url(get_config('mod_opencast', 'themeurl_' . $ocinstanceid));
         echo \html_writer::script('window.episode = ' . json_encode($data));
-
-        echo $OUTPUT->heading($title);
-
         echo '<br>';
 
         // Find aspect-ratio if there is only one video track.
