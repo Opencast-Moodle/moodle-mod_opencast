@@ -312,7 +312,7 @@ class paella_transform {
             $titlearr[] = $generator;
         }
         if (array_key_exists('generatortype', $tagdataarr)) {
-            $generatortype = $tagdataarr['generatortype'] == 'auto' ? 'A' : 'M';
+            $generatortype = $tagdataarr['generatortype'] === 'auto' ? 'A' : 'M';
             $titlearr[] = "($generatortype)";
         }
         if (array_key_exists('type', $tagdataarr)) {
