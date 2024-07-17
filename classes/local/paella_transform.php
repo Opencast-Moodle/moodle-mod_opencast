@@ -262,25 +262,25 @@ class paella_transform {
                 if (strpos($type2, 'vtt+') !== false) {
                     list($format, $lang) = explode('+', $type2, 2);
                     $text = $lang;
-                } else if (in_array($type2, ['delivery', 'prepared', 'vtt']) && !empty($media->tags)) { // Opencast 15 coverage.
+                } else if (in_array($type2, ['delivery', 'prepared', 'preview', 'vtt']) && !empty($media->tags)) { // Opencast 15 coverage.
                     $tagdataarr = [];
                     foreach ($media->tags as $tag) {
                         // The safety checker.
                         if (!is_string($tag)) {
                             continue;
                         }
-                        if (strpos($tag, 'lang:') !== false) {
-                            $lang = str_replace('lang:', '', $tag);
+                        if (strpos($tag, 'lang:') === 0) {
+                            $lang = substr($tag, strlen('lang:'));
                             $tagdataarr['lang'] = $lang;
                         }
-                        if (strpos($tag, 'generator-type:') !== false) {
-                            $tagdataarr['generatortype'] = str_replace('generator-type:', '', $tag);
+                        if (strpos($tag, 'generator-type:') === 0) {
+                            $tagdataarr['generatortype'] = substr($tag, strlen('generator-type:'));
                         }
-                        if (strpos($tag, 'generator:') !== false) {
-                            $tagdataarr['generator'] = str_replace('generator:', '', $tag);
+                        if (strpos($tag, 'generator:') === 0) {
+                            $tagdataarr['generator'] = substr($tag, strlen('generator:'));
                         }
-                        if (strpos($tag, 'type:') !== false) {
-                            $tagdataarr['type'] = str_replace('type:', '', $tag);
+                        if (strpos($tag, 'type:') === 0) {
+                            $tagdataarr['type'] = substr($tag, strlen('type:'));
                         }
                     }
                     $text = self::prepare_caption_text($tagdataarr);
@@ -312,14 +312,16 @@ class paella_transform {
             $titlearr[] = $generator;
         }
         if (array_key_exists('generatortype', $tagdataarr)) {
-            $generatortype = $tagdataarr['generatortype'] === 'auto' ? 'A' : 'M';
+            $generatortype = $tagdataarr['generatortype'] === 'auto' ?
+                get_string('captions_generator_type_auto', 'mod_opencast') :
+                get_string('captions_generator_type_manual', 'mod_opencast');
             $titlearr[] = "($generatortype)";
         }
         if (array_key_exists('type', $tagdataarr)) {
             $type = ucfirst($tagdataarr['type']);
             $titlearr[] = "($type)";
         }
-        return implode(' - ', $titlearr);
+        return implode(' ', $titlearr);
     }
 
     /**

@@ -28,6 +28,9 @@ defined('MOODLE_INTERNAL') || die();
 $string['allvideos'] = 'All videos';
 $string['allowdownload'] = 'Allow students to download the video(s)';
 
+$string['captions_generator_type_auto'] = 'Auto generated';
+$string['captions_generator_type_manual'] = 'Manually generated';
+
 $string['date'] = 'Date';
 $string['downloadvideo'] = 'Download video';
 $string['duration'] = 'Duration';
