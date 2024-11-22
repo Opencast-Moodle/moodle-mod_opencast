@@ -131,6 +131,13 @@ class output_helper {
 
         echo '<br>';
 
+        // Show error if there are no streams.
+        if (count($data['streams']) === 0) {
+            \core\notification::error(get_string('erroremptystreamsources', 'mod_opencast'));
+            echo $OUTPUT->footer();
+            return;
+        }
+
         // Find aspect-ratio if there is only one video track.
         if (!empty($data['streams']) && !empty($data['streams'][0]['sources'])) {
             $sources = $data['streams'][0]['sources'];
