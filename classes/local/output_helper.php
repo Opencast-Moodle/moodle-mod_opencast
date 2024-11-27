@@ -179,7 +179,7 @@ class output_helper {
 
             // Get the action menu options.
             $actionmenu = new action_menu();
-            $actionmenu->set_alignment(action_menu::TL, action_menu::BL);
+            $actionmenu->set_menu_left();
             $actionmenu->prioritise = true;
             $actionmenu->actionicon = new pix_icon('t/down', get_string('downloadvideo', 'mod_opencast'));
             $actionmenu->actiontext = 'Download';
