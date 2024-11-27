@@ -29,6 +29,7 @@ require(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 require_once($CFG->dirroot . '/course/modlib.php');
 require_once($CFG->libdir . '/gradelib.php');
+require_once($CFG->libdir.'/completionlib.php');
 
 global $OUTPUT, $DB, $PAGE;
 
@@ -85,6 +86,10 @@ $event = \mod_opencast\event\course_module_viewed::create([
 $event->add_record_snapshot('course', $course);
 $event->add_record_snapshot('opencast', $moduleinstance);
 $event->trigger();
+
+// Completion.
+$completion = new completion_info($course);
+$completion->set_module_viewed($cm);
 
 if ($moduleinstance->type == opencasttype::EPISODE) {
     output_helper::output_episode($moduleinstance->ocinstanceid, $moduleinstance->opencastid, $moduleinstance->id);

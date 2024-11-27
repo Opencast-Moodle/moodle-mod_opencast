@@ -128,6 +128,13 @@ class output_helper {
         echo \html_writer::script('window.episode = ' . json_encode($data));
         echo '<br>';
 
+        // Show error if there are no streams.
+        if (count($data['streams']) === 0) {
+            \core\notification::error(get_string('erroremptystreamsources', 'mod_opencast'));
+            echo $OUTPUT->footer();
+            return;
+        }
+
         // Find aspect-ratio if there is only one video track.
         if (count($data['streams']) === 1 && !empty($data['streams'][0]['sources'])) {
             $sources = $data['streams'][0]['sources'];
@@ -135,7 +142,6 @@ class output_helper {
             $resolution = $res['w'] . '/' . $res['h'];
             echo \html_writer::start_div('player-wrapper', ['style' => '--aspect-ratio:' . $resolution]);
         } else {
-            \core\notification::error(get_string('erroremptystreamsources', 'mod_opencast'));
             echo \html_writer::start_div('player-wrapper');
         }
 
@@ -170,7 +176,7 @@ class output_helper {
 
             // Get the action menu options.
             $actionmenu = new action_menu();
-            $actionmenu->set_alignment(action_menu::TL, action_menu::BL);
+            $actionmenu->set_menu_left();
             $actionmenu->prioritise = true;
             $actionmenu->actionicon = new pix_icon('t/down', get_string('downloadvideo', 'mod_opencast'));
             $actionmenu->actiontext = 'Download';

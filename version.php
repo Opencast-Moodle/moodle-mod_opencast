@@ -18,6 +18,7 @@
  * Plugin version and other meta-data are defined here.
  *
  * @package     mod_opencast
+ * @copyright   2024 Thomas Niedermaier <thomas.niedermaier@uni-muenster.de>
  * @copyright   2020 Tobias Reischmann <tobias.reischmann@wi.uni-muenster.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,10 +26,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_opencast';
-$plugin->release = 'v4.4-r1';
-$plugin->version = 2024060400;
-$plugin->requires = 2022112800; // Requires Moodle 4.1+.
+$plugin->release = 'v4.5-r1';
+$plugin->version = 2024111100;
+$plugin->requires = 2024100700; // Requires Moodle 4.5+.
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = [
-    'tool_opencast' => 2024060400,
+    'tool_opencast' => 2024111100,
 ];
