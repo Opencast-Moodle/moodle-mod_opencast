@@ -33,6 +33,9 @@ $string['advancedsettings'] = 'Advanced settings';
 $string['allowdownload'] = 'Allow students to download the video(s)';
 $string['allvideos'] = 'All videos';
 
+$string['captions_generator_type_auto'] = 'Auto generated';
+$string['captions_generator_type_manual'] = 'Manually generated';
+
 $string['date'] = 'Date';
 $string['defaultuploadedvideotitle'] = 'Uploaded video';
 $string['dnduploadvideofile'] = 'Upload video file to Opencast';
