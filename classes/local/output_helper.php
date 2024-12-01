@@ -135,15 +135,16 @@ class output_helper {
             return;
         }
 
-        // Find aspect-ratio if there is only one video track.
-        if (count($data['streams']) === 1 && !empty($data['streams'][0]['sources'])) {
+        // Find aspect-ratio of the first video track.
+        $wrapperattrs = [];
+        if (!empty($data['streams']) && !empty($data['streams'][0]['sources'])) {
             $sources = $data['streams'][0]['sources'];
             $res = $sources[array_key_first($sources)][0]['res'];
             $resolution = $res['w'] . '/' . $res['h'];
-            echo \html_writer::start_div('player-wrapper', ['style' => '--aspect-ratio:' . $resolution]);
-        } else {
-            echo \html_writer::start_div('player-wrapper');
+            $wrapperattrs['style'] = '--aspect-ratio:' . $resolution;
         }
+
+        echo \html_writer::start_div('player-wrapper', $wrapperattrs);
 
         echo '<iframe src="player.html" id="player-iframe" class="mod-opencast-paella-player" allowfullscreen"></iframe>';
         echo \html_writer::end_div();
