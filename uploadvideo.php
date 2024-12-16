@@ -96,7 +96,7 @@ foreach ($ocinstances as $ocinstance) {
                 $seriesobj->isdefault = $series->identifier == $defaultseries ? 1 : 0;
                 $seriesoption[$series->identifier] = $seriesobj;
             }
-        } catch (\block_opencast\opencast_connection_exception $e) {
+        } catch (\tool_opencast\exception\opencast_api_response_exception $e) {
             \core\notification::warning($e->getMessage());
             foreach ($seriesrecords as $series) {
                 $seriesobj = new \stdClass();
