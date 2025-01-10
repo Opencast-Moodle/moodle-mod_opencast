@@ -45,7 +45,8 @@ $string['duration'] = 'Duration';
 $string['episode'] = 'Opencast episode';
 $string['erroremptystreamsources'] = 'There is no video source available. Please contact your system administrator.';
 $string['errorfetchingvideo'] = 'There was a problem fetching the video.';
-
+$string['errorvideonotavailable'] = 'Unable to find the video! <br />Please contact your system administrator.';
+$string['errorvideonotready'] = 'The video is either not ready yet or cannot be properly accessed from the source!<br />Please try again later.';
 $string['gridview'] = 'View as grid';
 
 $string['listview'] = 'View as list';
@@ -60,6 +61,7 @@ $string['opencast:addinstance'] = 'Add a new Video (Opencast) instance';
 $string['opencastid'] = 'Opencast ID';
 $string['opencastidnotrecognized'] = 'This ID is neither recognized as a series nor a video.';
 $string['opencastname'] = 'Opencast Video Provider: {$a}';
+$string['opencastnotreachable'] = 'Opencast is currently not reachable, please try again later.';
 
 $string['pluginadministration'] = 'Opencast Video Provider administration';
 $string['pluginname'] = 'Opencast Video Provider';

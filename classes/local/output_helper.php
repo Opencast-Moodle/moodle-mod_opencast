@@ -56,7 +56,7 @@ class output_helper {
         $response = $api->get_episodes_in_series($seriesid, $sortseriesby);
 
         if ($response === false) {
-            throw new \exception('There was a problem reaching opencast!');
+            throw new \moodle_exception('opencastnotreachable', 'mod_opencast');
         }
 
         $context = self::create_template_context_for_series($ocinstanceid, $response);
@@ -102,11 +102,11 @@ class output_helper {
     public static function output_episode($ocinstanceid, $episodeid, $modinstanceid, $seriesid = null): void {
         global $PAGE, $OUTPUT, $DB;
 
-        $data = paella_transform::get_paella_data_json($ocinstanceid, $episodeid, $seriesid);
+        list($data, $errormessage) = paella_transform::get_paella_data_json($ocinstanceid, $episodeid, $seriesid);
 
-        if (!$data) {
+        if (empty($data)) {
             echo $OUTPUT->header();
-            echo $OUTPUT->heading(get_string('errorfetchingvideo', 'mod_opencast'));
+            echo $OUTPUT->heading($errormessage);
             echo $OUTPUT->footer();
             return;
         }
