@@ -39,12 +39,16 @@ class apibridge {
     /** @var int Opencast instance id */
     private $ocinstanceid;
 
+    /** @var api the opencast tool api instance */
+    public $api;
+
     /**
      * apibridge constructor.
      * @param int $ocinstanceid Opencast instance id
      */
     private function __construct($ocinstanceid) {
         $this->ocinstanceid = $ocinstanceid;
+        $this->api = api::get_instance($this->ocinstanceid);
     }
 
     /**
@@ -75,25 +79,34 @@ class apibridge {
      */
     public function get_episodes_in_series($seriesid, $sortseriesby = null) {
 
-        $sortstring = 'start_date:DESC,title:ASC';
+        $params = [
+            'withpublications' => true,
+            'sign' => true,
+        ];
+
+        $sort = [
+            'start_date' => 'DESC',
+            'title' => 'ASC',
+        ];
+
         if ($sortseriesby == 1) {
-            $sortstring = 'title:ASC,start_date:DESC';
+            $sort = [
+                'title' => 'ASC',
+                'start_date' => 'DESC',
+            ];
         }
 
-        $api = new api($this->ocinstanceid);
-        $resource = "/api/events?filter=is_part_of:$seriesid&withpublications=true&sort=$sortstring&sign=true";
-        $response = $api->oc_get($resource);
+        $params['sort'] = $sort;
 
-        if ($api->get_http_code() != 200) {
+        $response = $this->api->opencastapi->eventsApi->getBySeries($seriesid, $params);
+        $code = $response['code'];
+
+        // If something went wrong, we return false.
+        if ($code != 200 || !isset($response['body'])) {
             return false;
         }
 
-        $response = json_decode($response);
-        if ($response === null) {
-            return false;
-        }
-
-        return $response;
+        return $response['body'];
     }
 
     /**
@@ -102,19 +115,16 @@ class apibridge {
      * @return false|mixed
      */
     public function get_series($seriesid) {
-        $api = new api($this->ocinstanceid);
-        $resource = "/api/series/$seriesid";
-        $response = $api->oc_get($resource);
 
-        if ($api->get_http_code() != 200) {
+        $response = $this->api->opencastapi->seriesApi->get($seriesid);
+        $code = $response['code'];
+
+        // If something went wrong, we return false.
+        if ($code != 200 || !isset($response['body'])) {
             return false;
         }
 
-        $response = json_decode($response);
-        if ($response === null) {
-            return false;
-        }
-        return $response;
+        return $response['body'];
     }
 
     /**
@@ -124,25 +134,29 @@ class apibridge {
      * @return false|mixed
      */
     public function get_episode($episodeid, $ensureseries = null) {
-        $api = new api($this->ocinstanceid);
-        $resource = "/api/events/$episodeid?sign=true&withpublications=true";
-        $response = $api->oc_get($resource);
 
-        if ($api->get_http_code() != 200) {
+        $params = [
+            'withpublications' => true,
+            'sign' => true,
+        ];
+
+        $response = $this->api->opencastapi->eventsApi->get($episodeid, $params);
+        $code = $response['code'];
+
+        // If something went wrong, we return false.
+        if ($code != 200 || !isset($response['body'])) {
             return false;
         }
 
-        $response = json_decode($response);
-        if ($response === null) {
-            return false;
-        }
+        $episode = $response['body'];
 
         if ($ensureseries) {
-            if ($response->is_part_of !== $ensureseries) {
+            if ($episode->is_part_of !== $ensureseries) {
                 return false;
             }
         }
-        return $response;
+
+        return $episode;
     }
 
     /**
@@ -163,13 +177,13 @@ class apibridge {
             if ($ocseries) {
                 $serieskey = $ocseries->identifier . '_' . $s->get('ocinstanceid');
 
-                $serieschoices[$serieskey] = $ocseries->title;
                 $episodes = $apibridge->get_episodes_in_series($ocseries->identifier);
-
-                $episodechoices[$serieskey] = ['allvideos' => get_string('allvideos', 'mod_opencast')];
-
-                foreach ($episodes as $episode) {
-                    $episodechoices[$serieskey][$episode->identifier] = $episode->title;
+                if (!empty($episodes)) {
+                    $serieschoices[$serieskey] = $ocseries->title;
+                    $episodechoices[$serieskey] = ['allvideos' => get_string('allvideos', 'mod_opencast')];
+                    foreach ($episodes as $episode) {
+                        $episodechoices[$serieskey][$episode->identifier] = $episode->title;
+                    }
                 }
             }
         }
@@ -183,14 +197,15 @@ class apibridge {
      * @return int the type {@see opencasttype}
      */
     public function find_opencast_type_for_id($id) {
-        $api = new api($this->ocinstanceid);
-        $api->oc_get("/api/events/$id");
-        if ($api->get_http_code() == 200) {
+        $response = $this->api->opencastapi->eventsApi->get($id);
+        $code = $response['code'];
+        if ($code == 200) {
             return opencasttype::EPISODE;
         }
 
-        $api->oc_get("/api/series/$id");
-        if ($api->get_http_code() == 200) {
+        $response = $this->api->opencastapi->seriesApi->get($id);
+        $code = $response['code'];
+        if ($code == 200) {
             return opencasttype::SERIES;
         }
 

@@ -325,32 +325,54 @@ class paella_transform {
     }
 
     /**
-     * Returns the video data from Opencast in the format for the paella player.
-     * @param int $ocinstanceid Opencast instance id
-     * @param string $episodeid Opencast episode id
-     * @param string|null $seriesid Opencast series id
-     * @return array|false Video data or false if data could not be retrieved
-     * @throws \dml_exception
+     * This function retrieves the episode and publication data from the Opencast API,
+     * processes it to generate the required data structure for the Paella player,
+     * and returns it along with any error messages.
+     *
+     * @param int $ocinstanceid The Opencast instance ID.
+     * @param string $episodeid The episode ID.
+     * @param string|null $seriesid The series ID (optional, defaults to null).
+     * @return array An array containing the prepared data and any error messages.
+     *               The array has the following structure: [data, errormessage].
+     *               If there are no errors, the data will be an associative array with the following keys:
+     *               - 'metadata': An associative array containing the video's metadata (title, duration, preview).
+     *               - 'streams': An array containing the video's streams.
+     *               - 'frameList': An array containing the video's frame list.
+     *               - 'captions': An array containing the video's captions.
+     *               If there are errors, the data will be false, and the errormessage will contain the error message.
      */
     public static function get_paella_data_json($ocinstanceid, $episodeid, $seriesid = null) {
-        $api = apibridge::get_instance($ocinstanceid);
-        if (($episode = $api->get_episode($episodeid, $seriesid)) === false) {
-            return false;
+        $haserror = false;
+        $errormessage = '';
+        $data = false;
+        try {
+            $api = apibridge::get_instance($ocinstanceid);
+            if (($episode = $api->get_episode($episodeid, $seriesid)) === false) {
+                $haserror = true;
+                $errormessage = get_string('errorvideonotavailable', 'mod_opencast');
+            }
+
+            if (($publication = self::get_api_publication($ocinstanceid, $episode)) === false) {
+                $haserror = true;
+                $errormessage = get_string('errorvideonotready', 'mod_opencast');
+            }
+
+            if (!$haserror) {
+                $data = [
+                    'metadata' => [
+                        'title' => $episode->title,
+                        'duration' => self::get_duration($publication),
+                        'preview' => self::get_preview_image($publication),
+                    ],
+                    'streams' => self::get_streams($publication),
+                    'frameList' => self::get_frame_list($publication),
+                    'captions' => self::get_captions($publication),
+                ];
+            }
+        } catch (\Throwable $e) {
+            $errormessage = get_string('errorfetchingvideo', 'mod_opencast');
         }
 
-        if (($publication = self::get_api_publication($ocinstanceid, $episode)) === false) {
-            return false;
-        }
-
-        return [
-            'metadata' => [
-                'title' => $episode->title,
-                'duration' => self::get_duration($publication),
-                'preview' => self::get_preview_image($publication),
-            ],
-            'streams' => self::get_streams($publication),
-            'frameList' => self::get_frame_list($publication),
-            'captions' => self::get_captions($publication),
-        ];
+        return [$data, $errormessage];
     }
 }
