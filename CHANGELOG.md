@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+4.5.3 (2025-01-16)
+------------------
+* [FEATURE] #65 Improve error handling and messaging + opencast api integration
+* [FEATURE] #64 Use new opencast api exception handlers from API plugin
+
+
 4.5.1 (2024-12-03)
 ------------------
 * [FIXED] #63 Prevent future codechecker issues caused by lang file sort order
