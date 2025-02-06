@@ -145,7 +145,7 @@ function opencast_dndupload_register() {
     // Getting default opencast instance.
     $defaultocinstanceid = \tool_opencast\local\settings_api::get_default_ocinstance()->id;
     // Getting file extensions from the block_opencast configuration using default ocinstanceid.
-    $videotypescfg = get_config('block_opencast', 'uploadfileextensions_' . $defaultocinstanceid);
+    $videotypescfg = get_config('tool_opencast', 'uploadfileextensions_' . $defaultocinstanceid);
     $videoexts = empty($videotypescfg) || $videotypescfg == 'video' ?
         file_get_typegroup('extension', 'video') :
         array_map('trim', explode(',', $videotypescfg));
