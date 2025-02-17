@@ -3,9 +3,8 @@
   "private": true,
   "dependencies": {
     "paella-basic-plugins": "^1.44.10",
-    "paella-core": "^1.49.7",
-    "paella-mp4multiquality-plugin": "^1.47.1",
-    "paella-slide-plugins": "^1.48.1",
+    "paella-core": "^1.50.2",
+    "paella-slide-plugins": "^1.50.1",
     "paella-user-tracking": "^1.42.5",
     "paella-zoom-plugin": "^1.41.3"
   },
@@ -13,13 +12,13 @@
     "build": "webpack --mode production"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.7",
-    "@babel/preset-env": "^7.26.0",
+    "@babel/core": "^7.26.9",
+    "@babel/preset-env": "^7.26.9",
     "babel-loader": "^9.2.1",
-    "css-loader": "^7.1.2",
-    "style-loader": "^4.0.0",
+    "css-loader": "^6.11.0",
+    "style-loader": "^3.3.4",
     "svg-inline-loader": "^0.8.2",
-    "webpack": "^5.96.1",
+    "webpack": "^5.98.0",
     "webpack-cli": "^5.1.4"
   }
 }
