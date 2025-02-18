@@ -2,23 +2,24 @@
   "name": "moodle-paella-player",
   "private": true,
   "dependencies": {
-    "paella-basic-plugins": "^1.38.0",
-    "paella-core": "^1.39.2",
-    "paella-slide-plugins": "^1.8.0",
-    "paella-user-tracking": "^1.8.0",
-    "paella-zoom-plugin": "^1.27.0"
+    "paella-basic-plugins": "^1.44.10",
+    "paella-core": "^1.50.2",
+    "paella-mp4multiquality-plugin": "^1.47.1",
+    "paella-slide-plugins": "^1.50.1",
+    "paella-user-tracking": "^1.42.5",
+    "paella-zoom-plugin": "^1.41.3"
   },
   "scripts": {
     "build": "webpack --mode production"
   },
   "devDependencies": {
-    "@babel/core": "^7.21.3",
-    "@babel/preset-env": "^7.21.4",
-    "babel-loader": "^9.1.2",
-    "css-loader": "^6.7.3",
-    "style-loader": "^3.3.2",
+    "@babel/core": "^7.26.9",
+    "@babel/preset-env": "^7.26.9",
+    "babel-loader": "^9.2.1",
+    "css-loader": "^6.11.0",
+    "style-loader": "^3.3.4",
     "svg-inline-loader": "^0.8.2",
-    "webpack": "^5.82.0",
-    "webpack-cli": "^5.0.1"
+    "webpack": "^5.98.0",
+    "webpack-cli": "^5.1.4"
   }
 }
