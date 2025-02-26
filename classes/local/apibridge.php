@@ -86,13 +86,11 @@ class apibridge {
 
         $sort = [
             'start_date' => 'DESC',
-            'title' => 'ASC',
         ];
 
         if ($sortseriesby == 1) {
             $sort = [
                 'title' => 'ASC',
-                'start_date' => 'DESC',
             ];
         }
 
