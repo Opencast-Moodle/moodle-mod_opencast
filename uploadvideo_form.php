@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->libdir . '/formslib.php');
 
-use block_opencast\local\autocomplete_suggestion_helper;
+use tool_opencast\local\autocomplete_suggestion_helper;
 
 /**
  * Video Upload form
@@ -45,7 +45,7 @@ class mod_opencast_uploadvideo_form extends moodleform {
     public function definition() {
         global $PAGE, $OUTPUT;
         // Get the renderer to use its methods.
-        $renderer = $PAGE->get_renderer('block_opencast');
+        $renderer = $PAGE->get_renderer('tool_opencast');
 
         $cmid = $this->_customdata['cmid'];
         $ocinstances = $this->_customdata['ocinstances'];
@@ -123,11 +123,11 @@ class mod_opencast_uploadvideo_form extends moodleform {
                 if ($field->datatype == 'autocomplete') {
                     $attributes = [
                         'multiple' => true,
-                        'placeholder' => get_string('metadata_autocomplete_placeholder', 'block_opencast',
-                            $this->try_get_string($field->name, 'block_opencast')),
+                        'placeholder' => get_string('metadata_autocomplete_placeholder', 'tool_opencast',
+                            $this->try_get_string($field->name, 'tool_opencast')),
                         'showsuggestions' => true,
-                        'noselectionstring' => get_string('metadata_autocomplete_noselectionstring', 'block_opencast',
-                            $this->try_get_string($field->name, 'block_opencast')),
+                        'noselectionstring' => get_string('metadata_autocomplete_noselectionstring', 'tool_opencast',
+                            $this->try_get_string($field->name, 'tool_opencast')),
                         'tags' => true,
                     ];
 
@@ -145,14 +145,14 @@ class mod_opencast_uploadvideo_form extends moodleform {
                 }
 
                 // Get the created element back from addElement function, in order to further use its attrs.
-                $lbltext = $this->try_get_string($field->name, 'block_opencast');
+                $lbltext = $this->try_get_string($field->name, 'tool_opencast');
                 $element = $mform->addElement($field->datatype, $elementid, $lbltext, $param, $attributes);
 
                 // Check if the description is set for the field, to display it as help icon.
                 if (isset($field->description) && !empty($field->description)) {
                     // Use the renderer to generate a help icon with custom text.
                     $element->_helpbutton = $renderer->render_help_icon_with_custom_text(
-                        $this->try_get_string($field->name, 'block_opencast'), $field->description);
+                        $this->try_get_string($field->name, 'tool_opencast'), $field->description);
                 }
 
                 if ($field->datatype == 'text') {
@@ -169,7 +169,7 @@ class mod_opencast_uploadvideo_form extends moodleform {
             }
             if ($settitle) {
                 $elementid = 'title_' . $ocinstance->id;
-                $mform->addElement('text', 'title_' . $elementid, get_string('title', 'block_opencast'));
+                $mform->addElement('text', 'title_' . $elementid, get_string('title', 'tool_opencast'));
                 $mform->setType($elementid, PARAM_TEXT);
                 $mform->disabledIf($elementid, 'ocinstance' , 'neq', $ocinstance->id);
                 $mform->hideif($elementid, 'ocinstance' , 'neq', $ocinstance->id);
@@ -201,7 +201,7 @@ class mod_opencast_uploadvideo_form extends moodleform {
         $mform->setType('metadatacatalogs', PARAM_TEXT);
 
         $mform->closeHeaderBefore('buttonar');
-        $this->add_action_buttons(true, get_string('addvideo', 'block_opencast'));
+        $this->add_action_buttons(true, get_string('addvideo', 'tool_opencast'));
     }
 
     /**
