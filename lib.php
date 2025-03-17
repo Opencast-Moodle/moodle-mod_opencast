@@ -144,7 +144,7 @@ function mod_opencast_get_fontawesome_icon_map() {
 function opencast_dndupload_register() {
     // Getting default opencast instance.
     $defaultocinstanceid = \tool_opencast\local\settings_api::get_default_ocinstance()->id;
-    // Getting file extensions from the block_opencast configuration using default ocinstanceid.
+    // Getting file extensions from the tool_opencast configuration using default ocinstanceid.
     $videotypescfg = get_config('tool_opencast', 'uploadfileextensions_' . $defaultocinstanceid);
     $videoexts = empty($videotypescfg) || $videotypescfg == 'video' ?
         file_get_typegroup('extension', 'video') :
