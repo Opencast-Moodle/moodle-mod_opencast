@@ -19,6 +19,7 @@ export const initPaella = (configurl, themeurl, manifest) => {
     let paella = new Paella('playerContainer', {
         logLevel: "DEBUG",
         configUrl: configurl,
+        getVideoId: async () => manifest.metadata.id,
         getManifestUrl: noop,
         getManifestFileUrl: noop,
         loadVideoManifest: loadVideoManifestFunction,
