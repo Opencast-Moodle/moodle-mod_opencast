@@ -28,9 +28,9 @@ require_once($CFG->dirroot . '/course/modlib.php');
 require_once($CFG->libdir . '/gradelib.php');
 require_once(__DIR__ . '/uploadvideo_form.php');
 
-use block_opencast\local\apibridge;
+use tool_opencast\local\apibridge;
 use tool_opencast\local\settings_api;
-use block_opencast\local\upload_helper;
+use tool_opencast\local\upload_helper;
 
 global $PAGE, $OUTPUT, $USER, $DB;
 
@@ -48,8 +48,8 @@ require_login($course, false, $cm);
 
 $context = context_module::instance($cm->id);
 $coursecontext = context_course::instance($course->id);
-// As we are doing the upload using the block_opencast, we have to use its capability as well.
-require_capability('block/opencast:addvideo', $coursecontext);
+// As we are doing the upload using the tool_opencast, we have to use its capability as well.
+require_capability('tool/opencast:addvideo', $coursecontext);
 
 $PAGE->set_pagelayout('frametop');
 $PAGE->set_context($context);
@@ -62,7 +62,7 @@ if (empty($moduleinstance->uploaddraftitemid)) {
 // Getting all the oc instances.
 $ocinstances = settings_api::get_ocinstances();
 // Getting user defaults.
-$userdefaultsrecord = $DB->get_record('block_opencast_user_default', ['userid' => $USER->id]);
+$userdefaultsrecord = $DB->get_record('tool_opencast_user_default', ['userid' => $USER->id]);
 $userdefaults = $userdefaultsrecord ? json_decode($userdefaultsrecord->defaults, true) : [];
 $usereventdefaults = (!empty($userdefaults['event'])) ? $userdefaults['event'] : [];
 // Getting medatadata catalogs based on the ocinstances.
@@ -128,9 +128,9 @@ if ($mform->is_cancelled()) {
     // Saving and getting the file.
     $newitemid = rand(1000000, 9999999);
     file_save_draft_area_files($moduleinstance->uploaddraftitemid, $coursecontext->id,
-        'block_opencast', upload_helper::OC_FILEAREA, $newitemid);
+        'tool_opencast', upload_helper::OC_FILEAREA, $newitemid);
     $fs = get_file_storage();
-    $files = $fs->get_area_files($coursecontext->id, 'block_opencast', upload_helper::OC_FILEAREA, $newitemid, '', false);
+    $files = $fs->get_area_files($coursecontext->id, 'tool_opencast', upload_helper::OC_FILEAREA, $newitemid, '', false);
     $savedvideofile = null;
     if ($files) {
         $savedvideofile = reset($files);
@@ -142,7 +142,7 @@ if ($mform->is_cancelled()) {
         redirect($redirecturl, get_string('uploadmissingfile', 'mod_opencast'), null, \core\output\notification::NOTIFY_ERROR);
     } else {
         $coursecontext = context_course::instance($course->id);
-        \block_opencast\local\file_deletionmanager::track_draftitemid($coursecontext->id, $savedvideofile->get_itemid());
+        \tool_opencast\local\file_deletionmanager::track_draftitemid($coursecontext->id, $savedvideofile->get_itemid());
     }
 
     $flavorfieldname = 'flavor_' . $ocinstanceid;
@@ -234,10 +234,10 @@ if ($mform->is_cancelled()) {
             \core\notification::warning($e->getMessage());
         }
     }
-    $blockopencastlink = new moodle_url('/blocks/opencast/index.php',
+    $indexopencastlink = new moodle_url('/admin/tool/opencast/index.php',
         ['courseid' => $course->id, 'ocinstanceid' => $ocinstanceid]);
     redirect($redirecturl,
-        get_string('uploadsaved', 'mod_opencast', $blockopencastlink->out()), null, \core\output\notification::NOTIFY_SUCCESS);
+        get_string('uploadsaved', 'mod_opencast', $indexopencastlink->out()), null, \core\output\notification::NOTIFY_SUCCESS);
 }
 
 $PAGE->set_title(get_string('uploadformtitle', 'mod_opencast'));

@@ -104,9 +104,9 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
     $messagetext = get_string('uploadlandinginfo', 'mod_opencast');
     $messagestatus = \core\output\notification::NOTIFY_INFO;
     $url = new moodle_url('/mod/opencast/uploadvideo.php', ['cmid' => $cm->id]);
-    // Check the addvideo capability from block_opencast.
+    // Check the addvideo capability from tool_opencast.
     $coursecontext = context_course::instance($course->id);
-    if (!has_capability('block/opencast:addvideo', $coursecontext)) {
+    if (!has_capability('tool/opencast:addvideo', $coursecontext)) {
         // If capability is not met, redirect back with message.
         $url = new moodle_url('/course/view.php', ['id' => $course->id]);
         $messagetext = get_string('uploadnotallowed', 'mod_opencast');
@@ -125,7 +125,7 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
     redirect($url, $messagetext, null, $messagestatus);
 } else if ($moduleinstance->type == opencasttype::UPLOADED) {
     $url = new moodle_url('/course/view.php', ['id' => $course->id]);
-    $uploadjob = $DB->get_record('block_opencast_uploadjob', ['id' => $moduleinstance->uploadjobid]);
+    $uploadjob = $DB->get_record('tool_opencast_uploadjob', ['id' => $moduleinstance->uploadjobid]);
     if (empty($uploadjob) || empty($uploadjob->opencasteventid)) {
         $messagetext = get_string('uploadinprogress', 'mod_opencast', $moduleinstance->name);
         $messagestatus = \core\output\notification::NOTIFY_INFO;
@@ -139,7 +139,7 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
         redirect($url, $messagetext, null, $messagestatus);
     }
     $opencasteventid = $uploadjob->opencasteventid;
-    $apibridge = \block_opencast\local\apibridge::get_instance($moduleinstance->ocinstanceid);
+    $apibridge = \tool_opencast\local\apibridge::get_instance($moduleinstance->ocinstanceid);
     $video = $apibridge->get_opencast_video($opencasteventid);
     if ($video->video->processing_state != 'SUCCEEDED') {
         $messagetext = get_string('uploadedvideoisbeingprocesses', 'mod_opencast', $moduleinstance->name);
