@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+4.5.4 (2025-08-01)
+------------------
+* [FEATURE] #79 Pass event ID to Paella and update dependencies
+* [FEATURE] #69 Add quality selector for progressive download videos
+
+
 4.5.3 (2025-01-16)
 ------------------
 * [FEATURE] #65 Improve error handling and messaging + opencast api integration
