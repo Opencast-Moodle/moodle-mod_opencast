@@ -1,10 +1,11 @@
 CHANGELOG
 =========
 
-4.5.3 (2025-01-16)
+5.0.0 (2024-08-01)
 ------------------
-* [FEATURE] #65 Improve error handling and messaging + opencast api integration
-* [FEATURE] #64 Use new opencast api exception handlers from API plugin
+* [CHANGE] #75 Migrate Settings from block_opencast to tool_opencast
+* [FEATURE] #81 Add video canvas plugin preventing the context menu on right-click
+*  Moodle 5.0 compatible version
 
 
 4.5.1 (2024-12-03)
