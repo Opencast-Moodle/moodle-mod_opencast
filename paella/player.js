@@ -5,6 +5,7 @@ import getBasicPluginContext from 'paella-basic-plugins';
 import getSlidePluginContext from 'paella-slide-plugins';
 import getZoomPluginContext from 'paella-zoom-plugin';
 import getUserTrackingPluginsContext from 'paella-user-tracking';
+import getMP4MultiQualityContext from 'paella-mp4multiquality-plugin';
 
 const loadVideoManifestFunction = () => {
     return window.episode;
@@ -18,6 +19,7 @@ export const initPaella = (configurl, themeurl, manifest) => {
     let paella = new Paella('playerContainer', {
         logLevel: "DEBUG",
         configUrl: configurl,
+        getVideoId: async () => manifest.metadata.id,
         getManifestUrl: noop,
         getManifestFileUrl: noop,
         loadVideoManifest: loadVideoManifestFunction,
@@ -26,7 +28,8 @@ export const initPaella = (configurl, themeurl, manifest) => {
             getBasicPluginContext(),
             getSlidePluginContext(),
             getZoomPluginContext(),
-            getUserTrackingPluginsContext()
+            getUserTrackingPluginsContext(),
+            getMP4MultiQualityContext(),
         ]
     });
     paella.skin.loadSkin(themeurl);
