@@ -41,14 +41,17 @@ $cm = get_coursemodule_from_instance('opencast', $moduleinstance->id, $course->i
 require_login($course, true, $cm);
 $modulecontext = context_module::instance($cm->id);
 
+$enforce = get_config('mod_opencast', 'enforce_download_default_' . $ocinstanceid);
+$allowdownload = get_config('mod_opencast', 'download_default_' . $ocinstanceid);
+
 // Check if teacher enabled download.
-if (!get_config('mod_opencast', 'global_download_' . $ocinstanceid) && !$moduleinstance->allowdownload) {
-    die();
+if (($enforce && !$allowdownload) || (!$enforce && !$moduleinstance->allowdownload)) {
+    throw new moodle_exception('nopermissiontodownload', 'mod_opencast');
 }
 
 // Check if activity is visible for student.
 if (empty($cm->visible) && !has_capability('moodle/course:viewhiddenactivities', $modulecontext)) {
-    die();
+    throw new moodle_exception('nopermissiontodownload', 'mod_opencast');
 }
 
 $apibridge = apibridge::get_instance($ocinstanceid);
