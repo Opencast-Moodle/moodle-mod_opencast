@@ -60,8 +60,8 @@ if ($hassiteconfig) {
             new lang_string('settings:download-default', 'mod_opencast'),
             new lang_string('settings:download-default_desc', 'mod_opencast'), 0));
 
-        $settings->add(new admin_setting_configcheckbox('mod_opencast/global_download_' . $ocinstance->id,
-            new lang_string('settings:global_download', 'mod_opencast'),
-            new lang_string('settings:global_download_desc', 'mod_opencast'), 0));
+        $settings->add(new admin_setting_configcheckbox('mod_opencast/enforce_download_default_' . $ocinstance->id,
+                new lang_string('settings:enforce_download_default', 'mod_opencast'),
+                new lang_string('settings:enforce_download_default_desc', 'mod_opencast'), 0));
     }
 }

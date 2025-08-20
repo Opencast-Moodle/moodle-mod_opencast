@@ -114,15 +114,13 @@ class mod_opencast_mod_form extends moodleform_mod {
             $mform->addRule('opencastid', get_string('required'), 'required');
             $mform->hideIf('opencastid', 'manualocid', 'eq', '0');
 
-            if (get_config('mod_opencast', 'global_download_' . $ocinstanceid)) {
+            if (get_config('mod_opencast', 'enforce_download_default_' . $ocinstanceid)) {
                 $mform->addElement('hidden', 'allowdownload');
-                $mform->setType('allowdownload', PARAM_INT);
-                $mform->setDefault('allowdownload', '1');
             } else {
                 $mform->addElement('advcheckbox', 'allowdownload', get_string('allowdownload', 'mod_opencast'));
-                $mform->setType('allowdownload', PARAM_INT);
-                $mform->setDefault('allowdownload', get_config('mod_opencast', 'download_default_' . $ocinstanceid));
             }
+            $mform->setType('allowdownload', PARAM_INT);
+            $mform->setDefault('allowdownload', get_config('mod_opencast', 'download_default_' . $ocinstanceid));
 
             $mform->addElement('header', 'advancedsettings', get_string('advancedsettings', 'mod_opencast'));
 

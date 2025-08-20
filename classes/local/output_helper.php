@@ -153,10 +153,12 @@ class output_helper {
                 [$configurl->out(false), $themeurl->out(false)]);
 
         $moduleinstance = $DB->get_record('opencast', ['id' => $modinstanceid], '*', MUST_EXIST);
-        if (get_config('mod_opencast', 'global_download_' . $ocinstanceid) || $moduleinstance->allowdownload) {
+
+        $enforce = get_config('mod_opencast', 'enforce_download_default_' . $ocinstanceid);
+        $allowdownload = get_config('mod_opencast', 'download_default_' . $ocinstanceid);
+        if (($enforce && $allowdownload) || (!$enforce && $moduleinstance->allowdownload)) {
             self::output_download_menu($ocinstanceid, $episodeid, $modinstanceid);
         }
-
         echo $OUTPUT->footer();
     }
 

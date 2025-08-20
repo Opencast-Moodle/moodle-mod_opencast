@@ -137,5 +137,19 @@ function xmldb_opencast_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2023100900, 'opencast');
     }
 
+    if ($oldversion < 2025080100.01) {
+        $configs = $DB->get_records_select(
+                'config_plugins',
+                "plugin = :plugin AND name LIKE :pattern",
+                ['plugin' => 'mod_opencast', 'pattern' => 'global_download_%']
+        );
+        foreach ($configs as $config) {
+            $DB->delete_records('config_plugins', ['id' => $config->id]);
+        }
+
+        // Opencast savepoint reached.
+        upgrade_mod_savepoint(true, 2025080100.01, 'opencast');
+    }
+
     return true;
 }
