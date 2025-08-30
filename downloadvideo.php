@@ -41,56 +41,60 @@ $cm = get_coursemodule_from_instance('opencast', $moduleinstance->id, $course->i
 require_login($course, true, $cm);
 $modulecontext = context_module::instance($cm->id);
 
+$enforce = get_config('mod_opencast', 'enforce_download_default_' . $ocinstanceid);
+$allowdownload = get_config('mod_opencast', 'download_default_' . $ocinstanceid);
+
 // Check if teacher enabled download.
-if (!get_config('mod_opencast', 'global_download_' . $ocinstanceid) && !$moduleinstance->allowdownload) {
-    die();
+if (($enforce && !$allowdownload) || (!$enforce && !$moduleinstance->allowdownload)) {
+    throw new moodle_exception('nopermissiontodownload', 'mod_opencast');
 }
 
 // Check if activity is visible for student.
 if (empty($cm->visible) && !has_capability('moodle/course:viewhiddenactivities', $modulecontext)) {
-    die();
+    throw new moodle_exception('nopermissiontodownload', 'mod_opencast');
 }
 
 $apibridge = apibridge::get_instance($ocinstanceid);
 $result = $apibridge->get_opencast_video($episode, true);
-if (!$result->error) {
-    $video = $result->video;
-    foreach ($video->publications as $publication) {
-        if ($publication->channel == get_config('mod_opencast', 'download_channel_' . $ocinstanceid)) {
-            foreach ($publication->media as $media) {
-                if ($media->id === $mediaid) {
-                    $downloadurl = $media->url;
-                    $mimetype = $media->mediatype;
-                    $size = $media->size;
-                    break 2;
-                }
+
+if ($result->error) {
+    throw new moodle_exception('errorgettingvideo', 'mod_opencast', '', $result->error);
+}
+
+$video = $result->video;
+foreach ($video->publications as $publication) {
+    if ($publication->channel === get_config('mod_opencast', 'download_channel_' . $ocinstanceid)) {
+        foreach ($publication->media as $media) {
+            if ($media->id === $mediaid) {
+                $downloadurl = $media->url;
+                $mimetype = $media->mediatype;
+                $size = $media->size;
+                break 2;
             }
         }
     }
-    if (!$downloadurl) {
-        throw new coding_exception('Publication could not be found!');
-    }
-
-    $filename = $video->title . '.' . pathinfo($downloadurl, PATHINFO_EXTENSION);
-
-    header('Content-Description: Download Video');
-    header('Content-Type: ' . $mimetype);
-    header('Content-Disposition: attachment; filename*=UTF-8\'\'' . rawurlencode($filename));
-    if (is_numeric($size) && $size > 0) {
-        header('Content-Length: ' . $size);
-    }
-
-    if (is_https()) { // HTTPS sites - watch out for IE! KB812935 and KB316431.
-        header('Cache-Control: private, max-age=10, no-transform');
-        header('Expires: ' . gmdate('D, d M Y H:i:s', 0) . ' GMT');
-        header('Pragma: ');
-    } else { // Normal http - prevent caching at all cost.
-        header('Cache-Control: private, must-revalidate, pre-check=0, post-check=0, max-age=0, no-transform');
-        header('Expires: ' . gmdate('D, d M Y H:i:s', 0) . ' GMT');
-        header('Pragma: no-cache');
-    }
-
-    readfile($downloadurl);
-} else {
-    die();
 }
+if (!$downloadurl) {
+    throw new coding_exception('Publication could not be found!');
+}
+
+$filename = $video->title . '.' . pathinfo($downloadurl, PATHINFO_EXTENSION);
+
+header('Content-Description: Download Video');
+header('Content-Type: ' . $mimetype);
+header('Content-Disposition: attachment; filename*=UTF-8\'\'' . rawurlencode($filename));
+if (is_numeric($size) && $size > 0) {
+    header('Content-Length: ' . $size);
+}
+
+if (is_https()) { // HTTPS sites - watch out for IE! KB812935 and KB316431.
+    header('Cache-Control: private, max-age=10, no-transform');
+    header('Expires: ' . gmdate('D, d M Y H:i:s', 0) . ' GMT');
+    header('Pragma: ');
+} else { // Normal http - prevent caching at all cost.
+    header('Cache-Control: private, must-revalidate, pre-check=0, post-check=0, max-age=0, no-transform');
+    header('Expires: ' . gmdate('D, d M Y H:i:s', 0) . ' GMT');
+    header('Pragma: no-cache');
+}
+
+readfile($downloadurl);

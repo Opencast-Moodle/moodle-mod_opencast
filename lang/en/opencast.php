@@ -72,13 +72,13 @@ $string['seriesisempty'] = 'This series is currently empty.';
 $string['settings:api-channel'] = 'Opencast Channel';
 $string['settings:configurl'] = 'URL to Paella config.json';
 $string['settings:configurl_desc'] = 'URL of the config.json used by Paella Player. Can either be a absolute URL or a URL relative to the wwwroot.';
+$string['settings:enforce_download_default'] = 'Enforce download default';
+$string['settings:enforce_download_default_desc'] = 'Enforce the default download setting globally. Teachers cannot overwrite this setting.';
 $string['settings:download-channel'] = 'Opencast Download Channel';
 $string['settings:download-channel_desc'] = 'Opencast publication channel from which the videos are served when downloading them.';
 $string['settings:download-default'] = 'Allow download by default';
 $string['settings:download-default_desc'] = 'If activated, the checkbox for allowing downloads in activity forms is checked by default.';
 $string['settings:download_header'] = 'Student Download Configuration';
-$string['settings:global_download'] = 'Force student download';
-$string['settings:global_download_desc'] = 'Allow globally that students can download videos. Teachers cannot overwrite this setting.';
 $string['settings:themeurl'] = 'URL to Paella theme.json';
 $string['settings:themeurl_desc'] = 'URL of the theme.json used by Paella Player. Can either be a absolute URL or a URL relative to the wwwroot.';
 
