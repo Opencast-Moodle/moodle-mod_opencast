@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+5.0.1 (2024-09-01)
+------------------
+* [CHANGE] #278 Replace global download configuration with enforce download default policy
+
+
 5.0.0 (2024-08-01)
 ------------------
 * [CHANGE] #75 Migrate Settings from block_opencast to tool_opencast
