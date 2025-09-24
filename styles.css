@@ -97,3 +97,16 @@ body.path-mod-opencast .mod-opencast-paella-player {
     height: 100%;
     border: none;
 }
+
+.form-filetypes-descriptions ul {
+    margin-bottom: 0;
+}
+
+.form-filetypes-descriptions li {
+    font-size: 0;
+    display: inline-block;
+}
+
+.form-filetypes-descriptions li .text-dark {
+    font-size: 12px;
+}
