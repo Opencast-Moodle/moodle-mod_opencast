@@ -270,6 +270,19 @@ class renderer extends plugin_renderer_base {
             $mform->disabledIf($field->get_id(), $parentid, 'notchecked');
         }
 
+        $type = PARAM_RAW;
+        switch ($field->get_datatype()) {
+            case 'checkbox':
+            case 'number':
+                $type = PARAM_INT;
+                break;
+            default:
+                $type = PARAM_TEXT;
+                break;
+        }
+
+        $mform->setType($field->get_id(), $type);
+
         if ($children = $field->get_subfields()) {
             foreach ($children as $child) {
                 $this->render_advanced_upload_form_tab_field($mform, $child, $field->get_id());

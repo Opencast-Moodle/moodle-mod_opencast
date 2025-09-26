@@ -74,6 +74,7 @@ if ($mform->is_cancelled()) {
     $fs = get_file_storage();
     $files = $fs->get_area_files($coursecontext->id, 'block_opencast', upload_helper::OC_FILEAREA, $newitemid, '', false);
     $savedvideofile = null;
+    file_clear_draft_area($moduleinstance->uploaddraftitemid);
     if ($files) {
         $savedvideofile = reset($files);
     }

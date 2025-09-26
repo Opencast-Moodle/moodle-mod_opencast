@@ -166,8 +166,13 @@ if ($advanceduploadform->is_cancelled()) {
         if (isset($data->{mod_upload_helper::PRESENTATION_CHUNKUPLOAD_ID})) {
             $presentationfileitemid = $data->{mod_upload_helper::PRESENTATION_CHUNKUPLOAD_ID};
         } else {
-            $storedfilepresentation = $advanceduploadform->save_stored_file('video_presentation', $coursecontext->id,
-                'block_opencast', upload_helper::OC_FILEAREA, $data->video_presentation);
+            $storedfilepresentation = $advanceduploadform->save_stored_file(
+                mod_upload_helper::PRESENTATION_FILEPICKER_ID,
+                $coursecontext->id,
+                'block_opencast',
+                upload_helper::OC_FILEAREA,
+                $data->{mod_upload_helper::PRESENTATION_FILEPICKER_ID}
+            );
             if ($storedfilepresentation) {
                 $presentationfileitemid = $storedfilepresentation->get_itemid();
                 \block_opencast\local\file_deletionmanager::track_draftitemid($coursecontext->id, $presentationfileitemid);

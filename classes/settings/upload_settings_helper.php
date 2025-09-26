@@ -248,10 +248,12 @@ class upload_settings_helper {
             new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname, 'mod_opencast'));
         self::add_heading($settings, $tabname, $ocinstanceid);
 
-        $wfconfighelper = workflowconfiguration_helper::get_instance($ocinstanceid);
         $disabled = false;
-        if (!$wfconfighelper->can_provide_configuration_panel()) {
-            $disabled = true;
+        if (!(defined('BEHAT_UTIL') && BEHAT_UTIL)) {
+            $wfconfighelper = workflowconfiguration_helper::get_instance($ocinstanceid);
+            if (!$wfconfighelper->can_provide_configuration_panel()) {
+                $disabled = true;
+            }
         }
 
         self::add_activation_toggle($settings, $tabname, $ocinstanceid, $disabled);

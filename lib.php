@@ -168,7 +168,7 @@ function opencast_dndupload_handle($uploadinfo) {
     $data->name = get_string('uploadtitledisplay', 'mod_opencast') . " {$uploadinfo->displayname}";
     $data->ocinstanceid = \tool_opencast\local\settings_api::get_default_ocinstance()->id;
     $data->type = \mod_opencast\local\opencasttype::UPLOAD;
-    $data->uploaddraftitemid = $uploadinfo->draftitemid;
+    $data->uploaddraftitemid = (int) $uploadinfo->draftitemid;
     $data->opencastid = 'newfileupload';
     $data->intro = get_string('uploaddefaultintrodisplay', 'mod_opencast');
     $data->introformat = FORMAT_MOODLE;

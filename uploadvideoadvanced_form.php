@@ -30,7 +30,6 @@ require_once($CFG->libdir . '/formslib.php');
 use block_opencast\local\workflowconfiguration_helper;
 use mod_opencast\local\advancedupload_field;
 use mod_opencast\local\upload_helper as mod_upload_helper;
-use html_writer;
 
 /**
  * Advanced Video Upload form.
@@ -67,6 +66,7 @@ class mod_opencast_uploadvideoadvanced_form extends moodleform {
         $renderer->tab_content_start($mform, true);
 
         // Then we generate the tabs.
+        $tabindex = 0;
         foreach ($tabs as $tabid => $tabcontent) {
             // Make sure the first tab is marked activated.
             $renderer->tab_pane_start($mform, $tabid, ($tabindex == 0), true);

@@ -371,7 +371,9 @@ class upload_helper {
             $id = self::TRANSCRIPTION_ID_PREFIX . $lang->key;
             $params = [];
             $attributes['accepted_types'] = $transcriptiontypes;
-            $advanceduploadfield = new advancedupload_field($datatype, $id, ' ', $params, $attributes);
+            $filepickerlabel = ''; // We pass it as empty string, because the parent element has the label.
+            $params['class'] = 'mod-opencast-subtitle-filepicker-' . $lang->key;
+            $advanceduploadfield = new advancedupload_field($datatype, $id, $filepickerlabel, $params, $attributes);
             $parentdatatype = 'checkbox';
             $parentid = $id . self::TRANSCRIPTION_ENABLED_ID_SUFFIX;
             $parentlabel = $label;
@@ -771,6 +773,19 @@ class upload_helper {
      */
     public static function get_simple_form_advanced_mode_block(int $cmid, int $ocinstanceid): ?stdClass {
         global $OUTPUT;
+
+        // Make sure all advanced tabs are enabled.
+        $hasadvancedtab = false;
+        foreach (\mod_opencast\settings\upload_settings_helper::ADVANCED_TAB_ORDERS as $tabname) {
+            if (self::advanced_tab_enabled($ocinstanceid, $tabname)) {
+                $hasadvancedtab = true;
+                break;
+            }
+        }
+        if (!$hasadvancedtab) {
+            return null;
+        }
+
         // Prepare advanced mode block if advanced mode is enabled in settings.
         $advancedmodeurl = new moodle_url('/mod/opencast/uploadvideoadvanced.php',
             ['cmid' => $cmid, 'ocinstanceid' => $ocinstanceid]);

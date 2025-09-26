@@ -165,6 +165,7 @@ $string['uploadjobmissing'] = 'There was an error fetching upload data for this 
 $string['uploadlandinginfo'] = 'You are about to upload video to Opencast, please make sure the required information are entered.';
 $string['uploadmissingfile'] = 'Because of missing file, this module is no longer valid and is now deleted, please try adding another one.';
 $string['uploadmismatchedocinstanceids'] = 'The selected Opencast instance does not match the expected data. Please check your selection and try again.';
+$string['uploadnoadvancedtabs'] = 'No advanced options available. Contact your administrator.';
 $string['uploadnotallowed'] = 'Performing this action is not allowed';
 $string['uploadsaved'] = 'Video upload successful. The video is scheduled to be transferred to Opencast now, for more info please go to <a target="_blank" href="{$a}">Opencast Videos</a>';
 $string['uploadtitledisplay'] = 'Upload video:';
