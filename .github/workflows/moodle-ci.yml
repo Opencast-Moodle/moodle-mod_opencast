@@ -11,6 +11,9 @@ jobs:
     uses: Opencast-Moodle/moodle-workflows-opencast/.github/workflows/moodle-ci.yml@main
     with:
       requires-tool-plugin: true
-      branch-tool-plugin: MOODLE_405_STABLE
+      # Temporarily 405-mod-issue-77 branch is selected to proceed with the tests.
+      # This needs to be set back to MOODLE_405_STABLE,
+      # as soon as https://github.com/Opencast-Moodle/moodle-tool_opencast/pull/102 is merged into MOODLE_405_STABLE
+      branch-tool-plugin: 405-mod-issue-77
       requires-block-plugin: true
       branch-block-plugin: MOODLE_405_STABLE
