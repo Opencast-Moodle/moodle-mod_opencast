@@ -12,3 +12,5 @@ jobs:
     with:
       requires-tool-plugin: true
       branch-tool-plugin: MOODLE_405_STABLE
+      requires-block-plugin: true
+      branch-block-plugin: MOODLE_405_STABLE
