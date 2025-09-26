@@ -26,8 +26,8 @@
 
 require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
 
+use block_opencast\setting_default_manager;
 use tool_opencast\seriesmapping;
-
 use Behat\Gherkin\Node\TableNode as TableNode,
     Behat\Mink\Exception\ExpectationException as ExpectationException,
     Behat\Mink\Exception\DriverException as DriverException,
@@ -215,5 +215,13 @@ class behat_mod_opencast extends behat_base {
 
         // We wait for all the JS to finish as it is performing an action.
         $this->getSession()->wait(self::get_timeout(), self::PAGE_READY_JS);
+    }
+
+    /**
+     * Setup default settings for the block
+     * @Given /^I make sure the default settings for opencast plugins are set$/
+     */
+    public function i_make_sure_the_default_settings_for_opencast_plugins_are_set() {
+        setting_default_manager::init_regirstered_defaults(1);
     }
 }

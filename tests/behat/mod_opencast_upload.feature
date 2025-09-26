@@ -14,6 +14,7 @@ Feature: Easy And Advanced Upload feature via drag and drop in Opencast Video Pr
     And the following "course enrolments" exist:
       | user     | course | role                   |
       | teacher1 | C1     | editingteacher         |
+    And I make sure the default settings for opencast plugins are set
     And the following config values are set as admin:
       | config                        | value                                                             | plugin         |
       | apiurl_1                      | https://stable.opencast.org                                       | tool_opencast  |
