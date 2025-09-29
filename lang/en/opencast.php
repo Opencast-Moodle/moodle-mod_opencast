@@ -136,7 +136,6 @@ $string['uploadedvideoisbeingprocesses'] = 'This video ({$a}) is already uploade
 $string['uploadform_advanced_mode_desc'] = 'If you are looking for more upload options: {$a}';
 $string['uploadform_advanced_mode_link_text'] = 'Go to advanced mode page';
 $string['uploadform_advanced_mode_title'] = 'Advanced Mode';
-$string['uploadform_flavor_label'] = 'Use the video for the flavor of:';
 $string['uploadform_inplace_edit_checkbox_false_hint'] = 'Not accepted';
 $string['uploadform_inplace_edit_checkbox_hint'] = 'Make changes';
 $string['uploadform_inplace_edit_checkbox_label'] = 'Edit';

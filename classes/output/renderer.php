@@ -115,7 +115,6 @@ class renderer extends plugin_renderer_base {
             $li = html_writer::start_tag('li',
                 [
                     'class' => implode(' ', $liclasses),
-                    'role' => 'presentation',
                 ]
             );
 
@@ -193,9 +192,9 @@ class renderer extends plugin_renderer_base {
      * @return void
      */
     public function tab_pane_start(MoodleQuickForm &$mform, string $id, bool $active = false, bool $withcard = false): void {
-        $classes = ['tab-pane'];
+        $classes = ['tab-pane fade'];
         if ($active) {
-            $classes[] = 'active';
+            $classes[] = 'show active';
         }
         if ($withcard) {
             $classes[] = 'card-body';
