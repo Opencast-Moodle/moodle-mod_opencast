@@ -262,7 +262,8 @@ class paella_transform {
                 if (strpos($type2, 'vtt+') !== false) {
                     list($format, $lang) = explode('+', $type2, 2);
                     $text = $lang;
-                } else if (in_array($type2, ['delivery', 'prepared', 'preview', 'vtt']) && !empty($media->tags)) { // Opencast 15 coverage.
+                } else if (in_array($type2, ['delivery', 'prepared', 'preview', 'vtt', 'source']) && !empty($media->tags)) {
+                    // Opencast 15 coverage.
                     $tagdataarr = [];
                     foreach ($media->tags as $tag) {
                         // The safety checker.
