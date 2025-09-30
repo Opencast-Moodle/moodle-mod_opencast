@@ -23,45 +23,102 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_opencast\settings\mod_opencast_admin_settingspage_tabs;
+use mod_opencast\settings\upload_settings_helper;
+
 defined('MOODLE_INTERNAL') || die();
 
+
 if ($hassiteconfig) {
+    global $ADMIN;
+
+    $settings = null;
+
+    $settingscategory = new admin_category('mod_opencast', new lang_string('pluginname', 'mod_opencast'));
+    $ADMIN->add('modsettings', $settingscategory);
+
     $ocinstances = \tool_opencast\local\settings_api::get_ocinstances();
 
-    foreach ($ocinstances as $ocinstance) {
-        $settings->add(
-            new admin_setting_heading('mod_opencast/settings_' . $ocinstance->id, $ocinstance->name, ''));
+    $hasmultitenancy = count($ocinstances) > 1;
 
-        $settings->add(new admin_setting_configtext('mod_opencast/channel_' . $ocinstance->id,
-            new lang_string('settings:api-channel', 'mod_opencast'), '', 'api',
-            PARAM_ALPHANUMEXT));
+    $modsettingopencastsubcat = 'mod_opencast';
 
+    if (!$ADMIN->fulltree) {
+        foreach ($ocinstances as $ocinstance) {
+            if ($hasmultitenancy) {
+                $instancecategory = new admin_category('mod_opencast_instance_' . $ocinstance->id, $ocinstance->name);
+                $ADMIN->add('mod_opencast', $instancecategory);
+                $modsettingopencastsubcat = 'mod_opencast_instance_' . $ocinstance->id;
+            }
+            // General Settings.
+            $settings = new admin_settingpage('mod_opencast_general_' . $ocinstance->id,
+                new lang_string('settings:general_header', 'mod_opencast'));
+            $ADMIN->add($modsettingopencastsubcat, $settings);
 
-        $settings->add(new admin_setting_configtext('mod_opencast/configurl_' . $ocinstance->id,
-            new lang_string('settings:configurl', 'mod_opencast'),
-            new lang_string('settings:configurl_desc', 'mod_opencast'), '/mod/opencast/config.json'));
+            // Student Download Settings.
+            $settings = new admin_settingpage('mod_opencast_student_download_' . $ocinstance->id,
+                new lang_string('settings:download_header', 'mod_opencast'));
+            $ADMIN->add($modsettingopencastsubcat, $settings);
 
-        $settings->add(new admin_setting_configtext('mod_opencast/themeurl_' . $ocinstance->id,
-                new lang_string('settings:themeurl', 'mod_opencast'),
-                new lang_string('settings:themeurl_desc', 'mod_opencast'),
-                '/mod/opencast/paella/default_theme/theme.json'));
+            // Upload Settings.
+            $settings = new admin_settingpage('mod_opencast_upload_' . $ocinstance->id,
+                new lang_string('settings:upload_header', 'mod_opencast'));
+            $ADMIN->add($modsettingopencastsubcat, $settings);
+        }
+    } else {
+        foreach ($ocinstances as $ocinstance) {
+            if ($hasmultitenancy) {
+                $instancecategory = new admin_category('mod_opencast_instance_' . $ocinstance->id, $ocinstance->name);
+                $ADMIN->add('mod_opencast', $instancecategory);
+                $modsettingopencastsubcat = 'mod_opencast_instance_' . $ocinstance->id;
+            }
 
-        $settings->add(
-            new admin_setting_heading('mod_opencast/download_' . $ocinstance->id,
-                $ocinstance->name . ': ' . get_string('settings:download_header', 'mod_opencast'),
-                ''));
+            // General Settings.
+            $generalsettings = new admin_settingpage('mod_opencast_general_' . $ocinstance->id,
+                new lang_string('settings:general_header', 'mod_opencast'));
+            $ADMIN->add($modsettingopencastsubcat, $generalsettings);
 
-        $settings->add(new admin_setting_configtext('mod_opencast/download_channel_' . $ocinstance->id,
-            new lang_string('settings:download-channel', 'mod_opencast'),
-            new lang_string('settings:download-channel_desc', 'mod_opencast'), 'api',
-            PARAM_ALPHANUMEXT));
+            $generalsettings->add(new admin_setting_configtext('mod_opencast/channel_' . $ocinstance->id,
+                new lang_string('settings:api-channel', 'mod_opencast'), '', 'api',
+                PARAM_ALPHANUMEXT));
 
-        $settings->add(new admin_setting_configcheckbox('mod_opencast/download_default_' . $ocinstance->id,
-            new lang_string('settings:download-default', 'mod_opencast'),
-            new lang_string('settings:download-default_desc', 'mod_opencast'), 0));
+            $generalsettings->add(new admin_setting_configtext('mod_opencast/configurl_' . $ocinstance->id,
+                new lang_string('settings:configurl', 'mod_opencast'),
+                new lang_string('settings:configurl_desc', 'mod_opencast'), '/mod/opencast/config.json'));
 
-        $settings->add(new admin_setting_configcheckbox('mod_opencast/enforce_download_default_' . $ocinstance->id,
+            $generalsettings->add(new admin_setting_configtext('mod_opencast/themeurl_' . $ocinstance->id,
+                    new lang_string('settings:themeurl', 'mod_opencast'),
+                    new lang_string('settings:themeurl_desc', 'mod_opencast'),
+                    '/mod/opencast/paella/default_theme/theme.json'));
+
+            // Student Download Settings.
+            $studentdownloadsettings = new admin_settingpage('mod_opencast_student_download_' . $ocinstance->id,
+                new lang_string('settings:download_header', 'mod_opencast'));
+            $ADMIN->add($modsettingopencastsubcat, $studentdownloadsettings);
+
+            $studentdownloadsettings->add(new admin_setting_configtext('mod_opencast/download_channel_' . $ocinstance->id,
+                new lang_string('settings:download-channel', 'mod_opencast'),
+                new lang_string('settings:download-channel_desc', 'mod_opencast'), 'api',
+                PARAM_ALPHANUMEXT));
+
+            $studentdownloadsettings->add(new admin_setting_configcheckbox('mod_opencast/download_default_' . $ocinstance->id,
+                new lang_string('settings:download-default', 'mod_opencast'),
+                new lang_string('settings:download-default_desc', 'mod_opencast'), 0));
+
+            $studentdownloadsettings->add(new admin_setting_configcheckbox(
+                'mod_opencast/enforce_download_default_' . $ocinstance->id,
                 new lang_string('settings:enforce_download_default', 'mod_opencast'),
                 new lang_string('settings:enforce_download_default_desc', 'mod_opencast'), 0));
+
+            // Upload Settings with tabs.
+            $uploadtabssetting = new mod_opencast_admin_settingspage_tabs('mod_opencast_upload_' . $ocinstance->id,
+                new lang_string('settings:upload_header', 'mod_opencast'));
+            $ADMIN->add($modsettingopencastsubcat, $uploadtabssetting);
+
+            upload_settings_helper::define_upload_tabs_settings($uploadtabssetting, $ocinstance->id);
+
+        }
     }
 }
+
+$settings = null; // We do not want standard settings link.
