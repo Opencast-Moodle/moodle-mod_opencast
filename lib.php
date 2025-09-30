@@ -55,10 +55,9 @@ function opencast_supports($feature) {
  * number of the instance.
  *
  * @param object $moduleinstance An object from the form.
- * @param mod_opencast_mod_form $mform The form.
  * @return int The id of the newly inserted record.
  */
-function opencast_add_instance($moduleinstance, $mform = null) {
+function opencast_add_instance($moduleinstance) {
     global $DB;
 
     $moduleinstance->timecreated = time();
@@ -82,10 +81,9 @@ function opencast_add_instance($moduleinstance, $mform = null) {
  * this function will update an existing instance with new data.
  *
  * @param object $moduleinstance An object from the form in mod_form.php.
- * @param mod_opencast_mod_form $mform The form.
  * @return bool True if successful, false otherwise.
  */
-function opencast_update_instance($moduleinstance, $mform = null) {
+function opencast_update_instance($moduleinstance) {
     global $DB;
 
     $moduleinstance->timemodified = time();
@@ -170,12 +168,64 @@ function opencast_dndupload_handle($uploadinfo) {
     $data->name = get_string('uploadtitledisplay', 'mod_opencast') . " {$uploadinfo->displayname}";
     $data->ocinstanceid = \tool_opencast\local\settings_api::get_default_ocinstance()->id;
     $data->type = \mod_opencast\local\opencasttype::UPLOAD;
-    $data->uploaddraftitemid = $uploadinfo->draftitemid;
+    $data->uploaddraftitemid = (int) $uploadinfo->draftitemid;
     $data->opencastid = 'newfileupload';
     $data->intro = get_string('uploaddefaultintrodisplay', 'mod_opencast');
     $data->introformat = FORMAT_MOODLE;
     $data->coursemodule = $uploadinfo->coursemodule;
 
+    // Get the upload options according to opencast instances.
+    $defaultuploadoptions = \mod_opencast\local\upload_helper::get_default_upload_options(
+        $uploadinfo->displayname, $uploadinfo->course->id, true);
+    $data->uploadoptionsjson = $defaultuploadoptions;
+
     $data->id = opencast_add_instance($data, null);
     return $data->id ? $data->id : false;
+}
+
+/**
+ * Manage inplace editable saves.
+ *
+ * @param string $itemtype The type of item.
+ * @param int $itemid The ID of the item.
+ * @param mixed $newvalue The new value
+ * @return \core\output\inplace_editable
+ */
+function mod_opencast_inplace_editable($itemtype, $itemid, $newvalue) {
+    $context = \context_system::instance();
+    \core_external\external_api::validate_context($context);
+    require_capability('block/opencast:addvideo', $context);
+
+    switch ($itemtype) {
+        case 'inplace_edit_text_metadata':
+            return \mod_opencast\output\inplace_edit_text_metadata::update($itemid, $newvalue);
+            break;
+        case 'inplace_edit_select_metadata':
+            return \mod_opencast\output\inplace_edit_select_metadata::update($itemid, $newvalue);
+            break;
+        case 'inplace_edit_toggle_visibility':
+            return \mod_opencast\output\inplace_edit_toggle_visibility::update($itemid, $newvalue);
+            break;
+        case 'inplace_edit_checkbox_metadata':
+            return \mod_opencast\output\inplace_edit_checkbox_metadata::update($itemid, $newvalue);
+            break;
+        case 'inplace_edit_series_select':
+            return \mod_opencast\output\inplace_edit_series_select::update($itemid, $newvalue);
+            break;
+        case 'inplace_edit_ocinstance_select':
+            return \mod_opencast\output\inplace_edit_ocinstance_select::update($itemid, $newvalue);
+            break;
+        case 'inplace_edit_checkbox_processing':
+            return \mod_opencast\output\inplace_edit_checkbox_processing::update($itemid, $newvalue);
+            break;
+        case 'inplace_edit_text_processing':
+            return \mod_opencast\output\inplace_edit_text_processing::update($itemid, $newvalue);
+            break;
+        case 'inplace_edit_autocomplete_metadata':
+            return \mod_opencast\output\inplace_edit_autocomplete_metadata::update($itemid, $newvalue);
+            break;
+        default:
+            break;
+    }
+    return null;
 }
