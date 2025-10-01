@@ -48,6 +48,8 @@ use mod_opencast\output\inplace_edit_checkbox_processing;
  */
 class mod_opencast_uploadvideo_form extends moodleform {
 
+    /** @var array Required metadata fields to verify */
+    private $requiredmetadatafields = [];
     /**
      * Defines forms elements
      */
@@ -55,8 +57,8 @@ class mod_opencast_uploadvideo_form extends moodleform {
         $cmid = $this->_customdata['cmid'];
         $ocmoduleinstance = $this->_customdata['moduleinstance'];
         $uploadoptions = json_decode($ocmoduleinstance->uploadoptionsjson);
-        $formdata = mod_upload_helper::get_simple_upload_form_data($ocmoduleinstance, $cmid);
-        $ocinstanceformdata = $formdata['ocinstanceformdata'];
+        $simpleuploaddata = mod_upload_helper::get_simple_upload_form_data($ocmoduleinstance, $cmid);
+        $ocinstanceformdata = $simpleuploaddata['ocinstanceformdata'];
         $defaultocinstance = (int) $uploadoptions->selectedocinstanceid;
         $ocinstancesoptions = $uploadoptions->options;
 
@@ -161,6 +163,12 @@ class mod_opencast_uploadvideo_form extends moodleform {
                             $inplaceobjhtml
                         );
                         $this->set_element_toggles($mform, $elementid, $formdata->ocinstanceid);
+                    }
+
+                    // We record the required metadata fields to verify them later on.
+                    // In Simple Upload Page, only required metadata fields are shown, but we check nontheless.
+                    if ($field->required) {
+                        $this->requiredmetadatafields[$formdata->ocinstanceid][] = $field->name;
                     }
                 }
             }
@@ -276,8 +284,33 @@ class mod_opencast_uploadvideo_form extends moodleform {
      * @return array Validation results
      */
     public function validation($data, $files) {
+        global $DB;
         // Ask parent class for errors first.
         $errors = parent::validation($data, $files);
+
+        $ocinstanceid = $data['ocinstance'];
+        $cmid = $data['cmid'];
+
+        // Now we get the moulde instance from the database, to read the inplace values.
+        $cm = get_coursemodule_from_id('opencast', $cmid, 0, false, MUST_EXIST);
+        $moduleinstance = $DB->get_record('opencast', ['id' => $cm->instance], '*', MUST_EXIST);
+        $alluploadoptions = json_decode($moduleinstance->uploadoptionsjson);
+
+        if ((int) $alluploadoptions->selectedocinstanceid !== (int) $ocinstanceid) {
+            $errors['ocinstanceselect'] = get_string('uploadmismatchedocinstanceids', 'mod_opencast');
+        }
+
+        $recordedmetadata = $alluploadoptions->options->{$ocinstanceid}->metadata ?? [];
+        if (!empty($this->requiredmetadatafields)  && isset($this->requiredmetadatafields[$ocinstanceid]) &&
+            !empty($recordedmetadata)) {
+            foreach ($this->requiredmetadatafields[$ocinstanceid] as $fieldname) {
+                if (!isset($recordedmetadata->{$fieldname}) || empty($recordedmetadata->{$fieldname}->value)) {
+                    $elementid = "{$fieldname}_{$ocinstanceid}";
+                    $errors[$elementid] = get_string('requiredelement', 'form');
+                }
+            }
+        }
+
         // Return errors.
         return $errors;
     }
