@@ -54,6 +54,7 @@ class mod_opencast_uploadvideo_form extends moodleform {
      * Defines forms elements
      */
     public function definition() {
+        global $PAGE;
         $cmid = $this->_customdata['cmid'];
         $ocmoduleinstance = $this->_customdata['moduleinstance'];
         $uploadoptions = json_decode($ocmoduleinstance->uploadoptionsjson);
@@ -61,6 +62,7 @@ class mod_opencast_uploadvideo_form extends moodleform {
         $ocinstanceformdata = $simpleuploaddata['ocinstanceformdata'];
         $defaultocinstance = (int) $uploadoptions->selectedocinstanceid;
         $ocinstancesoptions = $uploadoptions->options;
+        $mainrenderer = $PAGE->get_renderer('tool_opencast');
 
         $mform = $this->_form;
 
@@ -116,7 +118,7 @@ class mod_opencast_uploadvideo_form extends moodleform {
                 foreach ($formdata->metadatacatalogs as $field) {
                     $elementid = "{$field->name}_{$formdata->ocinstanceid}";
                     $value = (isset($field->userdefault) ? $field->userdefault : null);
-                    $lbltext = $this->try_get_string($field->name, 'block_opencast');
+                    $lbltext = $this->try_get_string($field->name, 'tool_opencast');
 
                     if (!empty($ocinstancesoptions?->{$formdata->ocinstanceid}?->metadata?->{$field->name}->value)) {
                         $value = $ocinstancesoptions->{$formdata->ocinstanceid}->metadata->{$field->name}->value;
@@ -156,13 +158,20 @@ class mod_opencast_uploadvideo_form extends moodleform {
                     }
 
                     if (!empty($inplaceobjhtml)) {
-                        $mform->addElement(
+                        $element = $mform->addElement(
                             'static',
                             $elementid,
                             $lbltext,
                             $inplaceobjhtml
                         );
                         $this->set_element_toggles($mform, $elementid, $formdata->ocinstanceid);
+
+                        // Check if the description is set for the field, to display it as help icon.
+                        if (isset($field->description) && !empty($field->description)) {
+                            // Use the renderer to generate a help icon with custom text.
+                            $element->_helpbutton = $mainrenderer->render_help_icon_with_custom_text(
+                                $this->try_get_string($field->name, 'tool_opencast'), $field->description);
+                        }
                     }
 
                     // We record the required metadata fields to verify them later on.
@@ -187,12 +196,14 @@ class mod_opencast_uploadvideo_form extends moodleform {
                 }
                 $inplaceobj = new inplace_edit_toggle_visibility($inplvisibilitydata);
                 $inplaceobjhtml = mod_upload_helper::render_inplace_editable_object($inplaceobj);
-                $mform->addElement(
+                $element = $mform->addElement(
                     'static',
                     $elementid,
                     $lbltext,
                     $inplaceobjhtml
                 );
+                $visibilityhelp = get_string('uploadform_visibility_help', 'mod_opencast');
+                $element->_helpbutton = $mainrenderer->render_help_icon_with_custom_text($lbltext, $visibilityhelp);
                 $this->set_element_toggles($mform, $elementid, $formdata->ocinstanceid);
             }
 
@@ -229,11 +240,15 @@ class mod_opencast_uploadvideo_form extends moodleform {
                         }
                         if (!empty($inplaceobj)) {
                             $inplaceobjhtml = mod_upload_helper::render_inplace_editable_object($inplaceobj);
-                            $mform->addElement(
+                            $element = $mform->addElement(
                                 'static',
                                 $elementid,
                                 $lbltext,
                                 $inplaceobjhtml
+                            );
+                            $processingoptionsdesc = get_string('uploadform_processing_options_general_help', 'mod_opencast');
+                            $element->_helpbutton = $mainrenderer->render_help_icon_with_custom_text(
+                                $lbltext, $processingoptionsdesc
                             );
                             $this->set_element_toggles($mform, $elementid, $formdata->ocinstanceid);
                         }
@@ -251,6 +266,8 @@ class mod_opencast_uploadvideo_form extends moodleform {
 
         $mform->addElement('hidden', 'cmid', $cmid);
         $mform->setType('cmid', PARAM_INT);
+
+        $mform->setAttributes(['id' => 'mod-opencast-simple-upload-page'] + $mform->getAttributes());
 
         $mform->closeHeaderBefore('buttonar');
         $this->add_action_buttons(true, get_string('uploadform_submit', 'mod_opencast'));
