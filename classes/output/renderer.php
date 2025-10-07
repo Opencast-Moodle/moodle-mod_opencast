@@ -236,8 +236,7 @@ class renderer extends plugin_renderer_base {
     public function render_advanced_upload_form_tab_field(
         MoodleQuickForm &$mform, advancedupload_field $field, ?string $parentid = null
     ): void {
-        global $CFG, $PAGE;
-        $mainrenderer = $PAGE->get_renderer('block_opencast');
+        global $CFG;
         $attributes = $field->get_attributes();
         $setadvanced = false;
         if (isset($attributes['set_advanced'])) {
@@ -257,6 +256,7 @@ class renderer extends plugin_renderer_base {
             $attributes
         );
         if (!empty($field->get_description())) {
+            $mainrenderer = $this->page->get_renderer('block_opencast');
             $element->_helpbutton = $mainrenderer->render_help_icon_with_custom_text(
                 $field->get_label(), $field->get_description()
             );
