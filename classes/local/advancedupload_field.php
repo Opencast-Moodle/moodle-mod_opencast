@@ -78,6 +78,11 @@ class advancedupload_field {
     private $subfields = [];
 
     /**
+     * @var string Field description.
+     */
+    private $description = null;
+
+    /**
      * Constructor to set field properties.
      *
      * @param string $datatype
@@ -250,5 +255,23 @@ class advancedupload_field {
      */
     public function get_subfields(): array {
         return $this->subfields;
+    }
+
+    /**
+     * Get the field description.
+     *
+     * @return ?string
+     */
+    public function get_description(): ?string {
+        return $this->description;
+    }
+
+    /**
+     * Set the field description.
+     *
+     * @param string $description
+     */
+    public function set_description(string $description): void {
+        $this->description = $description;
     }
 }
