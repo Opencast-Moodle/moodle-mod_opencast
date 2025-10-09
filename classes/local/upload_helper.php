@@ -188,7 +188,12 @@ class upload_helper {
         if (!empty($additionalattr)) {
             $attributes = array_merge($additionalattr, $attributes);
         }
-        return new advancedupload_field($datatype, $id, $label, $params, $attributes, $default, $required);
+        $advanceduploadfield = new advancedupload_field($datatype, $id, $label, $params, $attributes, $default, $required);
+
+        if (!empty($field->description)) {
+            $advanceduploadfield->set_description($field->description);
+        }
+        return $advanceduploadfield;
     }
 
     /**

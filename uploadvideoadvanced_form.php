@@ -71,8 +71,13 @@ class mod_opencast_uploadvideoadvanced_form extends moodleform {
             // Make sure the first tab is marked activated.
             $renderer->tab_pane_start($mform, $tabid, ($tabindex == 0), true);
 
-            // Here we look for the values already set in the uploadoptionsjson.
+            // Here we add some helper texts and information regarding each tab if the string exists.
+            $tabdescriptionstringid = "uploadform_tab_{$tabid}_desc";
+            if (get_string_manager()->string_exists($tabdescriptionstringid, 'mod_opencast')) {
+                $renderer->render_tab_description($mform, get_string($tabdescriptionstringid, 'mod_opencast'));
+            }
 
+            // Here we look for the values already set in the uploadoptionsjson.
             foreach ($tabcontent as $field) {
                 // Add default title to the metadata field when it is set.
                 if ($field->get_id() === mod_upload_helper::METADATA_ID_PREFIX . 'title') {

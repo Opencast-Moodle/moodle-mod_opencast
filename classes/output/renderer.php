@@ -248,13 +248,19 @@ class renderer extends plugin_renderer_base {
                 "$CFG->dirroot/local/chunkupload/classes/chunkupload_form_element.php",
                 'local_chunkupload\chunkupload_form_element');
         }
-        $mform->addElement(
+        $element = $mform->addElement(
             $field->get_datatype(),
             $field->get_id(),
             $field->get_label(),
             $field->get_params(),
             $attributes
         );
+        if (!empty($field->get_description())) {
+            $mainrenderer = $this->page->get_renderer('block_opencast');
+            $element->_helpbutton = $mainrenderer->render_help_icon_with_custom_text(
+                $field->get_label(), $field->get_description()
+            );
+        }
         if (!empty($field->get_default())) {
             $mform->setDefault($field->get_id(), $field->get_default());
         }
@@ -287,5 +293,19 @@ class renderer extends plugin_renderer_base {
                 $this->render_advanced_upload_form_tab_field($mform, $child, $field->get_id());
             }
         }
+    }
+
+    /**
+     * Renders a description for a tab in the advanced upload form.
+     *
+     * Adds the provided description as a paragraph element to the Moodle form.
+     *
+     * @param MoodleQuickForm $mform The Moodle form object.
+     * @param string $description The description text to display.
+     * @return void
+     */
+    public function render_tab_description(MoodleQuickForm &$mform, string $description): void {
+        $tabdescription = html_writer::tag('p', $description, ['class' => 'pb-2']);
+        $mform->addElement('html', $tabdescription);
     }
 }
