@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+4.5.5 (2025-10-24)
+------------------
+* [FEATURE] Increase opencast coverage in ci
+* [FEATURE] Introducing easy upload
+* [FEATURE] Easy upload: Providing extra information for the fields and tabs
+* [CHANGE]  Easy upload: Adjust form verification in simple page
+
+
 4.5.4 (2025-08-01)
 ------------------
 * [FEATURE] #79 Pass event ID to Paella and update dependencies

@@ -138,7 +138,7 @@ function xmldb_opencast_upgrade($oldversion) {
     }
 
     // In this upgrade, we add upload config columns to opencast table, in order to record inline editable values.
-    if ($oldversion < 2024111109) {
+    if ($oldversion < 2024111105) {
 
         // Define field uploadoptionsjson to be added to opencast.
         $table = new xmldb_table('opencast');
@@ -150,7 +150,7 @@ function xmldb_opencast_upgrade($oldversion) {
         }
 
         // Opencast savepoint reached.
-        upgrade_mod_savepoint(true, 2024111109, 'opencast');
+        upgrade_mod_savepoint(true, 2024111105, 'opencast');
     }
 
     return true;
