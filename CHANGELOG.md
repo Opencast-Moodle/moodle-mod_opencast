@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+5.0.2 (2024-10-24)
+------------------
+* [FEATURE] Easy upload for v5.x with behat test
+* [FEATURE] Providing extra information for the fields and tabs for v5.x
+* [CHANGE] Adjust form verification in simple page for v5.x
+* [CHANGE] Adjust ci config, bump opencast coverage
+
+
 5.0.1 (2024-09-01)
 ------------------
 * [CHANGE] #278 Replace global download configuration with enforce download default policy
