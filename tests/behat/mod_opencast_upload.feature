@@ -164,7 +164,6 @@ Feature: Easy And Advanced Upload feature via drag and drop in Opencast Video Pr
     And I click on "#visibility-tab" "css_element"
     And I set the field "Visibility" to "Prevent any student from accessing the video"
     And I click on "#processing-tab" "css_element"
-    And the "Straight to publishing" checkbox should be checked
     And I click on "#subtitle-tab" "css_element"
     And I click on "English" "checkbox"
     And I upload "mod/opencast/tests/fixtures/en.vtt" subtitle file for "en"
