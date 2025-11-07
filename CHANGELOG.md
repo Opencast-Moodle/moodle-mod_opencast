@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+5.0.4 (2025-11-07)
+------------------
+* [FIXED] Gracefully handle exception in the setting when the tool plugin is not ready yet
+
+
 5.0.3 (2025-11-07)
 ------------------
 * [FIXED] Make sure no real api instance is requested and process also during phpunit init
