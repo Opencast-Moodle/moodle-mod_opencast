@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+4.5.6 (2025-11-07)
+------------------
+[FIXED] Make sure no real api instance is requested and process also during phpunit init
+
+
 4.5.5 (2025-10-24)
 ------------------
 * [FEATURE] Increase opencast coverage in ci
