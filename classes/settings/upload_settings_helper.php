@@ -249,7 +249,7 @@ class upload_settings_helper {
         self::add_heading($settings, $tabname, $ocinstanceid);
 
         $disabled = false;
-        if (!(defined('BEHAT_UTIL') && BEHAT_UTIL)) {
+        if (!(defined('BEHAT_UTIL') && BEHAT_UTIL) && !(defined('PHPUNIT_UTIL') && PHPUNIT_UTIL)) {
             $wfconfighelper = workflowconfiguration_helper::get_instance($ocinstanceid);
             if (!$wfconfighelper->can_provide_configuration_panel()) {
                 $disabled = true;
