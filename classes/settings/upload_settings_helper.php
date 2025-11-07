@@ -249,10 +249,15 @@ class upload_settings_helper {
         self::add_heading($settings, $tabname, $ocinstanceid);
 
         $disabled = false;
-        if (!(defined('BEHAT_UTIL') && BEHAT_UTIL) && !(defined('PHPUNIT_UTIL') && PHPUNIT_UTIL)) {
-            $wfconfighelper = workflowconfiguration_helper::get_instance($ocinstanceid);
-            if (!$wfconfighelper->can_provide_configuration_panel()) {
-                $disabled = true;
+        if (!(defined('BEHAT_UTIL') && BEHAT_UTIL) && !(defined('PHPUNIT_UTIL') && PHPUNIT_UTIL) && !during_initial_install()) {
+            try {
+                $wfconfighelper = workflowconfiguration_helper::get_instance($ocinstanceid);
+                if (!$wfconfighelper->can_provide_configuration_panel()) {
+                    $disabled = true;
+                }
+            } catch (\Throwable $e) {
+                // We want this to NOT throw error at this point, when it does we just disable the feature.
+                $disabled = false;
             }
         }
 
