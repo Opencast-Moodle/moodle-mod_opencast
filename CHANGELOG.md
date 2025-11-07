@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+5.0.3 (2025-11-07)
+------------------
+* [FIXED] Make sure no real api instance is requested and process also during phpunit init
+
+
 5.0.2 (2024-10-24)
 ------------------
 * [FEATURE] Easy upload for v5.x with behat test
