@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+4.5.8 (2025-12-04)
+------------------
+[CHANGE] Add video canvas plugin preventing the context menu on right-click PR #81
+
+
 4.5.7 (2025-11-07)
 ------------------
 [FIXED] Gracefully handle exception in the setting when the tool plugin is not ready yet
