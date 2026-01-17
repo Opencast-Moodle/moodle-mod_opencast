@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+5.1.0 (2026-01-17)
+------------------
+* Moodle 5.1 compatible version
+
+
 5.0.4 (2025-11-07)
 ------------------
 * [FIXED] Gracefully handle exception in the setting when the tool plugin is not ready yet
