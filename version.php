@@ -33,4 +33,5 @@ $plugin->supported = [405, 405];
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = [
     'tool_opencast' => 2024111104,
+    'block_opencast' => 2024111100,
 ];
