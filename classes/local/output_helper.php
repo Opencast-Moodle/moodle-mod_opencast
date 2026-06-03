@@ -30,6 +30,7 @@ use DateTime;
 use mod_opencast\output\renderer;
 use pix_icon;
 use stdClass;
+use tool_opencast\local\api;
 
 /**
  * Helper for generating page output for series and episodes.
@@ -137,6 +138,9 @@ class output_helper {
 
         // Find aspect-ratio of the first video track.
         $wrapperattrs = [];
+        $resolution = null;
+        $jwtiframewidth = '100%';
+        $jwtiframeheight = 'auto';
         if (!empty($data['streams']) && !empty($data['streams'][0]['sources'])) {
             $sources = $data['streams'][0]['sources'];
             $res = $sources[array_key_first($sources)][0]['res'];
@@ -144,17 +148,40 @@ class output_helper {
             $wrapperattrs['style'] = '--aspect-ratio:' . $resolution;
         }
 
-        echo \html_writer::start_div('player-wrapper', $wrapperattrs);
+        $api = api::get_instance($ocinstanceid, [], [], false, false);
+        $classes = [
+            'wrapper' => ['player-wrapper'],
+            'iframe' => ['mod-opencast-paella-player'],
+        ];
+        $jwtiframehtml = '';
+        if ($api?->jwtservice?->is_enabled() ?? false) {
+            $baseurl = $api->jwtservice->extract_base_url_from_paella_streams_data($data['streams'], $ocinstanceid);
+            $jwtiframehtml = $api->jwtservice->get_jwt_iframe_player_html(
+                $ocinstanceid,
+                $episodeid,
+                $classes,
+                $baseurl,
+                $resolution,
+                $jwtiframewidth,
+                $jwtiframeheight
+            );
+        }
 
-        echo '<iframe src="player.html" id="player-iframe" class="mod-opencast-paella-player" allowfullscreen"></iframe>';
-        echo \html_writer::end_div();
+        if ($jwtiframehtml) {
+            echo $jwtiframehtml;
+        } else {
+            echo \html_writer::start_div('player-wrapper', $wrapperattrs);
 
-        $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init',
-                [$configurl->out(false), $themeurl->out(false)]);
+            echo '<iframe src="player.html" id="player-iframe" class="mod-opencast-paella-player" allowfullscreen"></iframe>';
+            echo \html_writer::end_div();
 
-        $moduleinstance = $DB->get_record('opencast', ['id' => $modinstanceid], '*', MUST_EXIST);
-        if (get_config('mod_opencast', 'global_download_' . $ocinstanceid) || $moduleinstance->allowdownload) {
-            self::output_download_menu($ocinstanceid, $episodeid, $modinstanceid);
+            $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init',
+                    [$configurl->out(false), $themeurl->out(false)]);
+
+            $moduleinstance = $DB->get_record('opencast', ['id' => $modinstanceid], '*', MUST_EXIST);
+            if (get_config('mod_opencast', 'global_download_' . $ocinstanceid) || $moduleinstance->allowdownload) {
+                self::output_download_menu($ocinstanceid, $episodeid, $modinstanceid);
+            }
         }
 
         echo $OUTPUT->footer();
