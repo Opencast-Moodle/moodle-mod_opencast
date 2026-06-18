@@ -30,6 +30,7 @@ use DateTime;
 use mod_opencast\output\renderer;
 use pix_icon;
 use stdClass;
+use tool_opencast\local\api;
 
 /**
  * Helper for generating page output for series and episodes.
@@ -38,7 +39,6 @@ use stdClass;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class output_helper {
-
     /**
      * Prints output for series view.
      * @param stdClass $moduleinstance
@@ -102,7 +102,7 @@ class output_helper {
     public static function output_episode($ocinstanceid, $episodeid, $modinstanceid, $seriesid = null): void {
         global $PAGE, $OUTPUT, $DB;
 
-        list($data, $errormessage) = paella_transform::get_paella_data_json($ocinstanceid, $episodeid, $seriesid);
+        [$data, $errormessage] = paella_transform::get_paella_data_json($ocinstanceid, $episodeid, $seriesid);
 
         if (empty($data)) {
             echo $OUTPUT->header();
@@ -137,6 +137,9 @@ class output_helper {
 
         // Find aspect-ratio of the first video track.
         $wrapperattrs = [];
+        $resolution = null;
+        $jwtiframewidth = '100%';
+        $jwtiframeheight = 'auto';
         if (!empty($data['streams']) && !empty($data['streams'][0]['sources'])) {
             $sources = $data['streams'][0]['sources'];
             $res = $sources[array_key_first($sources)][0]['res'];
@@ -144,21 +147,48 @@ class output_helper {
             $wrapperattrs['style'] = '--aspect-ratio:' . $resolution;
         }
 
-        echo \html_writer::start_div('player-wrapper', $wrapperattrs);
-
-        echo '<iframe src="player.html" id="player-iframe" class="mod-opencast-paella-player" allowfullscreen"></iframe>';
-        echo \html_writer::end_div();
-
-        $PAGE->requires->js_call_amd('mod_opencast/opencast_player', 'init',
-                [$configurl->out(false), $themeurl->out(false)]);
-
-        $moduleinstance = $DB->get_record('opencast', ['id' => $modinstanceid], '*', MUST_EXIST);
-
-        $enforce = get_config('mod_opencast', 'enforce_download_default_' . $ocinstanceid);
-        $allowdownload = get_config('mod_opencast', 'download_default_' . $ocinstanceid);
-        if (($enforce && $allowdownload) || (!$enforce && $moduleinstance->allowdownload)) {
-            self::output_download_menu($ocinstanceid, $episodeid, $modinstanceid);
+        $api = api::get_instance($ocinstanceid, [], [], false, false);
+        $classes = [
+            'wrapper' => ['player-wrapper'],
+            'iframe' => ['mod-opencast-paella-player'],
+        ];
+        $jwtiframehtml = '';
+        if ($api?->jwtservice?->is_enabled() ?? false) {
+            $baseurl = $api->jwtservice->extract_base_url_from_paella_streams_data($data['streams'], $ocinstanceid);
+            $jwtiframehtml = $api->jwtservice->get_jwt_iframe_player_html(
+                $ocinstanceid,
+                $episodeid,
+                $classes,
+                $baseurl,
+                $resolution,
+                $jwtiframewidth,
+                $jwtiframeheight
+            );
         }
+
+        if ($jwtiframehtml) {
+            echo $jwtiframehtml;
+        } else {
+            echo \html_writer::start_div('player-wrapper', $wrapperattrs);
+
+            echo '<iframe src="player.html" id="player-iframe" class="mod-opencast-paella-player" allowfullscreen"></iframe>';
+            echo \html_writer::end_div();
+
+            $PAGE->requires->js_call_amd(
+                'mod_opencast/opencast_player',
+                'init',
+                [$configurl->out(false), $themeurl->out(false)]
+            );
+
+            $moduleinstance = $DB->get_record('opencast', ['id' => $modinstanceid], '*', MUST_EXIST);
+
+            $enforce = get_config('mod_opencast', 'enforce_download_default_' . $ocinstanceid);
+            $allowdownload = get_config('mod_opencast', 'download_default_' . $ocinstanceid);
+            if (($enforce && $allowdownload) || (!$enforce && $moduleinstance->allowdownload)) {
+                self::output_download_menu($ocinstanceid, $episodeid, $modinstanceid);
+            }
+        }
+
         echo $OUTPUT->footer();
     }
 
@@ -176,7 +206,6 @@ class output_helper {
 
         $api = apibridge::get_instance($ocinstanceid);
         if (($video = $api->get_episode($episodeid)) !== false) {
-
             // Get the action menu options.
             $actionmenu = new action_menu();
             $actionmenu->set_menu_left();
@@ -184,16 +213,22 @@ class output_helper {
             $actionmenu->actionicon = new pix_icon('t/down', get_string('downloadvideo', 'mod_opencast'));
             $actionmenu->actiontext = 'Download';
             $actionmenu->set_menu_trigger(' ');
-            $actionmenu->attributes['class'] .= ' download-action-menu float-right pt-1';
+            $actionmenu->attributes['class'] .= ' download-action-menu float-end pt-1';
 
             foreach ($video->publications as $publication) {
                 if ($publication->channel == get_config('mod_opencast', 'download_channel_' . $ocinstanceid)) {
                     foreach ($publication->media as $media) {
                         $name = ucwords(explode('/', $media->flavor)[0]) . ' (' . $media->width . 'x' . $media->height . ')';
                         $actionmenu->add(new action_menu_link_secondary(
-                            new \moodle_url('/mod/opencast/downloadvideo.php',
-                                ['e' => $video->identifier, 'o' => $modinstanceid,
-                                    'mediaid' => $media->id, 'ocinstanceid' => $ocinstanceid, ]),
+                            new \moodle_url(
+                                '/mod/opencast/downloadvideo.php',
+                                [
+                                    'e' => $video->identifier,
+                                    'o' => $modinstanceid,
+                                    'mediaid' => $media->id,
+                                    'ocinstanceid' => $ocinstanceid,
+                                ]
+                            ),
                             null,
                             $name
                         ));
@@ -300,7 +335,11 @@ class output_helper {
      */
     private static function format_date($startdate): string {
         $dt = new DateTime($startdate, core_date::get_server_timezone_object());
-        return userdate($dt->getTimestamp(), get_string('strftimedatefullshort', 'core_langconfig'),
-            99, false);
+        return userdate(
+            $dt->getTimestamp(),
+            get_string('strftimedatefullshort', 'core_langconfig'),
+            99,
+            false
+        );
     }
 }

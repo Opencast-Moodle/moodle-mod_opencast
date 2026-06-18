@@ -34,11 +34,14 @@ class paella_transform {
     /**
      * Returns the publication with the correct release channel for a given episode.
      * @param int $ocinstanceid Opencast instance id
-     * @param string $episode Episode id
+     * @param object $episode Episode id
      * @return false|mixed Publication or false if no publication for the configured channel exists.
      * @throws \dml_exception
      */
     private static function get_api_publication($ocinstanceid, $episode) {
+        if (!property_exists($episode, 'publications')) {
+            return false;
+        }
         $channel = get_config('mod_opencast', 'channel_' . $ocinstanceid);
         foreach ($episode->publications as $publication) {
             if ($publication->channel == $channel) {
@@ -50,7 +53,7 @@ class paella_transform {
 
     /**
      * Returns the preview image for a publication.
-     * @param string $publication Publication id
+     * @param object $publication Publication id
      * @return mixed|null Url to preview image or null if not existing
      */
     private static function get_preview_image($publication) {
@@ -74,23 +77,26 @@ class paella_transform {
 
     /**
      * Returns the duration of a publication.
-     * @param string $publication Publication id
+     * @param object $publication Publication id
      * @return float|int duration in seconds
      */
     private static function get_duration($publication) {
         $duration = 0;
 
         foreach ($publication->media as $media) {
-            if ($media->duration > $duration) {
-                $duration = $media->duration;
+            if (property_exists($media, 'duration')) {
+                $mediaduration = (int) $media->duration;
+                if ($mediaduration > $duration) {
+                    $duration = $mediaduration;
+                }
             }
         }
-        return $duration / 1000;
+        return !empty($$duration) ? (int) $duration / 1000 : 0;
     }
 
     /**
      * Returns the frames of a publication.
-     * @param string $publication Publication id
+     * @param object $publication Publication id
      * @return array of frames
      */
     private static function get_frame_list($publication) {
@@ -125,7 +131,7 @@ class paella_transform {
 
     /**
      * Return the source type for a track
-     * @param string $track Track
+     * @param object $track Track
      * @return mixed|string|null
      */
     private static function get_source_type_from_track($track) {
@@ -170,7 +176,7 @@ class paella_transform {
 
     /**
      * Creates the streams for a publication.
-     * @param string $publication Publication id
+     * @param object $publication Publication id
      * @return array of streams
      */
     private static function get_streams($publication) {
@@ -234,7 +240,7 @@ class paella_transform {
 
     /**
      * Returns the captions of a publication.
-     * @param string $publication Publication id
+     * @param object $publication Publication id
      * @return array of captions
      */
     private static function get_captions($publication) {
