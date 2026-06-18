@@ -183,3 +183,6 @@ $string['uploadform_tab_subtitle_desc'] = 'Upload subtitle files for each langua
 $string['uploadform_presentation_upload'] = 'Presentation file';
 $string['uploadform_processing_options_general_help'] = 'Choose extra processing options for your upload. For example, "Straight to publishing" will publish the video immediately. Contact your administrator for details about available options';
 $string['uploaddeactivatedadvancedmode'] = 'Advanced mode is deactivated for this Opencast instance, please contact your system administrator.';
+$string['uploadform_inplace_edit_select_ocinstance_label'] = 'Edit';
+$string['uploadform_inplace_edit_select_ocinstance_hint'] = 'Make changes';
+
