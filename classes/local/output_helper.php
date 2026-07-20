@@ -155,12 +155,10 @@ class output_helper {
         ];
         $jwtiframehtml = '';
         if ($api?->jwtservice?->is_enabled() ?? false) {
-            $baseurl = $api->jwtservice->extract_base_url_from_paella_streams_data($data['streams'], $ocinstanceid);
             $jwtiframehtml = $api->jwtservice->get_jwt_iframe_player_html(
                 $ocinstanceid,
                 $episodeid,
                 $classes,
-                $baseurl,
                 $resolution,
                 $jwtiframewidth,
                 $jwtiframeheight
