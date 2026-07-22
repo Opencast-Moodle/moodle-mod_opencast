@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+4.5.10 (2026-07-22)
+------------------
+* [FIX] version.php
+
+
 4.5.9 (2026-07-22)
 ------------------
 * [FEATURE] #98 Integrate JWT authentication core and tests
