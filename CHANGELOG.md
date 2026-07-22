@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+5.0.5 (2026-07-22)
+------------------
+* [FEATURE] #97 Integrate JWT authentication core and tests
+
+
 5.0.4 (2025-11-07)
 ------------------
 * [FIXED] Gracefully handle exception in the setting when the tool plugin is not ready yet
