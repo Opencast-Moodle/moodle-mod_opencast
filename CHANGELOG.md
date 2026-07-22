@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+4.5.9 (2026-07-22)
+------------------
+* [FEATURE] #98 Integrate JWT authentication core and tests
+
+
 4.5.8 (2025-12-04)
 ------------------
 [CHANGE] Add video canvas plugin preventing the context menu on right-click PR #81
