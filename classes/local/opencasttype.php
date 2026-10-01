@@ -32,7 +32,6 @@ namespace mod_opencast\local;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class opencasttype {
-
     /** @var int It is not known, what is specified by the ID */
     const UNDEFINED = 0;
     /** @var int The ID specifies a Episode */

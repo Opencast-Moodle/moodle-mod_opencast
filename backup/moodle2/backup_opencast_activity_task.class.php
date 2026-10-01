@@ -31,7 +31,6 @@ require_once($CFG->dirroot . '/mod/opencast/backup/moodle2/backup_opencast_steps
  * Provides all the settings and steps to perform one complete backup of the activity
  */
 class backup_opencast_activity_task extends backup_activity_task {
-
     /**
      * No specific settings for this activity
      */
@@ -54,20 +53,20 @@ class backup_opencast_activity_task extends backup_activity_task {
     public static function encode_content_links($content) {
         global $CFG;
 
-        $base = preg_quote($CFG->wwwroot.'/mod/opencast', '#');
+        $base = preg_quote($CFG->wwwroot . '/mod/opencast', '#');
 
         // Access a list of all links in a course.
-        $pattern = '#('.$base.'/index\.php\?id=)([0-9]+)#';
+        $pattern = '#(' . $base . '/index\.php\?id=)([0-9]+)#';
         $replacement = '$@OPENCASTINDEX*$2@$';
         $content = preg_replace($pattern, $replacement, $content);
 
         // Access the link supplying a course module id.
-        $pattern = '#('.$base.'/view\.php\?id=)([0-9]+)#';
+        $pattern = '#(' . $base . '/view\.php\?id=)([0-9]+)#';
         $replacement = '$@OPENCASTVIEWBYID*$2@$';
         $content = preg_replace($pattern, $replacement, $content);
 
         // Access the link supplying an instance id.
-        $pattern = '#('.$base.'/view\.php\?u=)([0-9]+)#';
+        $pattern = '#(' . $base . '/view\.php\?u=)([0-9]+)#';
         $replacement = '$@OPENCASTVIEWBYU*$2@$';
         $content = preg_replace($pattern, $replacement, $content);
 

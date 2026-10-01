@@ -22,9 +22,9 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require(__DIR__.'/../../config.php');
+require(__DIR__ . '/../../config.php');
 
-require_once(__DIR__.'/lib.php');
+require_once(__DIR__ . '/lib.php');
 
 $id = required_param('id', PARAM_INT);
 
@@ -74,11 +74,13 @@ foreach ($opencastinstances as $opencastinstance) {
         $link = html_writer::link(
             new moodle_url('/mod/opencast/view.php', ['id' => $opencastinstance->coursemodule]),
             format_string($opencastinstance->name, true),
-            ['class' => 'dimmed']);
+            ['class' => 'dimmed']
+        );
     } else {
         $link = html_writer::link(
             new moodle_url('/mod/opencast/view.php', ['id' => $opencastinstance->coursemodule]),
-            format_string($opencastinstance->name, true));
+            format_string($opencastinstance->name, true)
+        );
     }
 
     if ($course->format == 'weeks' || $course->format == 'topics') {

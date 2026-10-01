@@ -34,7 +34,6 @@ use admin_settingpage;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_opencast_admin_settingspage_tabs extends admin_settingpage {
-
     /** @var The tabs */
     protected $tabs = [];
 
@@ -107,4 +106,3 @@ class mod_opencast_admin_settingspage_tabs extends admin_settingpage {
         return $OUTPUT->render_from_template('mod_opencast/admin_settings_tabs', $context);
     }
 }
-

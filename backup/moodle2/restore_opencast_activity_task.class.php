@@ -30,7 +30,6 @@ require_once($CFG->dirroot . '/mod/opencast/backup/moodle2/restore_opencast_step
  * Opencast restore task that provides all the settings and steps to perform one complete restore of the activity.
  */
 class restore_opencast_activity_task extends restore_activity_task {
-
     /**
      * Define (add) particular settings this activity can have
      */
@@ -70,7 +69,6 @@ class restore_opencast_activity_task extends restore_activity_task {
         $rules[] = new restore_decode_rule('OPENCASTVIEWBYU', '/mod/opencast/view.php?u=$1', 'opencast');
 
         return $rules;
-
     }
 
     /**

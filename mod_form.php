@@ -37,7 +37,6 @@ require_once($CFG->dirroot . '/course/moodleform_mod.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_opencast_mod_form extends moodleform_mod {
-
     /**
      * Defines forms elements
      */
@@ -88,11 +87,19 @@ class mod_opencast_mod_form extends moodleform_mod {
             $mform->hideIf('series', 'manualocid', 'eq', '1');
 
             if (count($choices[1]) === 0) {
-                $mform->addElement('select', 'episode',
-                    get_string('episode', 'mod_opencast'), []);
+                $mform->addElement(
+                    'select',
+                    'episode',
+                    get_string('episode', 'mod_opencast'),
+                    []
+                );
             } else {
-                $mform->addElement('select', 'episode',
-                    get_string('episode', 'mod_opencast'), array_merge(...array_values($choices[1])));
+                $mform->addElement(
+                    'select',
+                    'episode',
+                    get_string('episode', 'mod_opencast'),
+                    array_merge(...array_values($choices[1]))
+                );
             }
             $mform->setType('episode', PARAM_ALPHANUMEXT);
             $mform->hideIf('episode', 'manualocid', 'eq', '1');
@@ -108,8 +115,12 @@ class mod_opencast_mod_form extends moodleform_mod {
             $mform->addRule('ocinstanceid', get_string('required'), 'required');
             $mform->hideIf('ocinstanceid', 'manualocid', 'eq', '0');
 
-            $mform->addElement('text', 'opencastid', get_string('opencastid', 'mod_opencast'),
-                ['size' => 64]);
+            $mform->addElement(
+                'text',
+                'opencastid',
+                get_string('opencastid', 'mod_opencast'),
+                ['size' => 64]
+            );
             $mform->setType('opencastid', PARAM_ALPHANUMEXT);
             $mform->addRule('opencastid', get_string('required'), 'required');
             $mform->hideIf('opencastid', 'manualocid', 'eq', '0');

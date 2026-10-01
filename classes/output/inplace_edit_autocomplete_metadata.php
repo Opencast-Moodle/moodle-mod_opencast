@@ -56,8 +56,10 @@ class inplace_edit_autocomplete_metadata extends \core\output\inplace_editable {
             $options = !empty($metadatacatalog->param_json) ? json_decode($metadatacatalog->param_json, true) : [];
         }
         if ($name == 'creator' || $name == 'contributor') {
-            $options = array_merge($options,
-                autocomplete_suggestion_helper::get_suggestions_for_creator_and_contributor($data->ocinstanceid));
+            $options = array_merge(
+                $options,
+                autocomplete_suggestion_helper::get_suggestions_for_creator_and_contributor($data->ocinstanceid)
+            );
         }
         $value = [];
         $displayvalue = '';
@@ -125,7 +127,7 @@ class inplace_edit_autocomplete_metadata extends \core\output\inplace_editable {
 
         $newvalue = json_decode($newvalue, true);
 
-        list($id, $moduleid) = explode('_', $itemid, 2);
+        [$id, $moduleid] = explode('_', $itemid, 2);
 
         $ocmoduleinstance = $DB->get_record('opencast', ['id' => $moduleid]);
 

@@ -47,7 +47,6 @@ use mod_opencast\output\inplace_edit_checkbox_processing;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_opencast_uploadvideo_form extends moodleform {
-
     /** @var array Required metadata fields to verify */
     private $requiredmetadatafields = [];
     /**
@@ -170,7 +169,9 @@ class mod_opencast_uploadvideo_form extends moodleform {
                         if (isset($field->description) && !empty($field->description)) {
                             // Use the renderer to generate a help icon with custom text.
                             $element->_helpbutton = $mainrenderer->render_help_icon_with_custom_text(
-                                $this->try_get_string($field->name, 'tool_opencast'), $field->description);
+                                $this->try_get_string($field->name, 'tool_opencast'),
+                                $field->description
+                            );
                         }
                     }
 
@@ -248,7 +249,8 @@ class mod_opencast_uploadvideo_form extends moodleform {
                             );
                             $processingoptionsdesc = get_string('uploadform_processing_options_general_help', 'mod_opencast');
                             $element->_helpbutton = $mainrenderer->render_help_icon_with_custom_text(
-                                $lbltext, $processingoptionsdesc
+                                $lbltext,
+                                $processingoptionsdesc
                             );
                             $this->set_element_toggles($mform, $elementid, $formdata->ocinstanceid);
                         }
@@ -318,8 +320,10 @@ class mod_opencast_uploadvideo_form extends moodleform {
         }
 
         $recordedmetadata = $alluploadoptions->options->{$ocinstanceid}->metadata ?? [];
-        if (!empty($this->requiredmetadatafields)  && isset($this->requiredmetadatafields[$ocinstanceid]) &&
-            !empty($recordedmetadata)) {
+        if (
+            !empty($this->requiredmetadatafields)  && isset($this->requiredmetadatafields[$ocinstanceid]) &&
+            !empty($recordedmetadata)
+        ) {
             foreach ($this->requiredmetadatafields[$ocinstanceid] as $fieldname) {
                 if (!isset($recordedmetadata->{$fieldname}) || empty($recordedmetadata->{$fieldname}->value)) {
                     $elementid = "{$fieldname}_{$ocinstanceid}";

@@ -22,6 +22,7 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core_courseformat\formatactions;
 use mod_opencast\local\opencasttype;
 use mod_opencast\local\output_helper;
 
@@ -29,7 +30,7 @@ require(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 require_once($CFG->dirroot . '/course/modlib.php');
 require_once($CFG->libdir . '/gradelib.php');
-require_once($CFG->libdir.'/completionlib.php');
+require_once($CFG->libdir . '/completionlib.php');
 
 global $OUTPUT, $DB, $PAGE;
 
@@ -118,7 +119,11 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
         $messagestatus = \core\output\notification::NOTIFY_ERROR;
 
         // Delete this module as it is faulty.
-        course_delete_module($cm->id);
+        if ($CFG->branch >= 502) {
+            formatactions::cm($course)->delete($cm->id);
+        } else {
+            course_delete_module($cm->id);
+        }
         opencast_delete_instance($moduleinstance->id);
     }
     // Perform the redirect.
@@ -131,7 +136,11 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
         $messagestatus = \core\output\notification::NOTIFY_INFO;
         // Delete this module as it is faulty.
         if (empty($uploadjob)) {
-            course_delete_module($cm->id);
+            if ($CFG->branch >= 502) {
+                formatactions::cm($course)->delete($cm->id);
+            } else {
+                course_delete_module($cm->id);
+            }
             opencast_delete_instance($moduleinstance->id);
             $messagetext = get_string('uploadjobmissing', 'mod_opencast');
             $messagestatus = \core\output\notification::NOTIFY_ERROR;
@@ -148,8 +157,8 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
     } else {
         try {
             // Gather more information about this module so that we can update the module info in the end.
-            list($unusedcm, $unusedcontext, $unusedmodule, $opencastmoduledata, $unusedcw) =
-                get_moduleinfo_data($cm , $course);
+            [$unusedcm, $unusedcontext, $unusedmodule, $opencastmoduledata, $unusedcw] =
+                get_moduleinfo_data($cm, $course);
 
             // Using a dummy parameter 'opencastmodtype' to be replaced with type at when updating record in db.
             $opencastmoduledata->opencastmodtype = opencasttype::EPISODE;
@@ -157,8 +166,11 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
             $opencastmoduledata->intro = '';
             // Update the module info directly.
             update_module($opencastmoduledata);
-            output_helper::output_episode($opencastmoduledata->ocinstanceid, $opencastmoduledata->opencastid,
-                $opencastmoduledata->id);
+            output_helper::output_episode(
+                $opencastmoduledata->ocinstanceid,
+                $opencastmoduledata->opencastid,
+                $opencastmoduledata->id
+            );
         } catch (\Exception $e) {
             \core\notification::warning($e->getMessage());
         }
