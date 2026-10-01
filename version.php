@@ -32,5 +32,6 @@ $plugin->requires = 2024100700; // Requires Moodle 4.5+.
 $plugin->supported = [405, 405];
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = [
-    'tool_opencast' => 2024111106,
+    'tool_opencast' => 2024111104,
+    'block_opencast' => 2024111100,
 ];
