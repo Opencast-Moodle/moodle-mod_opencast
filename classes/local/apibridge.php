@@ -106,7 +106,15 @@ class apibridge {
             return false;
         }
 
-        return $response['body'];
+        $seriesepisodes = $response['body'];
+
+        if ($this->api?->jwtservice?->is_enabled() ?? false) {
+            foreach ($seriesepisodes as &$episode) {
+                $this->api->jwtservice->attach_jwt_to_event_publication_urls($episode, $episode->identifier);
+            }
+        }
+
+        return $seriesepisodes;
     }
 
     /**
@@ -154,6 +162,10 @@ class apibridge {
             if ($episode->is_part_of !== $ensureseries) {
                 return false;
             }
+        }
+
+        if ($this->api?->jwtservice?->is_enabled() ?? false) {
+            $this->api->jwtservice->attach_jwt_to_event_publication_urls($episode, $episodeid);
         }
 
         return $episode;
