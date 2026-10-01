@@ -28,6 +28,7 @@ require_once($CFG->dirroot . '/course/modlib.php');
 require_once($CFG->libdir . '/gradelib.php');
 require_once(__DIR__ . '/uploadvideo_form.php');
 
+use core_courseformat\formatactions;
 use tool_opencast\local\upload_helper;
 
 global $PAGE, $OUTPUT, $DB;
@@ -85,7 +86,11 @@ if ($mform->is_cancelled()) {
     }
     if (empty($savedvideofile)) {
         // In case the file is gone, we remove the instance, becuase it is no use of it anymore.
-        course_delete_module($cm->id);
+        if ($CFG->branch >= 502) {
+            formatactions::cm($course)->delete($cm->id);
+        } else {
+            course_delete_module($cm->id);
+        }
         opencast_delete_instance($moduleinstance->id);
         redirect($redirecturl, get_string('uploadmissingfile', 'mod_opencast'), null, \core\output\notification::NOTIFY_ERROR);
     } else {

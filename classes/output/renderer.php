@@ -43,7 +43,7 @@ class renderer extends plugin_renderer_base {
      */
     public function render_listview_toggle($listviewactive) {
 
-        $o = html_writer::start_div('mt-3 mb-1 w-100 text-right icon-size-4');
+        $o = html_writer::start_div('mt-3 mb-1 w-100 text-end icon-size-4');
 
         if ($listviewactive) {
             $icon = $this->output->pix_icon('i/grid', get_string('gridview', 'mod_opencast'), 'mod_opencast');
@@ -76,7 +76,7 @@ class renderer extends plugin_renderer_base {
         $simplemodelink .= html_writer::tag(
             'span',
             get_string('uploadform_simple_page_title', 'mod_opencast'),
-            ['class' => 'mr-1']
+            ['class' => 'me-1']
         );
         $simplemodelink .= $this->output->pix_icon('i/share', get_string('uploadform_simple_page_title', 'mod_opencast'));
         $simplemodelink .= html_writer::end_tag('a');

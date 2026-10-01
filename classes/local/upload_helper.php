@@ -811,7 +811,7 @@ class upload_helper {
             $advancedmodelink .= \html_writer::tag(
                 'span',
                 get_string('uploadform_advanced_mode_link_text', 'mod_opencast'),
-                ['class' => 'mr-1']
+                ['class' => 'me-1']
             );
             $advancedmodelink .= $OUTPUT->pix_icon('i/share', get_string('uploadform_advanced_mode_title', 'mod_opencast'));
             $advancedmodelink .= \html_writer::end_tag('a');

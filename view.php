@@ -22,6 +22,7 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core_courseformat\formatactions;
 use mod_opencast\local\opencasttype;
 use mod_opencast\local\output_helper;
 
@@ -118,7 +119,11 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
         $messagestatus = \core\output\notification::NOTIFY_ERROR;
 
         // Delete this module as it is faulty.
-        course_delete_module($cm->id);
+        if ($CFG->branch >= 502) {
+            formatactions::cm($course)->delete($cm->id);
+        } else {
+            course_delete_module($cm->id);
+        }
         opencast_delete_instance($moduleinstance->id);
     }
     // Perform the redirect.
@@ -131,7 +136,11 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
         $messagestatus = \core\output\notification::NOTIFY_INFO;
         // Delete this module as it is faulty.
         if (empty($uploadjob)) {
-            course_delete_module($cm->id);
+            if ($CFG->branch >= 502) {
+                formatactions::cm($course)->delete($cm->id);
+            } else {
+                course_delete_module($cm->id);
+            }
             opencast_delete_instance($moduleinstance->id);
             $messagetext = get_string('uploadjobmissing', 'mod_opencast');
             $messagestatus = \core\output\notification::NOTIFY_ERROR;
