@@ -87,7 +87,7 @@ class inplace_edit_toggle_visibility extends \core\output\inplace_editable {
         global $DB;
         // Clean the new value.
         $newvalue = clean_param($newvalue, PARAM_INT);
-        list($id, $moduleid) = explode('_', $itemid, 2);
+        [$id, $moduleid] = explode('_', $itemid, 2);
 
         $ocmoduleinstance = $DB->get_record('opencast', ['id' => $moduleid]);
 

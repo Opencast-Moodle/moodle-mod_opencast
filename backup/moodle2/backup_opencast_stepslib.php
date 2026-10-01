@@ -26,7 +26,6 @@
   * Define the complete opencast structure for backup, with file and id annotations
   */
 class backup_opencast_activity_structure_step extends backup_activity_structure_step {
-
     /**
      * Define the structure to be processed by this backup step.
      *
@@ -48,6 +47,5 @@ class backup_opencast_activity_structure_step extends backup_activity_structure_
 
         // Return the root element (opencast), wrapped into standard activity structure.
         return $this->prepare_activity_structure($opencast);
-
     }
 }

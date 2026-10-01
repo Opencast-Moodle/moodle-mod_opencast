@@ -43,8 +43,10 @@ function xmldb_opencast_upgrade($oldversion) {
 
     if ($oldversion < 2021072000) {
         // Check if settings were upgraded without upgrading the plugin.
-        if ($DB->get_record('config_plugins', ['plugin' => 'mod_opencast', 'name' => 'channel']) &&
-            $DB->get_record('config_plugins', ['plugin' => 'mod_opencast', 'name' => 'channel_1'])) {
+        if (
+            $DB->get_record('config_plugins', ['plugin' => 'mod_opencast', 'name' => 'channel']) &&
+            $DB->get_record('config_plugins', ['plugin' => 'mod_opencast', 'name' => 'channel_1'])
+        ) {
             // Remove already upgraded settings and only keep old ones.
             $DB->execute("DELETE FROM {config_plugins} WHERE plugin='mod_opencast' AND name = 'channel' OR name = 'configurl'");
         }
@@ -123,7 +125,6 @@ function xmldb_opencast_upgrade($oldversion) {
     }
 
     if ($oldversion < 2023100900) {
-
         // Define field sortseriesby to be added to opencast.
         $table = new xmldb_table('opencast');
         $field = new xmldb_field('sortseriesby', XMLDB_TYPE_INTEGER, '2', null, null, null, null, 'allowdownload');
@@ -139,9 +140,9 @@ function xmldb_opencast_upgrade($oldversion) {
 
     if ($oldversion < 2025080101) {
         $configs = $DB->get_records_select(
-                'config_plugins',
-                "plugin = :plugin AND name LIKE :pattern",
-                ['plugin' => 'mod_opencast', 'pattern' => 'global_download_%']
+            'config_plugins',
+            "plugin = :plugin AND name LIKE :pattern",
+            ['plugin' => 'mod_opencast', 'pattern' => 'global_download_%']
         );
         foreach ($configs as $config) {
             $DB->delete_records('config_plugins', ['id' => $config->id]);
@@ -153,7 +154,6 @@ function xmldb_opencast_upgrade($oldversion) {
 
     // In this upgrade, we add upload config columns to opencast table, in order to record inline editable values.
     if ($oldversion < 2025080102) {
-
         // Define field uploadoptionsjson to be added to opencast.
         $table = new xmldb_table('opencast');
         $field = new xmldb_field('uploadoptionsjson', XMLDB_TYPE_TEXT, null, null, null, null, null, 'uploadjobid');

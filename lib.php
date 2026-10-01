@@ -22,6 +22,8 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core_completion\api;
+
 /**
  * Return if the plugin supports $feature.
  *
@@ -68,8 +70,7 @@ function opencast_add_instance($moduleinstance) {
     $cmid = $moduleinstance->coursemodule;
     $DB->set_field('course_modules', 'instance', $id, ['id' => $cmid]);
 
-    \core_completion\api::update_completion_date_event($cmid, 'opencast', $id,
-            $moduleinstance->completionexpected ?? null);
+    api::update_completion_date_event($cmid, 'opencast', $id, $moduleinstance->completionexpected ?? null);
 
     return $id;
 }
@@ -96,8 +97,12 @@ function opencast_update_instance($moduleinstance) {
         unset($moduleinstance->opencastmodtype);
     }
 
-    \core_completion\api::update_completion_date_event($moduleinstance->coursemodule, 'opencast', $moduleinstance->id,
-            $moduleinstance->completionexpected ?? null);
+    api::update_completion_date_event(
+        $moduleinstance->coursemodule,
+        'opencast',
+        $moduleinstance->id,
+        $moduleinstance->completionexpected ?? null
+    );
 
     return $DB->update_record('opencast', $moduleinstance);
 }
@@ -117,7 +122,7 @@ function opencast_delete_instance($id) {
     }
 
     $cm = get_coursemodule_from_instance('opencast', $id);
-    \core_completion\api::update_completion_date_event($cm->id, 'opencast', $id, null);
+    api::update_completion_date_event($cm->id, 'opencast', $id, null);
 
     $DB->delete_records('opencast', ['id' => $id]);
 
@@ -176,7 +181,10 @@ function opencast_dndupload_handle($uploadinfo) {
 
     // Get the upload options according to opencast instances.
     $defaultuploadoptions = \mod_opencast\local\upload_helper::get_default_upload_options(
-        $uploadinfo->displayname, $uploadinfo->course->id, true);
+        $uploadinfo->displayname,
+        $uploadinfo->course->id,
+        true
+    );
     $data->uploadoptionsjson = $defaultuploadoptions;
 
     $data->id = opencast_add_instance($data, null);

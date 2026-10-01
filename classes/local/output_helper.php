@@ -169,7 +169,7 @@ class output_helper {
         } else {
             echo \html_writer::start_div('player-wrapper', $wrapperattrs);
 
-            echo '<iframe src="player.html" id="player-iframe" class="mod-opencast-paella-player" allowfullscreen"></iframe>';
+            echo '<iframe src="player.html" id="player-iframe" class="mod-opencast-paella-player" allowfullscreen></iframe>';
             echo \html_writer::end_div();
 
             $PAGE->requires->js_call_amd(

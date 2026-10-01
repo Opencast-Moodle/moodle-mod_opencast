@@ -28,10 +28,10 @@ require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
 
 use tool_opencast\setting_default_manager;
 use tool_opencast\seriesmapping;
-use Behat\Gherkin\Node\TableNode as TableNode,
-    Behat\Mink\Exception\ExpectationException as ExpectationException,
-    Behat\Mink\Exception\DriverException as DriverException,
-    Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException;
+use Behat\Gherkin\Node\TableNode,
+    Behat\Mink\Exception\ExpectationException,
+    Behat\Mink\Exception\DriverException,
+    Behat\Mink\Exception\ElementNotFoundException;
 
 /**
  * Steps definitions related with the mod_opencast plugin.
@@ -114,8 +114,8 @@ class behat_mod_opencast extends behat_base {
         $logevent->trigger();
 
         // Add the opencast activity module to the course.
-        require_once($CFG->dirroot.'/course/modlib.php');
-        list($module, $context, $cw, $cm, $data) = prepare_new_moduleinfo_data($course, 'opencast', $section);
+        require_once($CFG->dirroot . '/course/modlib.php');
+        [$module, $context, $cw, $cm, $data] = prepare_new_moduleinfo_data($course, 'opencast', $section);
 
         $data->coursemodule = $data->id = add_course_module($data);
         $moduledata = new \stdClass();
@@ -146,8 +146,10 @@ class behat_mod_opencast extends behat_base {
     public function i_upload_subtitle_file_for($filepath, $subtitleid) {
         global $CFG;
         $data = new TableNode([]);
-        $exception = new ExpectationException('Filepicker element for subtitle "' . $subtitleid . '" can not be found',
-            $this->getSession());
+        $exception = new ExpectationException(
+            'Filepicker element for subtitle "' . $subtitleid . '" can not be found',
+            $this->getSession()
+        );
         $filemanagernode = $this->find(
             'xpath',
             "//div[contains(@class, 'mod-opencast-subtitle-filepicker-{$subtitleid}')] " .
@@ -168,14 +170,14 @@ class behat_mod_opencast extends behat_base {
         // Ensure all the form is ready.
         $noformexception = new ExpectationException('The upload file form is not ready', $this->getSession());
         $this->find(
-                'xpath',
-                "//div[contains(concat(' ', normalize-space(@class), ' '), ' container ')]" .
+            'xpath',
+            "//div[contains(concat(' ', normalize-space(@class), ' '), ' container ')]" .
                 "[contains(concat(' ', normalize-space(@class), ' '), ' repository_upload ')]" .
                 "/descendant::div[contains(concat(' ', normalize-space(@class), ' '), ' file-picker ')]" .
                 "/descendant::div[contains(concat(' ', normalize-space(@class), ' '), ' fp-content ')]" .
                 "/descendant::div[contains(concat(' ', normalize-space(@class), ' '), ' fp-upload-form ')]" .
                 "/descendant::form",
-                $noformexception
+            $noformexception
         );
         // After this we have the elements we want to interact with.
 
@@ -202,7 +204,6 @@ class behat_mod_opencast extends behat_base {
 
         // The action depends on the field type.
         foreach ($datahash as $locator => $value) {
-
             $field = behat_field_manager::get_form_field_from_label($locator, $this);
 
             // Delegates to the field class.

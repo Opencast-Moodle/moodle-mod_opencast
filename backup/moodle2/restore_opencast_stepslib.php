@@ -26,7 +26,6 @@
  * Structure step to restore one opencast activity
  */
 class restore_opencast_activity_structure_step extends restore_activity_structure_step {
-
     /**
      * Function that will return the structure to be processed by this restore_step.
      * Must return one array of @restore_path_element elements

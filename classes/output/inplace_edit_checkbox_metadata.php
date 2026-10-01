@@ -32,7 +32,6 @@ namespace mod_opencast\output;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class inplace_edit_checkbox_metadata extends \core\output\inplace_editable {
-
     /**
      * Constructor.
      *
@@ -88,7 +87,7 @@ class inplace_edit_checkbox_metadata extends \core\output\inplace_editable {
         global $DB;
         // Clean the new value.
         $newvalue = clean_param($newvalue, PARAM_INT);
-        list($id, $moduleid) = explode('_', $itemid, 2);
+        [$id, $moduleid] = explode('_', $itemid, 2);
 
         $ocmoduleinstance = $DB->get_record('opencast', ['id' => $moduleid]);
 

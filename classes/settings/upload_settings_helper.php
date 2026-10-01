@@ -40,7 +40,6 @@ use tool_opencast\local\workflowconfiguration_helper;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class upload_settings_helper {
-
     /** @var string The setting tab config ID prefix. */
     const SETTING_TAB_PREFIX = 'mod_opencast_upload_';
 
@@ -111,15 +110,18 @@ class upload_settings_helper {
      */
     private static function add_main_tab_settings(mod_opencast_admin_settingspage_tabs &$uploadtabssetting, $ocinstanceid) {
         $tabname = 'main';
-        $settings = new admin_settingpage(self::SETTING_TAB_PREFIX . $tabname . '_' . $ocinstanceid,
-            new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname, 'mod_opencast'));
+        $settings = new admin_settingpage(
+            self::SETTING_TAB_PREFIX . $tabname . '_' . $ocinstanceid,
+            new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname, 'mod_opencast')
+        );
         // Add heading.
         self::add_heading($settings, $tabname, $ocinstanceid);
 
         // Inline Visibility activation.
         $settingname = 'inline_visibility';
         $settingid = self::SETTING_ID_PREFIX . $settingname . '_' . $ocinstanceid;
-        $enablevisibility = new admin_setting_configcheckbox($settingid,
+        $enablevisibility = new admin_setting_configcheckbox(
+            $settingid,
             new lang_string(self::SETTING_STRING_ID_PREFIX . $settingname, 'mod_opencast'),
             new lang_string(self::SETTING_STRING_ID_PREFIX . $settingname . '_desc', 'mod_opencast'),
             1
@@ -129,7 +131,8 @@ class upload_settings_helper {
         // Inline Processing setting.
         $settingname = 'inline_processing';
         $settingid = self::SETTING_ID_PREFIX . $settingname . '_' . $ocinstanceid;
-        $enableprocessing = new admin_setting_configcheckbox($settingid,
+        $enableprocessing = new admin_setting_configcheckbox(
+            $settingid,
             new lang_string(self::SETTING_STRING_ID_PREFIX . $settingname, 'mod_opencast'),
             new lang_string(self::SETTING_STRING_ID_PREFIX . $settingname . '_desc', 'mod_opencast'),
             0
@@ -139,7 +142,8 @@ class upload_settings_helper {
         // Enable advanced mode setting.
         $settingname = 'enable_advanced_mode';
         $settingid = self::SETTING_ID_PREFIX . $settingname . '_' . $ocinstanceid;
-        $enableadvanced = new admin_setting_configcheckbox($settingid,
+        $enableadvanced = new admin_setting_configcheckbox(
+            $settingid,
             new lang_string(self::SETTING_STRING_ID_PREFIX . $settingname, 'mod_opencast'),
             new lang_string(self::SETTING_STRING_ID_PREFIX . $settingname . '_desc', 'mod_opencast'),
             1
@@ -157,8 +161,10 @@ class upload_settings_helper {
      */
     private static function add_metadata_tab_settings(mod_opencast_admin_settingspage_tabs &$uploadtabssetting, $ocinstanceid) {
         $tabname = 'metadata';
-        $settings = new admin_settingpage(self::SETTING_TAB_PREFIX . $tabname . '_' . $ocinstanceid,
-            new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname, 'mod_opencast'));
+        $settings = new admin_settingpage(
+            self::SETTING_TAB_PREFIX . $tabname . '_' . $ocinstanceid,
+            new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname, 'mod_opencast')
+        );
         self::add_heading($settings, $tabname, $ocinstanceid);
 
         self::add_activation_toggle($settings, $tabname, $ocinstanceid);
@@ -175,7 +181,8 @@ class upload_settings_helper {
             }
         }
 
-        $settings->add(new admin_setting_configmultiselect(self::SETTING_ID_PREFIX . $tabname . '_list_' . $ocinstanceid,
+        $settings->add(new admin_setting_configmultiselect(
+            self::SETTING_ID_PREFIX . $tabname . '_list_' . $ocinstanceid,
             new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname . '_list', 'mod_opencast'),
             new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname . '_list_desc', 'mod_opencast'),
             null,
@@ -193,8 +200,10 @@ class upload_settings_helper {
      */
     private static function add_presentation_tab_settings(mod_opencast_admin_settingspage_tabs &$uploadtabssetting, $ocinstanceid) {
         $tabname = 'presentation';
-        $settings = new admin_settingpage(self::SETTING_TAB_PREFIX . $tabname . '_' . $ocinstanceid,
-            new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname, 'mod_opencast'));
+        $settings = new admin_settingpage(
+            self::SETTING_TAB_PREFIX . $tabname . '_' . $ocinstanceid,
+            new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname, 'mod_opencast')
+        );
         self::add_heading($settings, $tabname, $ocinstanceid);
 
         self::add_activation_toggle($settings, $tabname, $ocinstanceid);
@@ -211,8 +220,10 @@ class upload_settings_helper {
     private static function add_visibility_tab_settings(mod_opencast_admin_settingspage_tabs &$uploadtabssetting, $ocinstanceid) {
         global $PAGE;
         $tabname = 'visibility';
-        $settings = new admin_settingpage(self::SETTING_TAB_PREFIX . $tabname . '_' . $ocinstanceid,
-            new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname, 'mod_opencast'));
+        $settings = new admin_settingpage(
+            self::SETTING_TAB_PREFIX . $tabname . '_' . $ocinstanceid,
+            new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname, 'mod_opencast')
+        );
         self::add_heading($settings, $tabname, $ocinstanceid);
 
         self::add_activation_toggle($settings, $tabname, $ocinstanceid);
@@ -226,7 +237,8 @@ class upload_settings_helper {
 
         $defaultvisibility = $mainrenderer::VISIBLE;
 
-        $settings->add(new admin_setting_configselect(self::SETTING_ID_PREFIX . $tabname . '_default_' . $ocinstanceid,
+        $settings->add(new admin_setting_configselect(
+            self::SETTING_ID_PREFIX . $tabname . '_default_' . $ocinstanceid,
             new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname . '_default', 'mod_opencast'),
             new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname . '_default_desc', 'mod_opencast'),
             $defaultvisibility,
@@ -244,8 +256,10 @@ class upload_settings_helper {
      */
     private static function add_processing_tab_settings(mod_opencast_admin_settingspage_tabs &$uploadtabssetting, $ocinstanceid) {
         $tabname = 'processing';
-        $settings = new admin_settingpage(self::SETTING_TAB_PREFIX . $tabname . '_' . $ocinstanceid,
-            new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname, 'mod_opencast'));
+        $settings = new admin_settingpage(
+            self::SETTING_TAB_PREFIX . $tabname . '_' . $ocinstanceid,
+            new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname, 'mod_opencast')
+        );
         self::add_heading($settings, $tabname, $ocinstanceid);
 
         $disabled = false;
@@ -274,8 +288,10 @@ class upload_settings_helper {
      */
     private static function add_subtitle_tab_settings(mod_opencast_admin_settingspage_tabs &$uploadtabssetting, $ocinstanceid) {
         $tabname = 'subtitle';
-        $settings = new admin_settingpage(self::SETTING_TAB_PREFIX . $tabname . '_' . $ocinstanceid,
-            new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname, 'mod_opencast'));
+        $settings = new admin_settingpage(
+            self::SETTING_TAB_PREFIX . $tabname . '_' . $ocinstanceid,
+            new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname, 'mod_opencast')
+        );
         self::add_heading($settings, $tabname, $ocinstanceid);
 
         $disabled = false;
@@ -299,7 +315,8 @@ class upload_settings_helper {
                 $languagesselection[$lang->key] = $lang->value;
             }
 
-            $settings->add(new admin_setting_configmultiselect(self::SETTING_ID_PREFIX . $tabname . '_langlist_' . $ocinstanceid,
+            $settings->add(new admin_setting_configmultiselect(
+                self::SETTING_ID_PREFIX . $tabname . '_langlist_' . $ocinstanceid,
                 new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname . '_langlist', 'mod_opencast'),
                 new lang_string(self::SETTING_STRING_ID_PREFIX . $tabname . '_langlist_desc', 'mod_opencast'),
                 array_keys($languagesselection),
@@ -320,7 +337,8 @@ class upload_settings_helper {
     private static function add_heading(\admin_settingpage &$settings, $tabname, $ocinstanceid) {
         $stringname = self::SETTING_STRING_ID_PREFIX . $tabname;
         $settings->add(
-            new admin_setting_heading(self::SETTING_ID_PREFIX . $tabname . '_h_' . $ocinstanceid,
+            new admin_setting_heading(
+                self::SETTING_ID_PREFIX . $tabname . '_h_' . $ocinstanceid,
                 new lang_string($stringname . '_heading', 'mod_opencast'),
                 new lang_string($stringname . '_desc', 'mod_opencast')
             )
@@ -341,16 +359,20 @@ class upload_settings_helper {
         $configdescstringkey = $configstringkey . '_desc';
         // In case the setting is disabled, we switch to configempty element.
         if ($disabled) {
-            $settings->add(new admin_setting_configempty($configid,
-                new lang_string($configstringkey, 'mod_opencast'),
-                new lang_string($configdescstringkey . '_disabled', 'mod_opencast')),
+            $settings->add(
+                new admin_setting_configempty(
+                    $configid,
+                    new lang_string($configstringkey, 'mod_opencast'),
+                    new lang_string($configdescstringkey . '_disabled', 'mod_opencast')
+                ),
                 0
             );
             return;
         }
 
         $settings->add(
-            new admin_setting_configcheckbox($configid,
+            new admin_setting_configcheckbox(
+                $configid,
                 new lang_string($configstringkey, 'mod_opencast'),
                 new lang_string($configdescstringkey, 'mod_opencast'),
                 1

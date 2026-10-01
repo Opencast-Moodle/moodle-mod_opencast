@@ -29,7 +29,7 @@ require(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 require_once($CFG->dirroot . '/course/modlib.php');
 require_once($CFG->libdir . '/gradelib.php');
-require_once($CFG->libdir.'/completionlib.php');
+require_once($CFG->libdir . '/completionlib.php');
 
 global $OUTPUT, $DB, $PAGE;
 
@@ -148,8 +148,8 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
     } else {
         try {
             // Gather more information about this module so that we can update the module info in the end.
-            list($unusedcm, $unusedcontext, $unusedmodule, $opencastmoduledata, $unusedcw) =
-                get_moduleinfo_data($cm , $course);
+            [$unusedcm, $unusedcontext, $unusedmodule, $opencastmoduledata, $unusedcw] =
+                get_moduleinfo_data($cm, $course);
 
             // Using a dummy parameter 'opencastmodtype' to be replaced with type at when updating record in db.
             $opencastmoduledata->opencastmodtype = opencasttype::EPISODE;
@@ -157,8 +157,11 @@ if ($moduleinstance->type == opencasttype::EPISODE) {
             $opencastmoduledata->intro = '';
             // Update the module info directly.
             update_module($opencastmoduledata);
-            output_helper::output_episode($opencastmoduledata->ocinstanceid, $opencastmoduledata->opencastid,
-                $opencastmoduledata->id);
+            output_helper::output_episode(
+                $opencastmoduledata->ocinstanceid,
+                $opencastmoduledata->opencastid,
+                $opencastmoduledata->id
+            );
         } catch (\Exception $e) {
             \core\notification::warning($e->getMessage());
         }

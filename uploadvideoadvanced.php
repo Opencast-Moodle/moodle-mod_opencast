@@ -75,7 +75,7 @@ if (empty($formdata['tabs'])) {
 $formdata['cmid'] = $cmid;
 $formdata['moduleinstance'] = $moduleinstance;
 
-$advanceduploadform = new mod_opencast_uploadvideoadvanced_form(null , $formdata);
+$advanceduploadform = new mod_opencast_uploadvideoadvanced_form(null, $formdata);
 
 if ($advanceduploadform->is_cancelled()) {
     redirect($redirecturl);
@@ -83,8 +83,13 @@ if ($advanceduploadform->is_cancelled()) {
     $ocinstanceid = intval($data->ocinstanceid);
     // Saving and getting the file.
     $newitemid = rand(1000000, 9999999);
-    file_save_draft_area_files($moduleinstance->uploaddraftitemid, $coursecontext->id,
-        'tool_opencast', upload_helper::OC_FILEAREA, $newitemid);
+    file_save_draft_area_files(
+        $moduleinstance->uploaddraftitemid,
+        $coursecontext->id,
+        'tool_opencast',
+        upload_helper::OC_FILEAREA,
+        $newitemid
+    );
     $fs = get_file_storage();
     $files = $fs->get_area_files($coursecontext->id, 'tool_opencast', upload_helper::OC_FILEAREA, $newitemid, '', false);
     $savedvideofile = null;
@@ -103,8 +108,12 @@ if ($advanceduploadform->is_cancelled()) {
     $alluploadoptions = json_decode($moduleinstance->uploadoptionsjson);
 
     if ($alluploadoptions->selectedocinstanceid != $ocinstanceid) {
-        redirect($redirecturl,
-            get_string('uploadmismatchedocinstanceids', 'mod_opencast'), null, \core\output\notification::NOTIFY_ERROR);
+        redirect(
+            $redirecturl,
+            get_string('uploadmismatchedocinstanceids', 'mod_opencast'),
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
     }
 
     $uploadoptions = $alluploadoptions?->options->{$ocinstanceid};
@@ -152,17 +161,21 @@ if ($advanceduploadform->is_cancelled()) {
 
     // Visibility, by default we use the one from simple page, then we look for it in the form data.
     $formvisibility = $uploadoptions->visibility;
-    if (mod_upload_helper::advanced_tab_enabled($ocinstanceid, mod_upload_settings_helper::VISIBILITY_TAB) &&
-        property_exists($data, mod_upload_helper::VISIBILITY_ID)) {
+    if (
+        mod_upload_helper::advanced_tab_enabled($ocinstanceid, mod_upload_settings_helper::VISIBILITY_TAB) &&
+        property_exists($data, mod_upload_helper::VISIBILITY_ID)
+    ) {
         $formvisibility = $data->{mod_upload_helper::VISIBILITY_ID};
     }
     $visibility = new stdClass();
     $visibility->initialvisibilitystatus = $formvisibility;
 
     // Presentation file.
-    if (mod_upload_helper::advanced_tab_enabled($ocinstanceid, mod_upload_settings_helper::PRESENTATION_TAB) &&
+    if (
+        mod_upload_helper::advanced_tab_enabled($ocinstanceid, mod_upload_settings_helper::PRESENTATION_TAB) &&
         (isset($data->{mod_upload_helper::PRESENTATION_CHUNKUPLOAD_ID}) ||
-        isset($data->{mod_upload_helper::PRESENTATION_FILEPICKER_ID}))) {
+        isset($data->{mod_upload_helper::PRESENTATION_FILEPICKER_ID}))
+    ) {
         if (isset($data->{mod_upload_helper::PRESENTATION_CHUNKUPLOAD_ID})) {
             $presentationfileitemid = $data->{mod_upload_helper::PRESENTATION_CHUNKUPLOAD_ID};
         } else {
@@ -192,8 +205,10 @@ if ($advanceduploadform->is_cancelled()) {
     // Preparing subtitles.
     $transcriptions = [];
     $transcriptionuploadenabled = (bool) get_config('tool_opencast', 'enableuploadtranscription_' . $ocinstanceid);
-    if (mod_upload_helper::advanced_tab_enabled($ocinstanceid, mod_upload_settings_helper::SUBTITLE_TAB) &&
-        $transcriptionuploadenabled) {
+    if (
+        mod_upload_helper::advanced_tab_enabled($ocinstanceid, mod_upload_settings_helper::SUBTITLE_TAB) &&
+        $transcriptionuploadenabled
+    ) {
         $transcriptionlanguagesconfig = get_config('tool_opencast', 'transcriptionlanguages_' . $ocinstanceid);
         $transcriptionlanguagesarray = json_decode($transcriptionlanguagesconfig) ?? [];
         foreach ($transcriptionlanguagesarray as $index => $language) {
@@ -207,8 +222,13 @@ if ($advanceduploadform->is_cancelled()) {
             }
             $fileelm = mod_upload_helper::TRANSCRIPTION_ID_PREFIX . $language->key;
             if (property_exists($data, $fileelm)) {
-                $storedfile = $advanceduploadform->save_stored_file($fileelm, $coursecontext->id,
-                    'tool_opencast', tool_opencast\local\attachment_helper::OC_FILEAREA_ATTACHMENT, $data->{$fileelm});
+                $storedfile = $advanceduploadform->save_stored_file(
+                    $fileelm,
+                    $coursecontext->id,
+                    'tool_opencast',
+                    tool_opencast\local\attachment_helper::OC_FILEAREA_ATTACHMENT,
+                    $data->{$fileelm}
+                );
                 if (isset($storedfile) && $storedfile) {
                     $transcriptions[] = [
                         'file_itemid' => $storedfile->get_itemid(),
@@ -251,8 +271,8 @@ if ($advanceduploadform->is_cancelled()) {
         try {
             $title = $metadata[array_search('title', array_column($metadata, 'id'))]['value'];
             // Gather more information about this module so that we can update the module info in the end.
-            list($unusedcm, $unusedcontext, $unusedmodule, $opencastmoduledata, $unusedcw) =
-                get_moduleinfo_data($cm , $course);
+            [$unusedcm, $unusedcontext, $unusedmodule, $opencastmoduledata, $unusedcw] =
+                get_moduleinfo_data($cm, $course);
 
             // Replace the module info to update its type and other info.
             $opencastmoduledata->name = $title ? $title : get_string('defaultuploadedvideotitle', 'mod_opencast');
@@ -266,10 +286,16 @@ if ($advanceduploadform->is_cancelled()) {
             \core\notification::warning($e->getMessage());
         }
     }
-    $indexopencastlink = new moodle_url('/admin/tool/opencast/index.php',
-        ['courseid' => $course->id, 'ocinstanceid' => $ocinstanceid]);
-    redirect($redirecturl,
-        get_string('uploadsaved', 'mod_opencast', $indexopencastlink->out()), null, \core\output\notification::NOTIFY_SUCCESS);
+    $indexopencastlink = new moodle_url(
+        '/admin/tool/opencast/index.php',
+        ['courseid' => $course->id, 'ocinstanceid' => $ocinstanceid]
+    );
+    redirect(
+        $redirecturl,
+        get_string('uploadsaved', 'mod_opencast', $indexopencastlink->out()),
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
 }
 
 $PAGE->set_title(get_string('uploadform_simple_page_title', 'mod_opencast'));

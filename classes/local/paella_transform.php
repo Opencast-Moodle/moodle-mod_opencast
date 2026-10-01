@@ -30,7 +30,6 @@ namespace mod_opencast\local;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class paella_transform {
-
     /**
      * Returns the publication with the correct release channel for a given episode.
      * @param int $ocinstanceid Opencast instance id
@@ -103,8 +102,10 @@ class paella_transform {
         $framelist = [];
 
         foreach ($publication->attachments as $attachment) {
-            if ($attachment->flavor === 'presentation/segment+preview' ||
-                $attachment->flavor === 'presentation/segment+preview+hires') {
+            if (
+                $attachment->flavor === 'presentation/segment+preview' ||
+                $attachment->flavor === 'presentation/segment+preview+hires'
+            ) {
                 if (preg_match('/time=T(\d+):(\d+):(\d+)/', $attachment->ref, $matches)) {
                     $time = intval($matches[1]) * 60 * 60 + intval($matches[2]) * 60 + intval($matches[3]);
                     if (!array_key_exists($time, $framelist)) {
@@ -121,7 +122,6 @@ class paella_transform {
                         } else {
                             $framelist[$time]['thumb'] = $attachment->url;
                         }
-
                     }
                 }
             }
@@ -152,7 +152,7 @@ class paella_transform {
                         case 'video/mp4':
                         case 'video/ogg':
                         case 'video/webm':
-                            list($type, $sourcetype) = explode('/', $track->mediatype, 2);
+                            [$type, $sourcetype] = explode('/', $track->mediatype, 2);
                             break;
                         case 'video/x-flv':
                             $sourcetype = 'flv';
@@ -246,9 +246,9 @@ class paella_transform {
     private static function get_captions($publication) {
         $captions = [];
         foreach ($publication->attachments as $attachment) {
-            list($type1, $type2) = explode('/', $attachment->flavor, 2);
+            [$type1, $type2] = explode('/', $attachment->flavor, 2);
             if ($type1 === 'captions') {
-                list($format, $lang) = explode('+', $type2, 2);
+                [$format, $lang] = explode('+', $type2, 2);
                 $captions[] = [
                     'lang' => $lang,
                     'text' => $lang,
@@ -259,14 +259,14 @@ class paella_transform {
         }
         // Opencast 13 handles captions under media, therefore we need to capture them here as well.
         foreach ($publication->media as $media) {
-            list($type1, $type2) = explode('/', $media->flavor, 2);
+            [$type1, $type2] = explode('/', $media->flavor, 2);
             if ($type1 === 'captions') {
                 $lang = 'undefined';
                 $format = 'vtt'; // Default standard format.
                 $text = 'unknown';
                 // Prior to Opencast 15 or manually added subtitles in block opencast.
                 if (strpos($type2, 'vtt+') !== false) {
-                    list($format, $lang) = explode('+', $type2, 2);
+                    [$format, $lang] = explode('+', $type2, 2);
                     $text = $lang;
                 } else if (in_array($type2, ['delivery', 'prepared', 'preview', 'vtt', 'source']) && !empty($media->tags)) {
                     // Opencast 15 coverage.
@@ -291,7 +291,7 @@ class paella_transform {
                         }
                     }
                     $text = self::prepare_caption_text($tagdataarr);
-                    list($mimefiletype, $format) = explode('/', $media->mediatype, 2);
+                    [$mimefiletype, $format] = explode('/', $media->mediatype, 2);
                 }
                 $captions[] = [
                     'lang' => $lang,

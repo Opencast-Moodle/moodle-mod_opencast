@@ -42,7 +42,6 @@ use stdClass;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class upload_helper {
-
     /** @var string The presentation file picker ID. */
     const PRESENTATION_FILEPICKER_ID = 'presentation_filepicker';
 
@@ -150,7 +149,9 @@ class upload_helper {
      * @return advancedupload_field The constructed advancedupload_field object.
      */
     private static function convert_metadatacatalog(
-        stdClass $field, int $ocinstanceid, array $additionalattr = []
+        stdClass $field,
+        int $ocinstanceid,
+        array $additionalattr = []
     ): advancedupload_field {
         $datatype = $field->datatype;
         $id = self::METADATA_ID_PREFIX . $field->name;
@@ -173,8 +174,10 @@ class upload_helper {
             ];
 
             if ($field->name == 'creator' || $field->name == 'contributor') {
-                $params = array_merge($params,
-                    autocomplete_suggestion_helper::get_suggestions_for_creator_and_contributor($ocinstanceid));
+                $params = array_merge(
+                    $params,
+                    autocomplete_suggestion_helper::get_suggestions_for_creator_and_contributor($ocinstanceid)
+                );
             }
         }
         if ($field->datatype == 'select') {
@@ -471,8 +474,10 @@ class upload_helper {
      */
     public static function has_simple_processing(int $ocinstanceid): bool {
         $wfconfighelper = workflowconfiguration_helper::get_instance($ocinstanceid);
-        if (!empty(get_config('mod_opencast', 'upload_inline_processing_' . $ocinstanceid)) &&
-            $wfconfighelper->can_provide_configuration_panel()) {
+        if (
+            !empty(get_config('mod_opencast', 'upload_inline_processing_' . $ocinstanceid)) &&
+            $wfconfighelper->can_provide_configuration_panel()
+        ) {
             return true;
         }
         return false;
@@ -572,8 +577,10 @@ class upload_helper {
      */
     public static function get_course_series(int $ocinstanceid, int $courseid): array {
         global $DB;
-        $seriesrecords = $DB->get_records('tool_opencast_series',
-            ['courseid' => $courseid, 'ocinstanceid' => $ocinstanceid]);
+        $seriesrecords = $DB->get_records(
+            'tool_opencast_series',
+            ['courseid' => $courseid, 'ocinstanceid' => $ocinstanceid]
+        );
 
         $courseseries = [];
         if ($seriesrecords) {
@@ -630,7 +637,8 @@ class upload_helper {
         }
 
         if (!empty($configuredmdlist) && !empty($optionalmtcats)) {
-            $filteredopmtcats = array_filter($optionalmtcats,
+            $filteredopmtcats = array_filter(
+                $optionalmtcats,
                 function ($metadata) use ($configuredmdlist) {
                     return in_array($metadata->name, $configuredmdlist);
                 }
@@ -793,13 +801,18 @@ class upload_helper {
         }
 
         // Prepare advanced mode block if advanced mode is enabled in settings.
-        $advancedmodeurl = new moodle_url('/mod/opencast/uploadvideoadvanced.php',
-            ['cmid' => $cmid, 'ocinstanceid' => $ocinstanceid]);
+        $advancedmodeurl = new moodle_url(
+            '/mod/opencast/uploadvideoadvanced.php',
+            ['cmid' => $cmid, 'ocinstanceid' => $ocinstanceid]
+        );
         if (!empty(get_config('mod_opencast', 'upload_enable_advanced_mode_' . $ocinstanceid))) {
             $linkattr['href'] = $advancedmodeurl->out(false);
             $advancedmodelink = \html_writer::start_tag('a', $linkattr);
-            $advancedmodelink .= \html_writer::tag('span',
-                get_string('uploadform_advanced_mode_link_text', 'mod_opencast'), ['class' => 'mr-1']);
+            $advancedmodelink .= \html_writer::tag(
+                'span',
+                get_string('uploadform_advanced_mode_link_text', 'mod_opencast'),
+                ['class' => 'mr-1']
+            );
             $advancedmodelink .= $OUTPUT->pix_icon('i/share', get_string('uploadform_advanced_mode_title', 'mod_opencast'));
             $advancedmodelink .= \html_writer::end_tag('a');
             return (object) [

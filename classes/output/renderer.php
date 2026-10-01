@@ -36,7 +36,6 @@ use mod_opencast\local\advancedupload_field;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class renderer extends plugin_renderer_base {
-
     /**
      * Renders a toggle icon for toggling the Series List/Grid-View.
      * @param bool $listviewactive whether the listview is active.
@@ -74,12 +73,17 @@ class renderer extends plugin_renderer_base {
         $simplemodeurl = new moodle_url('/mod/opencast/uploadvideo.php', ['cmid' => $cmid]);
         $linkattr['href'] = $simplemodeurl->out(false);
         $simplemodelink = html_writer::start_tag('a', $linkattr);
-        $simplemodelink .= html_writer::tag('span',
-            get_string('uploadform_simple_page_title', 'mod_opencast'), ['class' => 'mr-1']);
+        $simplemodelink .= html_writer::tag(
+            'span',
+            get_string('uploadform_simple_page_title', 'mod_opencast'),
+            ['class' => 'mr-1']
+        );
         $simplemodelink .= $this->output->pix_icon('i/share', get_string('uploadform_simple_page_title', 'mod_opencast'));
         $simplemodelink .= html_writer::end_tag('a');
-        $explanation = html_writer::tag('p',
-            get_string('uploadform_advanced_uploadexplaination', 'mod_opencast', $simplemodelink));
+        $explanation = html_writer::tag(
+            'p',
+            get_string('uploadform_advanced_uploadexplaination', 'mod_opencast', $simplemodelink)
+        );
         $mform->addElement('html', $explanation);
     }
 
@@ -94,7 +98,8 @@ class renderer extends plugin_renderer_base {
      * @return void
      */
     public function render_advanced_upload_form_tabs_navigation(MoodleQuickForm &$mform, array $tabs): void {
-        $ul = html_writer::start_tag('ul',
+        $ul = html_writer::start_tag(
+            'ul',
             [
                 'class' => 'nav nav-tabs mb-3',
                 'id' => 'mod_opencast_advanced_upload_tabs',
@@ -112,13 +117,15 @@ class renderer extends plugin_renderer_base {
                 $aclasses[] = 'active';
                 $ariaselected = 'true';
             }
-            $li = html_writer::start_tag('li',
+            $li = html_writer::start_tag(
+                'li',
                 [
                     'class' => implode(' ', $liclasses),
                 ]
             );
 
-            $a = html_writer::start_tag('a',
+            $a = html_writer::start_tag(
+                'a',
                 [
                     'class' => implode(' ', $aclasses),
                     'id' => "{$tab}-tab",
@@ -234,7 +241,9 @@ class renderer extends plugin_renderer_base {
      * @return void
      */
     public function render_advanced_upload_form_tab_field(
-        MoodleQuickForm &$mform, advancedupload_field $field, ?string $parentid = null
+        MoodleQuickForm &$mform,
+        advancedupload_field $field,
+        ?string $parentid = null
     ): void {
         global $CFG;
         $attributes = $field->get_attributes();
@@ -244,9 +253,11 @@ class renderer extends plugin_renderer_base {
             unset($attributes['set_advanced']);
         }
         if ($field->get_datatype() === 'chunkupload') {
-            MoodleQuickForm::registerElementType('chunkupload',
+            MoodleQuickForm::registerElementType(
+                'chunkupload',
                 "$CFG->dirroot/local/chunkupload/classes/chunkupload_form_element.php",
-                'local_chunkupload\chunkupload_form_element');
+                'local_chunkupload\chunkupload_form_element'
+            );
         }
         $element = $mform->addElement(
             $field->get_datatype(),
@@ -258,7 +269,8 @@ class renderer extends plugin_renderer_base {
         if (!empty($field->get_description())) {
             $mainrenderer = $this->page->get_renderer('tool_opencast');
             $element->_helpbutton = $mainrenderer->render_help_icon_with_custom_text(
-                $field->get_label(), $field->get_description()
+                $field->get_label(),
+                $field->get_description()
             );
         }
         if (!empty($field->get_default())) {

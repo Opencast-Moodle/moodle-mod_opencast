@@ -35,7 +35,6 @@ use tool_opencast\seriesmapping;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class apibridge {
-
     /** @var int Opencast instance id */
     private $ocinstanceid;
 

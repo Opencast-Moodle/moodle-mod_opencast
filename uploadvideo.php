@@ -61,7 +61,7 @@ $PAGE->requires->js_call_amd('mod_opencast/simple_upload_form', 'init', ['ocinst
 $formdata['cmid'] = $cmid;
 $formdata['moduleinstance'] = $moduleinstance;
 
-$mform = new mod_opencast_uploadvideo_form(null , $formdata);
+$mform = new mod_opencast_uploadvideo_form(null, $formdata);
 
 if ($mform->is_cancelled()) {
     redirect($redirecturl);
@@ -69,8 +69,13 @@ if ($mform->is_cancelled()) {
     $ocinstanceid = intval($data->ocinstance);
     // Saving and getting the file.
     $newitemid = rand(1000000, 9999999);
-    file_save_draft_area_files($moduleinstance->uploaddraftitemid, $coursecontext->id,
-        'tool_opencast', upload_helper::OC_FILEAREA, $newitemid);
+    file_save_draft_area_files(
+        $moduleinstance->uploaddraftitemid,
+        $coursecontext->id,
+        'tool_opencast',
+        upload_helper::OC_FILEAREA,
+        $newitemid
+    );
     $fs = get_file_storage();
     $files = $fs->get_area_files($coursecontext->id, 'tool_opencast', upload_helper::OC_FILEAREA, $newitemid, '', false);
     $savedvideofile = null;
@@ -90,8 +95,12 @@ if ($mform->is_cancelled()) {
     $alluploadoptions = json_decode($moduleinstance->uploadoptionsjson);
 
     if ($alluploadoptions->selectedocinstanceid != $ocinstanceid) {
-        redirect($redirecturl,
-            get_string('uploadmismatchedocinstanceids', 'mod_opencast'), null, \core\output\notification::NOTIFY_ERROR);
+        redirect(
+            $redirecturl,
+            get_string('uploadmismatchedocinstanceids', 'mod_opencast'),
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
     }
 
     $uploadoptions = $alluploadoptions?->options->{$ocinstanceid};
@@ -148,8 +157,8 @@ if ($mform->is_cancelled()) {
         try {
             $title = $metadata[array_search('title', array_column($metadata, 'id'))]['value'];
             // Gather more information about this module so that we can update the module info in the end.
-            list($unusedcm, $unusedcontext, $unusedmodule, $opencastmoduledata, $unusedcw) =
-                get_moduleinfo_data($cm , $course);
+            [$unusedcm, $unusedcontext, $unusedmodule, $opencastmoduledata, $unusedcw] =
+                get_moduleinfo_data($cm, $course);
 
             // Replace the module info to update its type and other info.
             $opencastmoduledata->name = $title ? $title : get_string('defaultuploadedvideotitle', 'mod_opencast');
@@ -163,10 +172,16 @@ if ($mform->is_cancelled()) {
             \core\notification::warning($e->getMessage());
         }
     }
-    $indexopencastlink = new moodle_url('/admin/tool/opencast/index.php',
-        ['courseid' => $course->id, 'ocinstanceid' => $ocinstanceid]);
-    redirect($redirecturl,
-        get_string('uploadsaved', 'mod_opencast', $indexopencastlink->out()), null, \core\output\notification::NOTIFY_SUCCESS);
+    $indexopencastlink = new moodle_url(
+        '/admin/tool/opencast/index.php',
+        ['courseid' => $course->id, 'ocinstanceid' => $ocinstanceid]
+    );
+    redirect(
+        $redirecturl,
+        get_string('uploadsaved', 'mod_opencast', $indexopencastlink->out()),
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
 }
 
 $PAGE->set_title(get_string('uploadform_simple_page_title', 'mod_opencast'));
