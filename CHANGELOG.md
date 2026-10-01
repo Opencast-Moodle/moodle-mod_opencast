@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+5.2.0 (2026-10-01)
+------------------
+* Moodle 5.2 compatible version
+* [FEATURE] #97 Integrate JWT authentication.
+
 5.1.0 (2026-01-17)
 ------------------
 * Moodle 5.1 compatible version
